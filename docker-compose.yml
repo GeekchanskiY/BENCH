@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  db-local:
+    image: postgres:14.5
+    container_name: db-bench
+    ports:
+      - "5401:5432"
+    env_file:
+      - ./.env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build: 
+      dockerfile: ./coordinator/Dockerfile
+    image: backend-banch:latest
+    restart: always
+    volumes:
+      - ./src:/src
+      - ./opt:/opt
+    ports:
+      - "80:80"
+    env_file:
+      - ./.env
+#    environment:
+#      - API_ENVIRONMENT=local
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "localhost:8000/healthcheck"]
+#      interval: 60s
+#      timeout: 5s
+#      retries: 5
+
+
+volumes:
+  pgdata:
