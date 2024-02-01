@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip install --no-cache-dir --upgrade -r ./coordinator/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
 
-CMD ["uvicorn", "coordinator.src.main:app", "--host", "0.0.0.0", "--port", "80"]
+WORKDIR /app/src
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]

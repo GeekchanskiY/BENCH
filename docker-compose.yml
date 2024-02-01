@@ -12,8 +12,8 @@ services:
 
   backend:
     build: 
-      dockerfile: ./coordinator/Dockerfile
-    image: backend-banch:latest
+      context: ./coordinator/
+    image: backend-bench:latest
     restart: always
     volumes:
       - ./src:/src
@@ -22,6 +22,21 @@ services:
       - "80:80"
     env_file:
       - ./.env
+  ressearch_backend:
+    build: 
+      # dockerfile: ./ressearch/Dockerfile
+      context: ./ressearch/
+    env_file:
+      - .env
+    image:
+      ressearch_backend:latest
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db-local
+    
+    
 #    environment:
 #      - API_ENVIRONMENT=local
 #    healthcheck:
