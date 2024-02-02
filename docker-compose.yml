@@ -2,14 +2,29 @@ version: '3.8'
 services:
   db-local:
     image: postgres:14.5
-    container_name: db-bench
+    container_name: db-fastapi
     ports:
-      - "5401:5432"
+      - "8001:5432"
     env_file:
       - ./.env
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend_fastapi
+  
+  db-local2:
+    image: postgres:14.5
+    container_name: db-rails
+    ports:
+      - "8002:5432"
+    env_file:
+      - ./.env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend_rails
 
+  # FastAPI application
   backend:
     build: 
       context: ./coordinator/
@@ -22,9 +37,12 @@ services:
       - "80:80"
     env_file:
       - ./.env
+    networks:
+      - backend_fastapi
+  
+  # Rails application
   ressearch_backend:
-    build: 
-      # dockerfile: ./ressearch/Dockerfile
+    build:
       context: ./ressearch/
     env_file:
       - .env
@@ -35,6 +53,8 @@ services:
       - "3000:3000"
     depends_on:
       - db-local
+    networks:
+      - backend_rails
     
     
 #    environment:
@@ -48,3 +68,7 @@ services:
 
 volumes:
   pgdata:
+
+networks:
+  backend_fastapi:
+  backend_rails:
