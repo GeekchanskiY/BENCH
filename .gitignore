@@ -2,4 +2,6 @@ coordinator/env/
 coordinator/__pycache__/
 .env
 opt/
-src/
+./src/
+
+*.pyc
