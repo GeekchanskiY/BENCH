@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, MetaData, Column, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = 'postgresql://staffing:staffing@db-fastapi:5432/staffing'
+SQLALCHEMY_DATABASE_URL = 'postgresql://staffing:staffing@db-fastapi:5432/backend_fastapi'
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 metadata_obj = MetaData()
@@ -24,6 +24,7 @@ class User(Base):
 
 def get_db():
     db = SessionLocal()
-    # Base.metadata.create_all(engine)
-    # Base.metadata.tables.keys()
-    return Base.metadata.tables.keys()
+    try:
+        return db
+    finally:
+        db.close()

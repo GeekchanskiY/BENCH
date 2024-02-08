@@ -6,9 +6,9 @@ services:
     ports:
       - "8001:5432"
     env_file:
-      - ./.env
+      - ./.env_db_fastapi
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata_fastapi:/var/lib/postgresql/data
     networks:
       - backend_fastapi
   
@@ -18,9 +18,9 @@ services:
     ports:
       - "8002:5432"
     env_file:
-      - ./.env
+      - ./.env_db_rails
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata_rails:/var/lib/postgresql/data
     networks:
       - backend_rails
 
@@ -69,7 +69,9 @@ services:
 
 
 volumes:
-  pgdata:
+  pgdata_fastapi:
+  pgdata_rails:
+  
 
 networks:
   backend_fastapi:

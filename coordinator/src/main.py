@@ -1,3 +1,5 @@
+import aiohttp
+
 from fastapi import FastAPI
 
 from repos.db import get_db
@@ -9,3 +11,10 @@ app = FastAPI()
 async def root():
     a = get_db()
     return {"message": str(a)}
+
+@app.get('/test')
+async def test():
+    async with aiohttp.ClientSession() as session:
+        async with session.get('http://0.0.0.0:3000/') as resp:
+            # print(resp.status)
+            return{resp.starus: await resp.text()}
