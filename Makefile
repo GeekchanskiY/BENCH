@@ -7,7 +7,7 @@ up-build:
 	&& sudo docker-compose run ressearch_backend bin/rails db:migrate
 
 logs:
-    sudo docker compose logs
+	sudo docker compose logs
 
 down:
 	sudo docker compose down
