@@ -8,6 +8,10 @@ stores it's states
 Ruby app with functionality to be able to do some notes of different types, and analyze them
 3 - Combinator
 Gin app, which allows to do some plannings, create roadmap and analysis with heavy calculations
+4 - Portfolio
+Django (DRF) app with portfolio items 
+5 - Frontend
+React application which represents data from all 3 services
 
 
 ## Tech stack:
