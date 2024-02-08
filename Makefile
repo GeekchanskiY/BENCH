@@ -14,10 +14,10 @@ logs:
 	sudo docker compose logs
 
 down:
-	sudo docker compose down
+	sudo docker compose down --remove-orphans
 
 restart:
-	sudo docker compose down && \
+	sudo docker compose down --remove-orphans && \
 	sudo docker compose up --build -d \
 	&& sudo docker-compose run ressearch_backend bin/rails db:migrate
 

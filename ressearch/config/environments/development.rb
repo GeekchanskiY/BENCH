@@ -63,8 +63,9 @@ Rails.application.configure do
   config.assets.quiet = true
 
   config.hosts << "0.0.0.0"
+  config.hosts << /.*/ #TODO: change to actual port
   config.port = 80
-
+  
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 
