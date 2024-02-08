@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, MetaData, Column, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = 'postgresql://staffing:staffing@db-bench:5432/staffing'
+SQLALCHEMY_DATABASE_URL = 'postgresql://staffing:staffing@db-fastapi:5432/staffing'
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 metadata_obj = MetaData()

@@ -39,6 +39,8 @@ services:
       - ./.env
     networks:
       - backend_fastapi
+    depends_on:
+      - db-local
   
   # Rails application
   ressearch_backend:
@@ -52,7 +54,7 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - db-local
+      - db-local2
     networks:
       - backend_rails
     
