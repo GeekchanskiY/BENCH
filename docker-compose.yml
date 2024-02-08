@@ -59,6 +59,18 @@ services:
     networks:
       - backend_rails
       - backend_communicator
+  
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning # --requirepass password
+    volumes: 
+      - redis-cache:/data
+    networks:
+      - backend_communicator
+  
     
     
 #    environment:
@@ -73,6 +85,8 @@ services:
 volumes:
   pgdata_fastapi:
   pgdata_rails:
+  redis-cache:
+    driver: local
   
 
 networks:
