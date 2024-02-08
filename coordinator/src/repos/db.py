@@ -24,5 +24,6 @@ class User(Base):
 
 def get_db():
     db = SessionLocal()
-    Base.metadata.create_all(engine)
-    return db
+    # Base.metadata.create_all(engine)
+    # Base.metadata.tables.keys()
+    return Base.metadata.tables.keys()
