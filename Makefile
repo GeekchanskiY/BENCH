@@ -43,3 +43,7 @@ migrations-downgrade: # Migrate down by 1 migration
 .PHONY: migrations-copy-to-host
 migrations-copy-to-host: # Copy migrations from container to host
 	sudo docker compose cp coordinator_backend:/app/src/alembic/versions  ./coordinator/src/alembic
+
+
+rails-sandbox:
+	sudo docker compose exec -it ressearch_backend sh -c "bin/rails console --sandbox"
