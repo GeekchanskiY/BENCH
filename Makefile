@@ -47,3 +47,6 @@ migrations-copy-to-host: # Copy migrations from container to host
 
 rails-sandbox:
 	docker compose exec -it ressearch_backend sh -c "bin/rails console --sandbox"
+
+rails-console:
+	docker compose exec -it ressearch_backend sh -c "bin/rails console"
