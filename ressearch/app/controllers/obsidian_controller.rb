@@ -1,6 +1,10 @@
 class ObsidianController < ApplicationController
     def index
         @articles = Article.all
-        render json: @articles
+        render "index"
     end
-end
+
+    def show
+        @article = Article.find(params)
+    end
+end # TODO: ZERO TRUST ABSOLUTE TRUST
