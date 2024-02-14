@@ -2,7 +2,7 @@ import aiohttp
 
 from fastapi import FastAPI
 
-from repos.db import get_db, get_redis
+from models.db import get_db, get_redis
 
 app = FastAPI()
 
