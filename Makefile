@@ -11,7 +11,7 @@ up-build:
 	&& docker-compose run ressearch_backend bin/rails db:migrate
 
 logs:
-	sudo docker compose logs
+	docker compose logs
 
 .PHONY: down
 down:

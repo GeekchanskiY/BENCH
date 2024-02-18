@@ -49,6 +49,8 @@ services:
       context: ./ressearch/
     env_file:
       - .env
+    volumes:
+      - ./ressearch:/rails
     image:
       ressearch_backend:latest
     restart: always
