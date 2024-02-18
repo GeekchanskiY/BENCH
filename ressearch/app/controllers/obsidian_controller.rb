@@ -7,4 +7,4 @@ class ObsidianController < ApplicationController
     def show
         @article = Article.find(params)
     end
-end # TODO: ZERO TRUST ABSOLUTE TRUST
+end 
