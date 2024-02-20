@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bench/finance/models"
 	"log"
+	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +17,22 @@ func LoggerMiddleware() gin.HandlerFunc {
 		log.Printf("Request - Method: %s | Status: %d | Duration: %v", c.Request.Method, c.Writer.Status(), duration)
 	}
 }
+func checkErr(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+func getPersons(c *gin.Context) {
+	persons, err := models.GetPersons(10)
+	checkErr(err)
 
+	if persons == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No Records Found"})
+		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": persons})
+	}
+}
 func main() {
 	var r *gin.Engine = gin.Default()
 	r.Use(LoggerMiddleware())
@@ -24,6 +41,7 @@ func main() {
 			"message": "pong",
 		})
 	})
+	r.GET("/", getPersons)
 	v1 := r.Group("/v1")
 	v2 := v1.Group("/v12")
 
