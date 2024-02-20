@@ -1,12 +1,12 @@
 Rails.application.routes.draw do
-  get 'users/new'
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   root "obsidian#index"
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+
+  resources :articles, path: 'obsidian', controller: 'obsidian'
+
+  get 'users/new'
+ 
   get "up" => "rails/health#show", as: :rails_health_check
   get "/obsidian", to: "obsidian#index"
-  get "/obsidian/:id", to: "obsidian#show"
-  # Defines the root path route ("/")
-  # root "posts#index"
+  # get "/obsidian/:id", to: "obsidian#show"
+ 
 end
