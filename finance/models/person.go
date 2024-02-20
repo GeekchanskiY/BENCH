@@ -1,13 +1,10 @@
 package models
 
 import (
-	"database/sql"
 	"strconv"
 
 	_ "github.com/mattn/go-sqlite3"
 )
-
-var DB *sql.DB
 
 type Person struct {
 	Id        int    `json:"id"`
@@ -15,16 +12,6 @@ type Person struct {
 	LastName  string `json:"last_name"`
 	Email     string `json:"email"`
 	IpAddress string `json:"ip_address"`
-}
-
-func ConnectDatabase() error {
-	db, err := sql.Open("sqlite3", "./names.db")
-	if err != nil {
-		return err
-	}
-
-	DB = db
-	return nil
 }
 
 func GetPersons(count int) ([]Person, error) {

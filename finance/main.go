@@ -34,7 +34,12 @@ func getPersons(c *gin.Context) {
 	}
 }
 func main() {
+	// create router
 	var r *gin.Engine = gin.Default()
+
+	// init database
+	models.ConnectDatabase()
+
 	r.Use(LoggerMiddleware())
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
