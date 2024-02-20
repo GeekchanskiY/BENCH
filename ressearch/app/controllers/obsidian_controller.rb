@@ -1,9 +1,17 @@
+require 'httparty'
+
 class ObsidianController < ApplicationController
     def index
         @articles = Article.all
       end
     
       def show
+        response = HTTParty.get('http://coordinator_backend/')
+        if response.success?
+            @additional_argument = "Hello from the controller!"
+        else
+            @additional_argument = "Failed"
+        end
         @article = Article.find(params[:id])
       end
     
