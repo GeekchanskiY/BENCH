@@ -33,6 +33,40 @@ func getPersons(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"data": persons})
 	}
 }
+
+func getPersonById(c *gin.Context) {
+
+	id := c.Param("id")
+
+	person, err := models.GetPersonById(id)
+	checkErr(err)
+	// if the name is blank we can assume nothing is found
+	if person.FirstName == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No Records Found"})
+		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": person})
+	}
+}
+
+func addPerson(c *gin.Context) {
+
+	var json models.Person
+
+	if err := c.ShouldBindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	success, err := models.AddPerson(json)
+
+	if success {
+		c.JSON(http.StatusOK, gin.H{"message": "Success"})
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+	}
+}
+
 func main() {
 	// create router
 	var r *gin.Engine = gin.Default()
@@ -47,6 +81,8 @@ func main() {
 		})
 	})
 	r.GET("/", getPersons)
+	r.GET("/:id", getPersonById)
+	r.POST("/", addPerson)
 	v1 := r.Group("/v1")
 	v2 := v1.Group("/v12")
 
