@@ -17,7 +17,7 @@ func LoggerMiddleware() gin.HandlerFunc {
 }
 
 func main() {
-	r := gin.Default()
+	var r *gin.Engine = gin.Default()
 	r.Use(LoggerMiddleware())
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
