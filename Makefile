@@ -1,14 +1,14 @@
 up:
 	docker compose up \
-	&& docker-compose run ressearch_backend bin/rails db:migrate
+	&& docker compose run ressearch_backend bin/rails db:migrate
 
 up-d:
 	sudo docker compose up -d \
-	&& sudo docker-compose run ressearch_backend bin/rails db:migrate
+	&& sudo docker compose run ressearch_backend bin/rails db:migrate
 
 up-build:
 	docker compose up --build -d \
-	&& docker-compose run ressearch_backend bin/rails db:migrate
+	&& docker compose run ressearch_backend bin/rails db:migrate
 
 logs:
 	docker compose logs
@@ -25,7 +25,7 @@ restart:
 	make migrations-copy-to-host
 	docker compose down --remove-orphans
 	docker compose up --build -d \
-	&& docker-compose run ressearch_backend bin/rails db:migrate
+	&& docker compose run ressearch_backend bin/rails db:migrate
 
 
 .PHONY: create-migrations
