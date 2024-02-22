@@ -1,5 +1,8 @@
 # GeekchanskiY's bench project
 
+TODO:
+create guide to create and apply config easily
+
 ## Services:
 1 - Coordinator
 an fastapi app which gets all the required info from 3rd-party services and 
