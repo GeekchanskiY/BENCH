@@ -27,3 +27,19 @@ React application which represents data from all 3 services
     JavaScript+ReactJS
     .erb
     django-templates
+
+# Setup guide:
+
+need 2 .env files for RoR and FastApi applications databases:
+.env_db_fastapi
+.env_db_rails 
+
+Content:
+POSTGRES_DB=database_name
+POSTGRES_USER=database_user
+POSTGRES_PASSWORD=database_password
+POSTGRES_HOST=database_host
+POSTGRES_PORT=5432
+POSTGRES_HOST_AUTH_METHOD=trust
+
+TODO: add .env readers to both applications
