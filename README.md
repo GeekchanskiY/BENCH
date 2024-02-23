@@ -3,6 +3,9 @@
 TODO:
 create guide to create and apply config easily
 
+!!!
+export CGO_ENABLED=1
+
 ## Services:
 1 - Coordinator
 an fastapi app which gets all the required info from 3rd-party services and 
