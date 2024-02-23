@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	// "Finance/Models"
 	"Finance/Config"
+	"Finance/Models"
 	"Finance/Routers"
 	"time"
 
@@ -36,6 +36,7 @@ func main() {
 	if err != nil {
 		fmt.Println("status: ", err)
 	}
+	Models.Migrate()
 	r := Routers.SetupRouter()
 
 	r.Use(LoggerMiddleware())

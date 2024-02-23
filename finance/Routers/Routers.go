@@ -1,7 +1,8 @@
 package Routers
 
 import (
-	// "../Controllers"
+	"Finance/Controllers"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,6 +16,7 @@ func SetupRouter() *gin.Engine {
 				"message": "pong",
 			})
 		})
+		v1.GET("/", Controllers.ListBudget)
 	}
 
 	return r
