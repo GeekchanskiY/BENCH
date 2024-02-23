@@ -17,6 +17,8 @@ func SetupRouter() *gin.Engine {
 			})
 		})
 		v1.GET("/", Controllers.ListBudget)
+		v1.POST("/add", Controllers.AddNewBudget)
+		v1.GET("/get/:id", Controllers.GetOneBudget)
 	}
 
 	return r

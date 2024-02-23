@@ -17,3 +17,10 @@ func GetOneBudget(b *Budget, id string) (err error) {
 	}
 	return nil
 }
+
+func AddNewBudget(b *Budget) (err error) {
+	if err = Config.DB.Create(b).Error; err != nil {
+		return err
+	}
+	return nil
+}

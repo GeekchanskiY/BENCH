@@ -27,3 +27,14 @@ func ListBudget(c *gin.Context) {
 		ApiHelpers.RespondJSON(c, 200, budget)
 	}
 }
+
+func AddNewBudget(c *gin.Context) {
+	var budget Models.Budget
+	c.BindJSON(&budget)
+	err := Models.AddNewBudget(&budget)
+	if err != nil {
+		ApiHelpers.RespondJSON(c, 404, budget)
+	} else {
+		ApiHelpers.RespondJSON(c, 200, budget)
+	}
+}
