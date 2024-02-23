@@ -4,6 +4,8 @@ import (
 	"Finance/ApiHelpers"
 	"Finance/Models"
 
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -30,8 +32,16 @@ func ListBudget(c *gin.Context) {
 
 func AddNewBudget(c *gin.Context) {
 	var budget Models.Budget
+	var err error
 	c.BindJSON(&budget)
-	err := Models.AddNewBudget(&budget)
+
+	err = budget.Validate()
+	if err != nil {
+		ApiHelpers.RespondJSON(c, 201, budget)
+	}
+
+	fmt.Println(c.Request.Body)
+	err = Models.AddNewBudget(&budget)
 	if err != nil {
 		ApiHelpers.RespondJSON(c, 404, budget)
 	} else {
