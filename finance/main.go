@@ -22,14 +22,8 @@ func LoggerMiddleware() gin.HandlerFunc {
 		log.Printf("Method: %s | Status: %d | Duration: %v", c.Request.Method, c.Writer.Status(), duration)
 	}
 }
-func checkErr(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
-}
 
 func main() {
-
 	var err error
 	Config.DB, err = gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 
