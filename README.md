@@ -46,3 +46,7 @@ POSTGRES_PORT=5432
 POSTGRES_HOST_AUTH_METHOD=trust
 
 TODO: add .env readers to both applications
+
+
+# Services
+![Services](img/BENCH.drawio.png)
