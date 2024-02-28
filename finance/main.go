@@ -35,5 +35,5 @@ func main() {
 
 	r.Use(LoggerMiddleware())
 
-	r.Run(":8085")
+	r.Run(":3001")
 }
