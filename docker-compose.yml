@@ -71,7 +71,7 @@ services:
       - ./finance:/app
     image: finance_backend:latest
     ports:
-      - "8080:3001"
+      - "3001:3001"
     networks:
       - backend_finance
       - backend_communicator
