@@ -1,11 +1,9 @@
-FROM golang:1.22
+FROM golang:1.22-alpine
+ 
 WORKDIR /app
 
-# Mirror
-# RUN echo "https://mirror1.alpinelinux.org/alpine/latest-stable/main" > /etc/apk/repositories
-
-RUN apt-get update -y && \
-    apt-get install -y --no-cache gcc musl-dev
+RUN apk update && \
+    apk add gcc musl-dev
 
 RUN go install github.com/cosmtrek/air@latest
 COPY ./go.mod .

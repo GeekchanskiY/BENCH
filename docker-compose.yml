@@ -66,6 +66,7 @@ services:
   finance_backend:
     build: 
       context: ./finance/
+      network: host
     volumes:
       - ./finance:/app
     image: finance_backend:latest
@@ -110,5 +111,5 @@ networks:
   backend_rails:
     driver: bridge
   backend_finance:
-    driver: host
+    driver: bridge
   backend_communicator:
