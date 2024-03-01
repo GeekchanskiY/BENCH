@@ -2,10 +2,13 @@ import aiohttp
 
 from fastapi import FastAPI
 
+from routers.users import router as user_router
+
 from models.db import get_db, get_redis
 
 app = FastAPI()
 
+app.include_router(user_router)
 
 @app.get("/")
 async def root():
