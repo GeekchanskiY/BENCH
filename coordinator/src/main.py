@@ -10,7 +10,8 @@ app = FastAPI()
 @app.get("/")
 async def root():
     a = get_db()
-    return {"message": str(a)}
+    return {"message": str(a),
+            "ping": "pong3"}
 
 @app.get('/test')
 async def test():

@@ -28,11 +28,11 @@ services:
   coordinator_backend:
     build: 
       context: ./coordinator/
+      network: host
     image: backend-bench:latest
     restart: always
     volumes:
-      - ./src:/src
-      - ./opt:/opt
+      - ./coordinator/:/app/
     ports:
       - "80:80"
     env_file:
