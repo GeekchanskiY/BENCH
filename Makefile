@@ -3,8 +3,8 @@ up:
 	&& docker compose run ressearch_backend bin/rails db:migrate
 
 up-d:
-	sudo docker compose up -d \
-	&& sudo docker compose run ressearch_backend bin/rails db:migrate
+	docker compose up -d \
+	&& docker compose run ressearch_backend bin/rails db:migrate
 
 up-build:
 	docker compose up --build -d \
