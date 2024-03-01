@@ -83,7 +83,7 @@ services:
     volumes:
       - ./frontend/app:/app
     ports:
-      - "3002:3000"
+      - "3002:3002"
     networks:
       - backend_communicator
   

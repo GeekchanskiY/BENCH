@@ -4,9 +4,19 @@ from fastapi import FastAPI
 
 from routers.users import router as user_router
 
+from fastapi.middleware.cors import CORSMiddleware
+
 from models.db import get_db, get_redis
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['http://0.0.0.0:3002'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*']
+)
 
 app.include_router(user_router)
 

@@ -8,4 +8,6 @@ COPY app/package.json /app/
 
 RUN npm install
 
+ENV PORT=3002
+
 CMD ["npm", "start"]
