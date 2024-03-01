@@ -20,9 +20,9 @@ async def root():
 async def test():
     resp_text = ''
     async with aiohttp.ClientSession() as session:
-        async with session.get('http://ressearch_backend:3000/') as resp:
+        async with session.get('http://ressearch_backend:3000/ping') as resp:
             # print(resp.status)
-            resp_text = await resp.text()
+            resp_text = await resp.json()
     
     redis = await get_redis()
     await redis.set('test', 'hello, redis')
