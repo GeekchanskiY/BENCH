@@ -13,7 +13,7 @@ func SetupRouter() *gin.Engine {
 	{
 		v1.GET("/ping", func(c *gin.Context) {
 			c.JSON(200, gin.H{
-				"message": "pong2",
+				"message": "pong",
 			})
 		})
 		v1.GET("/", Controllers.ListBudget)

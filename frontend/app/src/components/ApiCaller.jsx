@@ -6,7 +6,7 @@ function ApiCaller(props){
 
     useEffect(()=>{
     var startDate = new Date();
-     fetch('http://0.0.0.0:80/test')
+     fetch('http://0.0.0.0:80/healthcheck')
     .then(res => res.json())
     .then(data => {
         console.log(data)

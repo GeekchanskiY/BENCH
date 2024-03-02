@@ -26,19 +26,36 @@ async def root():
     return {"message": str(a),
             "ping": "pong3"}
 
-@app.get('/test')
-async def test():
-    resp_text = ''
+@app.get('/healthcheck')
+async def healthcheck():
+    ressearch_response = 'Failed'
+    redis_response = 'Failed'
+    finance_response = 'Failed'
     async with aiohttp.ClientSession() as session:
         async with session.get('http://ressearch_backend:3000/ping') as resp:
-            # print(resp.status)
-            resp_text = await resp.json()
+            val = await resp.json()
+            if val.get('msg', None) == 'pong':
+                ressearch_response = 'Success'
     
-    redis = await get_redis()
-    await redis.set('test', 'hello, redis')
-    redis_value = await redis.get('test')
+    try:
+        redis = await get_redis()
+        await redis.set('test', 'test')
+        redis_value = await redis.get('test')
+        if redis_value.decode('utf-8') == 'test':
+            redis_response = 'Success'
+    except Exception as e:
+        redis_response = e.text
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get('http://finance_backend:3001/v1/ping') as resp:
+            val = await resp.json()
+            if val.get('message', None) == 'pong':
+                finance_response = 'Success'
+  
+
 
     return {
-        'ruby response': resp_text,
-        'redis response': redis_value
+        'Ressearch': ressearch_response,
+        'Redis': redis_response,
+        'Finance': finance_response
     }
