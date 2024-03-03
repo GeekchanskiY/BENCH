@@ -3,6 +3,7 @@ coordinator/__pycache__/
 .env
 .env_db_fastapi
 .env_db_rails
+.env_rabbitmq
 opt/
 ./src/
 

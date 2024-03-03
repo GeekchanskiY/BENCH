@@ -45,7 +45,9 @@ POSTGRES_HOST=database_host
 POSTGRES_PORT=5432
 POSTGRES_HOST_AUTH_METHOD=trust
 
-TODO: add .env readers to both applications
+.env_rabbitmq
+RABBITMQ_DEFAULT_USER=rmuser
+RABBITMQ_DEFAULT_PASS=rmpassword
 
 
 # Services
