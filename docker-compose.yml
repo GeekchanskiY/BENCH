@@ -3,6 +3,8 @@ services:
   db-local:
     image: postgres:14.5
     container_name: db-fastapi
+    hostname: db-fastapi
+    restart: always
     ports:
       - "8001:5432"
     env_file:
@@ -15,6 +17,8 @@ services:
   db-local2:
     image: postgres:14.5
     container_name: db-rails
+    hostname: db-rails
+    restart: always
     ports:
       - "8002:5432"
     env_file:
@@ -30,6 +34,8 @@ services:
       context: ./coordinator/
       network: host
     image: backend-bench:latest
+    hostname: coordinator
+    container_name: bench-backend-fastapi
     restart: always
     volumes:
       - ./coordinator/:/app/
@@ -47,6 +53,8 @@ services:
   ressearch_backend:
     build:
       context: ./ressearch/
+    container_name: bench-backend-rails
+    hostname: ressearch
     env_file:
       - .env
     volumes:
@@ -67,6 +75,8 @@ services:
     build: 
       context: ./finance/
       network: host
+    container_name: bench-backend-golang
+    hostname: finance
     volumes:
       - ./finance:/app
     image: finance_backend:latest
@@ -80,6 +90,7 @@ services:
     build: 
       context: ./frontend
       network: host
+    container_name: bench-frontend
     volumes:
       - ./frontend/app:/app
     ports:

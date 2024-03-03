@@ -31,11 +31,14 @@ async def healthcheck():
     ressearch_response = 'Failed'
     redis_response = 'Failed'
     finance_response = 'Failed'
-    async with aiohttp.ClientSession() as session:
-        async with session.get('http://ressearch_backend:3000/ping') as resp:
-            val = await resp.json()
-            if val.get('msg', None) == 'pong':
-                ressearch_response = 'Success'
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get('http://ressearch_backend:3000/ping') as resp:
+                val = await resp.json()
+                if val.get('msg', None) == 'pong':
+                    ressearch_response = 'Success'
+    except Exception as e:
+        ressearch_response = str(e)
     
     try:
         redis = await get_redis()
@@ -46,12 +49,14 @@ async def healthcheck():
     except Exception as e:
         redis_response = e.text
 
-    async with aiohttp.ClientSession() as session:
-        async with session.get('http://finance_backend:3001/v1/ping') as resp:
-            val = await resp.json()
-            if val.get('message', None) == 'pong':
-                finance_response = 'Success'
-  
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get('http://finance_backend:3001/v1/ping') as resp:
+                val = await resp.json()
+                if val.get('message', None) == 'pong':
+                    finance_response = 'Success'
+    except Exception as e:
+        finance_response = str(e)
 
 
     return {
