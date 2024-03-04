@@ -8,6 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from models.db import get_db, get_redis
 
+import pika
+
 app = FastAPI()
 
 app.add_middleware(
@@ -28,6 +30,19 @@ async def root():
 
 @app.get('/healthcheck')
 async def healthcheck():
+    credentials = pika.PlainCredentials('rmuser', 'rmpassword')
+    parameters = pika.ConnectionParameters('rabbitmq',
+                                    5672,
+                                    '/',
+                                    credentials)
+    connection = pika.BlockingConnection(parameters=parameters)
+    channel = connection.channel()
+    channel.queue_declare(queue='hello')
+
+    channel.basic_publish(exchange='',
+                    routing_key='hello',
+                    body='Hello W0rld!')
+    connection.close()
     ressearch_response = 'Failed'
     redis_response = 'Failed'
     finance_response = 'Failed'

@@ -115,12 +115,18 @@ services:
   
   rabbitmq:
     image: rabbitmq:3.10.7-management
+    container_name: 'bench-rabbitmq'
     ports:
       - 15672:15672
+      - 5672:5672
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
     env_file:
       - ./.env_rabbitmq
     networks:
       - backend_communicator
+    hostname: rabbitmq
   
     
     
