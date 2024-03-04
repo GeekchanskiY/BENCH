@@ -1,9 +1,15 @@
 from fastapi import APIRouter
 
+from models.user import User
+from models.db import get_db
+
+
 router = APIRouter()
 
 @router.get("/users/", tags=["users"])
 async def read_users():
+    with get_db() as session:
+        session.query(User).all()
     return [{"username": "Rick"}, {"username": "Morty"}]
 
 
