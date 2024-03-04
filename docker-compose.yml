@@ -119,6 +119,8 @@ services:
       - 15672:15672
     env_file:
       - ./.env_rabbitmq
+    networks:
+      - backend_communicator
   
     
     
