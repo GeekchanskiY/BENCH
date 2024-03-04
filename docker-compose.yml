@@ -50,6 +50,7 @@ services:
       - db-local
       - ressearch_backend
       - finance_backend
+      - rabbitmq
   
   # Rails application
   ressearch_backend:
