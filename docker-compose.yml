@@ -121,8 +121,8 @@ services:
       - 15672:15672
       - 5672:5672
     volumes:
-        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+      - rabbitmq_data:/var/lib/rabbitmq/
+      - rabbitmq_log:/var/log/rabbitmq/
     env_file:
       - ./.env_rabbitmq
     networks:
@@ -145,6 +145,8 @@ volumes:
   pgdata_rails:
   redis-cache:
     driver: local
+  rabbitmq_data:
+  rabbitmq_log:
   
 
 networks:
