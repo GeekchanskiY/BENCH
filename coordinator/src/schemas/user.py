@@ -23,6 +23,19 @@ class RegisterUser(BaseModel):
         
         return v
 
+class LoginUser(BaseModel):
+    model_config: ConfigDict = ConfigDict(from_attributes=True)
 
-class UserPrivate(BaseModel):
+    email: str = "SampleUserEmail"
+    password: str = "SampleStrongPassword"
+
+    @validator('password')
+    def validate_password(cls, v: str, values: dict, **kwargs):
+        if len(v) <= 8:
+            raise ValueError('Password is too short!')
+        
+        return v
+
+
+class UserPrivate(User):
     password: str
