@@ -4,6 +4,7 @@ from models.user import User
 from models.db import get_db
 import schemas.user as schemas
 from sqlalchemy.orm import Session
+from utils import bcrypt_utils
 
 
 
@@ -20,7 +21,7 @@ async def read_user_me():
     return {"username": "fakecurrentuser"}
 
 
-@router.get("/users/{username}", tags=["users"])
+@router.get("/users/{userid}", tags=["users"])
 async def read_user(username: str):
     return {"username": username}
 
@@ -31,11 +32,12 @@ async def create_user(user: schemas.RegisterUser, db: Session = Depends(get_db))
     new_user.email = user.email
     new_user.is_staff = True
     new_user.ip_adress = 'localhost'
+    new_user.password = bcrypt_utils.hash_password(user.password)
     db.add(new_user)
     db.commit()
     return new_user
 
-@router.get("/users/{userid}/delete")
+@router.get("/users/{userid}/delete", tags=["users"])
 async def delete_user(userid: int, db: Session = Depends(get_db)):
     user = db.query(User).where(User.id == userid).first()
     if user is not None:
