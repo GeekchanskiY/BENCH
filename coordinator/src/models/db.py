@@ -9,7 +9,7 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal: sessionmaker = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
-
+Base.metadata.create_all(bind=engine)
 
 async def get_redis():
     redis = await aioredis.from_url('redis://redis')
@@ -17,7 +17,5 @@ async def get_redis():
     
 
 def get_db():
-    Base.metadata.create_all(bind=engine)
-
     with SessionLocal() as session:
         yield session
