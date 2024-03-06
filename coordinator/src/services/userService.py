@@ -4,7 +4,7 @@ from repositories.userRepository import UserRepository
 from schemas.userSchema import UserSchema, LoginUserSchema, UserPrivateSchema \
     , RegisterUserSchema
 from schemas.jwtSchema import JWTDetailedSchema
-from .utils import bcrypt_utils
+from utils import bcrypt_utils
 
 
 class UserService:
@@ -35,5 +35,11 @@ class UserService:
     async def register(self, userdata: RegisterUserSchema, ip: str) -> UserSchema:
         userdata.password = bcrypt_utils.hash_password(userdata.password).decode('utf-8')
         user = self.user_repository.create_user(userdata, ip, False)
-        return UserSchema.model_validate(user)
+        return UserSchema(
+            id=user.id,
+            ip_adress=user.ip_adress,
+            name=user.name,
+            email=user.email,
+            is_staff=user.is_staff,
+        )
     
