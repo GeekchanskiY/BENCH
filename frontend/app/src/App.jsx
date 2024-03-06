@@ -8,7 +8,6 @@ function App() {
   return (
     <div className="App">
       <Header></Header>
-      <ApiCaller></ApiCaller>
       <Jwt></Jwt>
       <footer></footer>
     </div>

@@ -1,9 +1,16 @@
 import {useState, useEffect} from "react";
 
 function ApiItem(props){
-    return <div>
-        <span>Hehe {props.name}: {props.active}</span>
-    </div>
+    console.log(props.active)
+    if (props.active == "Success"){
+        return <div className="headerItem">
+            <span>{props.name} <div className="dot active"/></span>
+        </div>
+    } else {
+        return <div className="headerItem">
+           <span>{props.name} <div className="dot inactive"/> </span>
+        </div>
+    }
 }
 
 function ApiCaller(props){
@@ -27,26 +34,23 @@ function ApiCaller(props){
     }, [])
         
     function getServices(){
-        if (response.Services != undefined){
-            return <div>
-            {response.Services.map(entry => 
-                <span>
-                    <ApiItem name={entry.name} active={entry.Status}></ApiItem>
+        if (response.services != undefined){
+            return <div className="serviceStatuses">
+            <span className="serviceStatusesHeader">Services: </span>
+            {response.services.map(entry => 
+                <span key={entry.name}>
+                    <ApiItem name={entry.name} active={entry.response}></ApiItem>
                 </span>
             )}
             </div>
         } else {
-            return <span>Fuck</span>
+            return <span className="serviceStatusesHeader">Services data unavailable. Coordinator is not responding.</span>
         }
         
     }
         
     return <div>
         {getServices()}
-        <span>Request: {props.url}</span>
-        <span>Response: {JSON.stringify(response)}</span>
-        <span>Time: {seconds}</span>
-        <span>Status: {response === null ? "Success" : "Fail"}</span>
     </div>
 }
 
