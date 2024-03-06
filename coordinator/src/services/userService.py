@@ -6,6 +6,7 @@ from schemas.userSchema import UserSchema, LoginUserSchema, UserPrivateSchema \
 from schemas.jwtSchema import JWTDetailedSchema
 from utils import bcrypt_utils
 
+PREFIX = 'Bearer'
 
 class UserService:
     user_repository: UserRepository
@@ -43,3 +44,21 @@ class UserService:
             is_staff=user.is_staff,
         )
     
+
+    async def whoami(self, token) -> UserSchema:
+        bearer, _, token = token.partition(' ')
+        if bearer != PREFIX:
+            raise ValueError('Invalid token')
+
+        token_data: dict = jwt.decode(
+            token,
+            "secret",
+            algorithms="HS256")
+        user = self.user_repository.get_user_by_name(token_data['username'])
+        return UserSchema(
+            id=user.id,
+            ip_adress=user.ip_adress,
+            name=user.name,
+            email=user.email,
+            is_staff=user.is_staff,
+        )

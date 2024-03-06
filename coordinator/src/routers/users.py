@@ -26,8 +26,15 @@ async def authenticate_user(user: LoginUserSchema, service: UserService = Depend
         raise HTTPException(404, str(e))
 
 @router.get("/users/find/{userid}", dependencies=[Depends(JWTBearer())], tags=["users"])
-async def read_user(username: str):
+async def read_user(username: str, service: UserService = Depends(get_user_service)):
     return {"username": username}
+
+@router.get("/users/whoami", dependencies=[Depends(JWTBearer())], tags=["users"])
+async def whoami(request:Request, service: UserService = Depends(get_user_service)):
+    try:
+        return await service.whoami(token=request.headers.get('Authorization'))
+    except Exception as e:
+        raise HTTPException(404, str(e))
 
 @router.post("/users/register", tags=["users"])
 async def create_user(user: RegisterUserSchema, request:Request, service: UserService = Depends(get_user_service)):
