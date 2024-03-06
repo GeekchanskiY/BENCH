@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 
 from repositories.models.userModel import User
 from repositories.models.db import get_db
@@ -19,43 +19,25 @@ async def read_users(db: Session = Depends(get_db)):
     users = db.query(User).all()
     return users
 
-
-@router.get("/users/me", tags=["users"])
-async def read_user_me():
-    return {"username": "fakecurrentuser"}
-
-@router.post("/users/login", tags=["users"])
+@router.post("/users/login", tags=["users"], response_model=schemas.UserSchema)
 async def login_user(user: schemas.LoginUserSchema, service: UserService = Depends(get_user_service)):
     try:
         return await service.login(user)
     except Exception as e:
         raise HTTPException(404, str(e))
 
-@router.post("/users/login/refresh", tags=["users"])
-async def login_refresh():
-    return {
-        'status': 'success',
-        'token': 'token',
-        'expires_in': 9000
-    }
-
-@router.get("/users/{userid}", tags=["users"])
+@router.get("/users/find/{userid}", tags=["users"])
 async def read_user(username: str):
     return {"username": username}
 
-@router.post("/users/create", tags=["users"])
-async def create_user(user: schemas.RegisterUser, db: Session = Depends(get_db)):
-    new_user = User()
-    new_user.name = user.name
-    new_user.email = user.email
-    new_user.is_staff = True
-    new_user.ip_adress = 'localhost'
-    new_user.password = bcrypt_utils.hash_password(user.password).decode('utf-8')
-    db.add(new_user)
-    db.commit()
-    return new_user
+@router.post("/users/register", tags=["users"])
+async def create_user(user: schemas.RegisterUserSchema, request:Request, service: UserService = Depends(get_user_service)):
+    try:
+        return await service.register(user, request.client.host)
+    except Exception as e:
+        raise HTTPException(404, str(e))
 
-@router.get("/users/{userid}/delete", tags=["users"])
+@router.get("/users/delete", tags=["users"])
 async def delete_user(userid: int, db: Session = Depends(get_db)):
     user = db.query(User).where(User.id == userid).first()
     if user is not None:

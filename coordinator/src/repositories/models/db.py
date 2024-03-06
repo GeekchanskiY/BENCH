@@ -14,6 +14,7 @@ session: Session = SessionLocal()
 Base = declarative_base()
 Base.metadata.create_all(bind=engine)
 
+
 async def get_redis() -> Redis:
     return await aioredis.from_url('redis://redis')
 

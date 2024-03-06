@@ -1,7 +1,8 @@
 import jwt
 from datetime import datetime, timedelta
 from repositories.userRepository import UserRepository
-from schemas.userSchema import UserSchema, LoginUserSchema, UserPrivateSchema
+from schemas.userSchema import UserSchema, LoginUserSchema, UserPrivateSchema \
+    , RegisterUserSchema
 from schemas.jwtSchema import JWTDetailedSchema
 from .utils import bcrypt_utils
 
@@ -30,5 +31,9 @@ class UserService:
             username=db_user.name,
             expires_at=str(datetime.now() + timedelta(minutes=30))
         )
-    
+
+    async def register(self, userdata: RegisterUserSchema, ip: str) -> UserSchema:
+        userdata.password = bcrypt_utils.hash_password(userdata.password).decode('utf-8')
+        user = self.user_repository.create_user(userdata, ip, False)
+        return UserSchema.model_validate(user)
     

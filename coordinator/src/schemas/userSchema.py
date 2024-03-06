@@ -10,7 +10,7 @@ class UserSchema(BaseModel):
     is_staff: bool
     ip_adress: str
 
-class RegisterUser(BaseModel):
+class RegisterUserSchema(BaseModel):
     model_config: ConfigDict = ConfigDict(from_attributes=True)
     name: str = "SampleUserName"
     email: str = "SampleUserEmail"
