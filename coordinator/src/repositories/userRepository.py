@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from .models.db import get_db
 from .models.userModel import User
-from .schemas.userSchema import UserSchema, UserPrivateSchema
+from schemas.userSchema import UserSchema, UserPrivateSchema
 
 class UserRepository:
     db: Session
@@ -15,7 +15,7 @@ class UserRepository:
         return self.db.query(User).all()
 
     def get_user_by_email(self, email:str) -> User:
-        pass
+        return self.db.query(User).where(User.email == email).first()
 
     def get_user_by_name(self, name: str) -> User:
         pass

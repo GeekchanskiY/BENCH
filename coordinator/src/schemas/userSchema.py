@@ -23,7 +23,7 @@ class RegisterUser(BaseModel):
         
         return v
 
-class LoginUser(BaseModel):
+class LoginUserSchema(BaseModel):
     model_config: ConfigDict = ConfigDict(from_attributes=True)
 
     email: str = "SampleUserEmail"

@@ -2,9 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from repositories.models.userModel import User
 from repositories.models.db import get_db
-import repositories.schemas.userSchema as schemas
+from .depends import UserService, get_user_service
+import schemas.userSchema as schemas
 from sqlalchemy.orm import Session
-from utils import bcrypt_utils
+from services.utils import bcrypt_utils
 
 import jwt
 from datetime import datetime, timedelta
@@ -24,24 +25,11 @@ async def read_user_me():
     return {"username": "fakecurrentuser"}
 
 @router.post("/users/login", tags=["users"])
-async def login_user(user: schemas.LoginUser, db: Session = Depends(get_db)):
-    db_user = db.query(User).where(User.email == user.email).first()
-    if db_user is None:
-        raise HTTPException(404, "User not found")
-    
-    if not bcrypt_utils.verify_password(db_user.password, user.password):
-        raise HTTPException(404, "Incorrect password!")
-
-    token: str = jwt.encode({
-        "username": db_user.name,
-        "expires_at": str(datetime.now() + timedelta(minutes=30))
-    }, "secret", algorithm="HS256")
-
-    return {
-        'status': 'success',
-        'token': token,
-        'expires_at': str(datetime.now() + timedelta(minutes=30))
-    }
+async def login_user(user: schemas.LoginUserSchema, service: UserService = Depends(get_user_service)):
+    try:
+        return await service.login(user)
+    except Exception as e:
+        raise HTTPException(404, str(e))
 
 @router.post("/users/login/refresh", tags=["users"])
 async def login_refresh():
