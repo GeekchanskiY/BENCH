@@ -6,9 +6,9 @@ def hash_password(password):
     return hashed_password
 
 
-def verify_password(hashed_password, input_password):
+def verify_password(hashed_password: str, input_password):
     
-    return bcrypt.checkpw(input_password.encode('utf-8'), hashed_password)
+    return bcrypt.checkpw(password=bytes(input_password, 'utf-8'), hashed_password=bytes(hashed_password, 'utf-8'))
 
 
 if __name__ == "__main__":
