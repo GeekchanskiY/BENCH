@@ -75,7 +75,18 @@ async def healthcheck():
 
 
     return {
-        'Ressearch': ressearch_response,
-        'Redis': redis_response,
-        'Finance': finance_response
+        'Services': [
+            {
+                'name': 'Ressearch',
+                'response': ressearch_response
+            },
+            {
+                'name': 'Redis',
+                'response': redis_response
+            },
+            {
+                'name': 'Finance',
+                'response': finance_response
+            }
+        ],
     }
