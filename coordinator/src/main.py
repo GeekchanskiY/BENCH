@@ -6,7 +6,7 @@ from routers.users import router as user_router
 
 from fastapi.middleware.cors import CORSMiddleware
 
-from models.db import get_db, get_redis
+from repositories.models.db import get_db, get_redis
 
 import pika
 

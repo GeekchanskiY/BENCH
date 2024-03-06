@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict, validator
 
-class User(BaseModel):
+class UserSchema(BaseModel):
     model_config: ConfigDict = ConfigDict(from_attributes=True)
 
     id: int | None = None
@@ -37,5 +37,5 @@ class LoginUser(BaseModel):
         return v
 
 
-class UserPrivate(User):
+class UserPrivateSchema(UserSchema):
     password: str

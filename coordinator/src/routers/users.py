@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from models.user import User
-from models.db import get_db
-import schemas.user as schemas
+from repositories.models.userModel import User
+from repositories.models.db import get_db
+import repositories.schemas.userSchema as schemas
 from sqlalchemy.orm import Session
 from utils import bcrypt_utils
 
@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 
 router: APIRouter = APIRouter()
 
-@router.get("/users/", tags=["users"], response_model=list[schemas.UserPrivate])
+@router.get("/users/", tags=["users"], response_model=list[schemas.UserPrivateSchema])
 async def read_users(db: Session = Depends(get_db)):
     users = db.query(User).all()
     return users
