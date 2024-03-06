@@ -3,9 +3,9 @@ import { createSlice } from '@reduxjs/toolkit'
 export const jwtSlice = createSlice({
   name: 'jwt',
   initialState: {
-    username: null,
-    token: null,
-    expires_in: null,
+    username: "asdasd",
+    token: "asdasd",
+    expires_in: "asdasdsadasd",
   },
   reducers: {
     logout: (state) => {
@@ -22,6 +22,6 @@ export const jwtSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { login, logout } = jwtSlice.actions
+export const { logout, login } = jwtSlice.actions
 
 export default jwtSlice.reducer
