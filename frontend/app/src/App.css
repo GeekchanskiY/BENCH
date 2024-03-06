@@ -68,3 +68,7 @@ header{
 .inactive{
   background-color: red;
 }
+
+.whoami{
+  border: 1px solid white;
+}

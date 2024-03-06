@@ -1,7 +1,26 @@
+import { UseSelector, useSelector } from "react-redux";
 
 async function getRequest(url){
     
     return fetch(url)
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+        return data;
+    })
+    .catch(rejected => {
+        console.log(rejected);
+        return {'error': rejected};
+    });
+}
+
+async function getRequestAuth(url, jwt){
+    return fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + jwt
+        }
+    })
     .then(res => res.json())
     .then(data => {
         console.log(data);
@@ -37,4 +56,4 @@ async function postRequest(url, body){
     
 }
 
-export {postRequest, getRequest};
+export {postRequest, getRequest, getRequestAuth};

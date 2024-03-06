@@ -1,5 +1,7 @@
 import logo from '../img/logo_GPT.jpg'
 import ApiCaller from './ApiCaller'
+import WhoAmI from './WhoAmI'
+
 export default function Header(){
     return <header>
         <div className='side_header'>
@@ -8,6 +10,9 @@ export default function Header(){
         </div>
         <div className='side_header'>
             <ApiCaller/>
+        </div>
+        <div className='side_header whoami'>
+            <WhoAmI/>
         </div>
         
     </header>
