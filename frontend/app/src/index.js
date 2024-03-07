@@ -4,12 +4,22 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import store from './app/store';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from 'react-redux';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
-    <App />
+    <Header></Header>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />}></Route>
+        <Route path="/login" element={<App />}></Route>
+      </Routes>
+    </BrowserRouter>
+    <Footer></Footer>
   </Provider>
 );
 
