@@ -128,6 +128,8 @@ services:
     networks:
       - backend_communicator
     hostname: rabbitmq
+    logging:
+      driver: none
   
     
     
