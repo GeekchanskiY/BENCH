@@ -2,6 +2,7 @@ import { Formik } from 'formik';
 import { postRequest } from '../features/requests/requests';
 import { UseSelector, useDispatch, useSelector } from "react-redux";
 import { login_slice } from '../features/jwt/jwtSlice';
+import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
 
 const LoginSchema = Yup.object().shape({
@@ -16,6 +17,7 @@ const LoginSchema = Yup.object().shape({
 
 export default function Login(){
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     async function login_request(values){
         console.log(values)
         let data = await postRequest(
@@ -36,12 +38,13 @@ export default function Login(){
     }
     return <div>
         <Formik
-        initialValues={{ email: 'dmt@mail.ru', password: '12345678!' }}
+        initialValues={{ email: 'dmt@mail.ru', password: 'password!' }}
         validationSchema={LoginSchema}
         onSubmit={(values, { setSubmitting }) => {
             setTimeout(() => {
                 login_request(values);
                 setSubmitting(false);
+                navigate('/')
               }, 400);
         }}
       >
