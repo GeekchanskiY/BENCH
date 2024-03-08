@@ -8,7 +8,7 @@ from schemas.userSchema import UserSchema, LoginUserSchema, UserPrivateSchema, R
 from schemas.jwtSchema import JWTDetailedSchema
 from sqlalchemy.orm import Session
 
-from .middlewares import JWTBearer, get_jwt_bearer, JWTCredentials
+from .depends import JWTBearer, get_jwt_bearer, JWTCredentials
 
 
 
