@@ -16,6 +16,7 @@ class ServiceSchema(BaseModel):
 class ServiceLogSchema(BaseModel):
     model_config: ConfigDict = ConfigDict(from_attributes=True)
 
+    id: int | None
     service_id: int
     message: str
 
