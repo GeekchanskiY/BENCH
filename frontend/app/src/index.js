@@ -10,6 +10,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Login from './components/Login';
 import User from './components/User';
+import ServiceList from './components/ServiceList';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -23,6 +24,7 @@ root.render(
           <Route path="/" element={<App />}></Route>
           <Route path='/me' element={<User/>}/>
           <Route path="/login" element={<Login />}></Route>
+          <Route path='/services' element={<ServiceList/>} />
         </Routes>
       </div>
     <Footer></Footer>

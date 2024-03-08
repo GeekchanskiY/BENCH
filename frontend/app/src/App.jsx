@@ -1,7 +1,5 @@
 import './App.css';
-import ApiCaller from './components/ApiCaller';
-
-import Header from './components/Header';
+import { Link } from 'react-router-dom';
 
 function App() {
   return <div className="index-page">
@@ -11,6 +9,7 @@ function App() {
         create full development cycle, and just to have fun while I'm on
         bench.
       </p>
+      <Link to={'/services'}>Services</Link>
   </div>
 
 }
