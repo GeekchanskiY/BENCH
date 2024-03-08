@@ -21,6 +21,18 @@ header{
   height: 60px;
   display: flex;
 }
+footer{
+  position: absolute;
+  bottom: 0;
+  height: 30px;
+  width: 100%;
+  background-color: #111111;
+}
+.content-wrap{
+  position: relative;
+  min-height: calc(100vh - 30px - 60px);
+  padding-bottom: 30px;
+}
 
 .side_header{
   display: flex;
@@ -70,5 +82,9 @@ header{
 }
 
 .whoami{
-  border: 1px solid white;
+
+}
+
+form{
+  color: #444;
 }

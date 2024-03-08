@@ -8,12 +8,12 @@ export const jwtSlice = createSlice({
     expires_in: "asdasdsadasd",
   },
   reducers: {
-    logout: (state) => {
+    logout_slice: (state) => {
       state.username = null
       state.token = null
       state.expires_in = null
     },
-    login: (state, action) => {
+    login_slice: (state, action) => {
       state.username = action.payload.username
       state.token = action.payload.token
       state.expires_in = action.payload.expires_in
@@ -22,6 +22,6 @@ export const jwtSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { logout, login } = jwtSlice.actions
+export const { logout_slice, login_slice } = jwtSlice.actions
 
 export default jwtSlice.reducer

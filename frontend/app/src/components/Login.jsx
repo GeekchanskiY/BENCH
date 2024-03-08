@@ -1,0 +1,81 @@
+import { Formik } from 'formik';
+import { postRequest } from '../features/requests/requests';
+import { UseSelector, useDispatch, useSelector } from "react-redux";
+import { login_slice } from '../features/jwt/jwtSlice';
+import * as Yup from 'yup';
+
+const LoginSchema = Yup.object().shape({
+    password: Yup.string()
+      .min(8, 'Min 8 symbols')
+      .max(50, 'Max 50 symbols')
+      .required('required field'),
+    
+    email: Yup.string().email('Wrong e-mail').required('Required field'),
+  });
+
+
+export default function Login(){
+    const dispatch = useDispatch()
+    async function login_request(values){
+        console.log(values)
+        let data = await postRequest(
+            'http://0.0.0.0:80/users/auth',
+            {
+                "email": values.email,
+                "password": values.password
+            }
+        )
+        
+        dispatch(
+        login_slice({
+            username: data.username,
+            expires_at: data.expires_at,
+            token: data.token
+        })
+        )
+    }
+    return <div>
+        <Formik
+        initialValues={{ email: 'dmt@mail.ru', password: '12345678!' }}
+        validationSchema={LoginSchema}
+        onSubmit={(values, { setSubmitting }) => {
+            setTimeout(() => {
+                login_request(values);
+                setSubmitting(false);
+              }, 400);
+        }}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+        }) => (
+          <form onSubmit={handleSubmit}>
+            <input
+              type="email"
+              name="email"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.email}
+            />
+            {errors.email && touched.email && errors.email}
+            <input
+              type="password"
+              name="password"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.password}
+            />
+            {errors.password && touched.password && errors.password}
+            <button type="submit" disabled={isSubmitting}>
+              Submit
+            </button>
+          </form>
+        )}
+      </Formik>
+    </div>
+}
