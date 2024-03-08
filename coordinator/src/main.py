@@ -3,6 +3,7 @@ import aiohttp
 from fastapi import FastAPI
 
 from routers.users import router as user_router
+from routers.services import router as service_router
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -20,13 +21,12 @@ app.add_middleware(
     allow_headers=['*']
 )
 
-app.include_router(user_router)
+app.include_router(user_router, prefix='/users')
+app.include_router(service_router, prefix='/services')
 
 @app.get("/")
 async def root():
-    a = get_db()
-    return {"message": str(a),
-            "ping": "pong3"}
+    return {'message': 'pong'}
 
 @app.get('/healthcheck')
 async def healthcheck():
