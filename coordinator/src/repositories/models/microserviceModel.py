@@ -26,5 +26,9 @@ class Service(Base):
 class ServiceLog(Base):
     __tablename__ = "servicelogs"
     id: Mapped[int] = mapped_column(primary_key=True)
-    service_id: Mapped[int] = mapped_column(ForeignKey('services.id'))
+    service_id: Mapped[int] = mapped_column(
+        ForeignKey('services.id'),
+        nullable=False
+    )
+    message: Mapped[String] = Column(String, nullable=False)
     service: Mapped[Service] = relationship('Service', back_populates='logs')
