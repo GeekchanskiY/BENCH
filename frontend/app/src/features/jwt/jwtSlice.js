@@ -3,9 +3,9 @@ import { createSlice } from '@reduxjs/toolkit'
 export const jwtSlice = createSlice({
   name: 'jwt',
   initialState: {
-    username: "asdasd",
-    token: "asdasd",
-    expires_in: "asdasdsadasd",
+    username: null,
+    token: null,
+    expires_in: null,
   },
   reducers: {
     logout_slice: (state) => {

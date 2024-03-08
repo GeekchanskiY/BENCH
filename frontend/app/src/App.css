@@ -94,3 +94,13 @@ footer{
 form{
   color: #444;
 }
+
+.index-page{
+  text-align: center;
+  padding-top: 40px;
+}
+.index-page p{
+  margin-top: 20px;
+  width: 70%;
+  margin-left: 15%;
+}

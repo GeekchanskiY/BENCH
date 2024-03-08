@@ -1,6 +1,8 @@
 import {useState, useEffect} from "react";
 import { useSelector } from "react-redux";
 import { getRequestAuth } from "../features/requests/requests";
+import { Link } from "react-router-dom";
+
 export default function WhoAmI(){
     const jwt = useSelector((state) => state.jwt.token)
     const [response, setResponse] = useState('')
@@ -17,11 +19,16 @@ export default function WhoAmI(){
         get_my_data()
         
     }, [])
-    return <div className="whoAmI">
-        <span>
-        {response}
-        </span>
-        
-        <button onClick={get_my_data}>refresh</button>
-    </div>
+
+    if (jwt != null){
+        return <div className="whoAmI">
+            <span>
+                Current user: {response}
+            </span>
+        </div> 
+    } else {
+        return <div className="whoAmI">
+            <Link to={'/login'}>Login</Link>
+        </div>
+    }
 }
