@@ -45,20 +45,16 @@ class UserService:
         )
     
 
-    async def whoami(self, token) -> UserSchema:
-        bearer, _, token = token.partition(' ')
-        if bearer != PREFIX:
-            raise ValueError('Invalid token')
+    async def get_user_by_name(self, username: str) -> UserSchema:
 
-        token_data: dict = jwt.decode(
-            token,
-            "secret",
-            algorithms="HS256")
-        user = self.user_repository.get_user_by_name(token_data['username'])
-        return UserSchema(
-            id=user.id,
-            ip_adress=user.ip_adress,
-            name=user.name,
-            email=user.email,
-            is_staff=user.is_staff,
-        )
+        user = self.user_repository.get_user_by_name(username)
+        if user is not None:
+            return UserSchema(
+                id=user.id,
+                ip_adress=user.ip_adress,
+                name=user.name,
+                email=user.email,
+                is_staff=user.is_staff,
+            )
+        else:
+            raise Exception('User not found')
