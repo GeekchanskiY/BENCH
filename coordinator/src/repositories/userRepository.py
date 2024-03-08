@@ -27,6 +27,10 @@ class UserRepository:
         new_user.is_staff = is_staff
         new_user.ip_adress = ip
         new_user.password = user.password
-        self.db.add(new_user)
-        self.db.commit()
-        return new_user
+        try:
+            self.db.add(new_user)
+            self.db.commit()
+            return new_user
+        except Exception as e:
+            self.db.rollback()
+            raise e
