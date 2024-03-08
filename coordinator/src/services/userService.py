@@ -4,6 +4,7 @@ from repositories.userRepository import UserRepository
 from schemas.userSchema import UserSchema, LoginUserSchema, UserPrivateSchema \
     , RegisterUserSchema
 from schemas.jwtSchema import JWTDetailedSchema
+from schemas.statusSchemas import MessageResponseSchema
 from utils import bcrypt_utils
 
 PREFIX = 'Bearer'
@@ -58,3 +59,14 @@ class UserService:
             )
         else:
             raise Exception('User not found')
+        
+    async def get_users(self) -> list[UserSchema]:
+        return self.user_repository.get_users()
+    
+    async def delete_user(self, username: str) -> bool:
+        deleted: bool = self.user_repository.delete_user(username)
+        if deleted:
+            return MessageResponseSchema(msg='Deleted')
+        else:
+            return MessageResponseSchema(msg='Failed to delete')
+    
