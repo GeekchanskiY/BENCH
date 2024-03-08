@@ -34,3 +34,15 @@ class UserRepository:
         except Exception as e:
             self.db.rollback()
             raise e
+    
+    def delete_user(self, name: str) -> bool:
+        db_user = self.db.query(User).where(User.name == name).first()
+        if db_user is None:
+            raise Exception('User not found')
+        
+        try:
+            self.db.delete(db_user)
+            self.db.commit()
+        except Exception as e:
+            self.db.rollback()
+            raise e
