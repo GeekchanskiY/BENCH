@@ -49,7 +49,7 @@ class JWTBearer(HTTPBearer):
 jwtBearer = JWTBearer()
 
 def get_jwt_bearer():
-    return jwtBearer()
+    return jwtBearer
 
 user_service = UserService()
 service_service = ServiceService()
