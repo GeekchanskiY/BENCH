@@ -7,6 +7,9 @@ class ServiceSchema(BaseModel):
     description: str
     is_active: bool
 
+    url: str
+    ping_url: str
+
 
 class ServiceLogSchema(BaseModel):
     model_config: ConfigDict = ConfigDict(from_attributes=True)

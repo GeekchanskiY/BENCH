@@ -13,6 +13,9 @@ class Service(Base):
     description: Mapped[String] = Column(String)
     is_active: Column = Column(Boolean)
 
+    url: Column = Column(String)
+    ping_url: Column = Column(String)
+
     logs: Mapped[List['ServiceLog']] = relationship(
         'ServiceLog',
         back_populates='service'
