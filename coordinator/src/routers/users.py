@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
-
+from fastapi.security import HTTPAuthorizationCredentials
+from typing import Annotated
 from repositories.models.userModel import User
 from repositories.models.db import get_db
 from .depends import UserService, get_user_service
@@ -7,7 +8,7 @@ from schemas.userSchema import UserSchema, LoginUserSchema, UserPrivateSchema, R
 from schemas.jwtSchema import JWTDetailedSchema
 from sqlalchemy.orm import Session
 
-from .middlewares import JWTBearer
+from .middlewares import JWTBearer, get_jwt_bearer, JWTCredentials
 
 
 
@@ -29,8 +30,9 @@ async def authenticate_user(user: LoginUserSchema, service: UserService = Depend
 async def read_user(username: str, service: UserService = Depends(get_user_service)):
     return {"username": username}
 
-@router.get("/whoami", dependencies=[Depends(JWTBearer())], tags=["users"])
-async def whoami(request:Request, service: UserService = Depends(get_user_service)):
+@router.get("/whoami", tags=["users"])
+async def whoami(request:Request, credentials: JWTCredentials = Depends(JWTBearer()), service: UserService = Depends(get_user_service),):
+    print(credentials.username)
     try:
         return await service.whoami(token=request.headers.get('Authorization'))
     except Exception as e:
