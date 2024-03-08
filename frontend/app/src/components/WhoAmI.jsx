@@ -24,7 +24,7 @@ export default function WhoAmI(){
         get_my_data()
         return <div className="whoAmI">
             <span>
-                Current user: {response}
+                <Link to={'/me'}>{response}</Link>
             </span>
         </div> 
     } else {

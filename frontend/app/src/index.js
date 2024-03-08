@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Login from './components/Login';
+import User from './components/User';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -20,6 +21,7 @@ root.render(
     <div className='content-wrap'>
         <Routes>
           <Route path="/" element={<App />}></Route>
+          <Route path='/me' element={<User/>}/>
           <Route path="/login" element={<Login />}></Route>
         </Routes>
       </div>
