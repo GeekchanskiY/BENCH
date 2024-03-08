@@ -54,23 +54,24 @@ export default function Login(){
           handleSubmit,
           isSubmitting,
         }) => (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className='frm loginform'>
+            <h3>Login</h3>
             <input
               type="email"
               name="email"
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.email}
-            />
-            {errors.email && touched.email && errors.email}
+            /> <br />
+            <span className='errors'>{errors.email && touched.email && errors.email}</span> <br />
             <input
               type="password"
               name="password"
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.password}
-            />
-            {errors.password && touched.password && errors.password}
+            /> <br />
+             <span className='errors'>{errors.password && touched.password && errors.password}</span> <br />
             <button type="submit" disabled={isSubmitting}>
               Submit
             </button>

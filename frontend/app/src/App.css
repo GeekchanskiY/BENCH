@@ -104,3 +104,47 @@ form{
   width: 70%;
   margin-left: 15%;
 }
+
+.frm{
+  margin: 5rem auto;
+  width: fit-content;
+  padding: 40px;
+  text-align: center;
+  color: #111;
+}
+
+.frm input{
+  color: #fff;
+  margin-top: 10px;
+  font-size: 18px;
+  text-align: center;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid white;
+  outline: none;
+  transition: .5s;
+}
+.frm input:active, .frm input:focus{
+  border-bottom: 1px solid #F4CE14;
+}
+
+.frm .errors{
+  color: red;
+}
+
+.frm button{
+  color: #fff;
+  margin-top: 10px;
+  font-size: 18px;
+  text-align: center;
+  background-color: transparent;
+  outline: none;
+  border: 1px solid white;
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: .5s;
+}
+.frm button:active, .frm button:focus, .frm button:hover{
+  border: 1px solid #F4CE14;
+}

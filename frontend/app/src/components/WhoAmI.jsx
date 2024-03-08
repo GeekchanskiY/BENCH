@@ -8,6 +8,7 @@ export default function WhoAmI(){
     const [response, setResponse] = useState('')
     
     function get_my_data(){
+
         getRequestAuth('http://0.0.0.0/users/whoami', jwt)
         .then(data => {
             console.log(data)
@@ -16,11 +17,11 @@ export default function WhoAmI(){
     }
 
     useEffect(()=>{
-        get_my_data()
-        
+               
     }, [])
 
     if (jwt != null){
+        get_my_data()
         return <div className="whoAmI">
             <span>
                 Current user: {response}
