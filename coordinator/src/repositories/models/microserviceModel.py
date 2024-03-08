@@ -6,22 +6,25 @@ from sqlalchemy import Column, String, Integer, Boolean, ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 class Service(Base):
-     __tablename__ = "servises"
+    __tablename__ = "services"
 
-     id: Mapped[int] = mapped_column(primary_key=True)
-     name: Mapped[String] = Column(String(30))
-     description: Mapped[String] = Column(String)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[String] = Column(String(30), unique=True)
+    description: Mapped[String] = Column(String)
+    is_active: Column = Column(Boolean)
 
-     is_active: Column = Column(Boolean)
-
-     logs: Mapped[List['ServiceLog']] = relationship(back_populates="servise")
+    logs: Mapped[List['ServiceLog']] = relationship(
+        'ServiceLog',
+        back_populates='service'
+    )
      
-
-     def __repr__(self) -> str:
-         return f"User(id={self.id!r}, name={self.name!r}, fullname={self.fullname!r})"
+    def __repr__(self) -> str:
+        return f"Service(id={self.id!r}," \
+            "name={self.name!r}," \
+            "description={self.description!r})"
 
 class ServiceLog(Base):
-    __tablename__ = "serviselogs"
+    __tablename__ = "servicelogs"
     id: Mapped[int] = mapped_column(primary_key=True)
-    service_id: Mapped[int] = mapped_column(ForeignKey(Service.id))
-    service: Mapped['Service'] = relationship(back_populates='service_logs')
+    service_id: Mapped[int] = mapped_column(ForeignKey('services.id'))
+    service: Mapped[Service] = relationship('Service', back_populates='logs')

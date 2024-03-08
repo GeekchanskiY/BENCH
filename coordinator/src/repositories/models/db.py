@@ -8,11 +8,19 @@ from aioredis import Redis
 SQLALCHEMY_DATABASE_URL = 'postgresql://staffing:staffing@db-fastapi:5432/backend_fastapi'
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
-SessionLocal: sessionmaker = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+SessionLocal: sessionmaker = sessionmaker(
+    autocommit=False,
+    autoflush=False, 
+    bind=engine
+)
+
 session: Session = SessionLocal()
 
 Base = declarative_base()
-Base.metadata.create_all(bind=engine)
+
+# Unused because of alembic
+# Base.metadata.create_all(bind=engine)
 
 
 async def get_redis() -> Redis:
