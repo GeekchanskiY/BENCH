@@ -13,16 +13,18 @@ import Login from './components/Login';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
-    <Header></Header>
+    
     <div className='content-wrap'>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />}></Route>
-        <Route path="/login" element={<Login />}></Route>
-      </Routes>
+      <Header></Header>
+        <Routes>
+          <Route path="/" element={<App />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+        </Routes>
+      <Footer></Footer>
     </BrowserRouter>
     </div>
-    <Footer></Footer>
+    
   </Provider>
 );
 

@@ -39,8 +39,14 @@ footer{
   width: 33%;
   align-items: center;
 }
+.side_header a{
+  display: flex;
+  width: 100%;
+  align-items: center;
+  text-decoration: none;
+}
 
-.side_header img{
+.side_header a img{
   width: 60px;
   height: 60px;
   align-items: flex-end;
