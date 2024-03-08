@@ -14,16 +14,18 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
     
+    
+  <BrowserRouter>
+    <Header></Header>
     <div className='content-wrap'>
-    <BrowserRouter>
-      <Header></Header>
         <Routes>
           <Route path="/" element={<App />}></Route>
           <Route path="/login" element={<Login />}></Route>
         </Routes>
-      <Footer></Footer>
-    </BrowserRouter>
-    </div>
+      </div>
+    <Footer></Footer>
+  </BrowserRouter>
+    
     
   </Provider>
 );
