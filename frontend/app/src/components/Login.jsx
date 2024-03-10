@@ -2,8 +2,7 @@ import { Formik } from 'formik';
 import { postRequest } from '../features/requests/requests';
 import { useDispatch, useSelector } from "react-redux";
 import { login_slice } from '../features/jwt/jwtSlice';
-import { useNavigate } from "react-router-dom";
-import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 const LoginSchema = Yup.object().shape({
@@ -17,16 +16,10 @@ const LoginSchema = Yup.object().shape({
 
 
 export default function Login(){
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const jwt = useSelector((state) => state.jwt.token)
 
-    useEffect(()=>{
-      if (jwt != null){
-        navigate('/me')
-      }
-    }, [])
-    
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     async function login_request(values){
         console.log(values)
         let data = await postRequest(
@@ -36,27 +29,34 @@ export default function Login(){
                 "password": values.password
             }
         )
-        
-        dispatch(
-        login_slice({
-            username: data.username,
-            expires_at: data.expires_at,
-            token: data.token
-        })
-        )
+        if (data.success == true){
+          dispatch(
+              login_slice({
+                  username: data.username,
+                  expires_at: data.expires_at,
+                  token: data.token
+              })
+            )
+            
+        } 
+        return data
     }
+
     return <div>
         <Formik
         initialValues={{ email: 'dmt@mail.ru', password: 'password!' }}
         validationSchema={LoginSchema}
-        onSubmit={(values, { setSubmitting }) => {
-            setTimeout(async () => {
-                await login_request(values);
-                setSubmitting(false);
-                navigate('/me')
-              }, 400);
-        }}
-      >
+        onSubmit={async (values, { setSubmitting, setErrors }) => {
+          
+          let data = await login_request(values);
+          if (data.success == true){
+            setSubmitting(false);
+            navigate('/me')
+          } else {
+            setErrors({'email': 'Invalid login or password!'})
+          }
+          
+        }}>
         {({
           values,
           errors,

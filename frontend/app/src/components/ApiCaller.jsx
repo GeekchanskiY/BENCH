@@ -1,7 +1,6 @@
 import {useState, useEffect} from "react";
 
 function ApiItem(props){
-    console.log(props.active)
     if (props.active == "Success"){
         return <div className="headerItem">
             <span>{props.name} <div className="dot active"/></span>
