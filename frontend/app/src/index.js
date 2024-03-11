@@ -11,6 +11,7 @@ import Footer from './components/Footer';
 import Login from './components/Login';
 import User from './components/User';
 import ServiceList from './components/ServiceList';
+import LogListener from './components/LogListener';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -25,6 +26,7 @@ root.render(
           <Route path='/me' element={<User/>}/>
           <Route path="/login" element={<Login />}></Route>
           <Route path='/services' element={<ServiceList/>} />
+          <Route path='/logs' element={<LogListener/>} />
         </Routes>
       </div>
     <Footer></Footer>
