@@ -8,16 +8,18 @@ export CGO_ENABLED=1
 
 ## Services:
 1 - Coordinator
-an fastapi app which gets all the required info from 3rd-party services and 
+FastAPI
 stores it's states
 2 - Ressearch 
-Ruby app with functionality to be able to do some notes of different types, and analyze them
-3 - Combinator
-Gin app, which allows to do some plannings, create roadmap and analysis with heavy calculations
-4 - Portfolio
-Django (DRF) app with portfolio items 
+Ruby on Rails
+3 - Finance
+Gin
+4 - Support
+Django + DRF
 5 - Frontend
-React application which represents data from all 3 services
+React
+6 - Big Guy
+gRPC
 
 
 ## Tech stack:
@@ -25,11 +27,12 @@ React application which represents data from all 3 services
     Ruby+Rails
     Python+FastAPI
     Python+DRF
-    Golang+Gin
+    Go+Gin
     FE:
     JavaScript+ReactJS
-    .erb
-    django-templates
+
+Libraries:
+  TODO: add
 
 # Setup guide:
 
@@ -52,3 +55,31 @@ RABBITMQ_DEFAULT_PASS=rmpassword
 
 # Services
 ![Services](img/BENCH_schema.drawio.png)
+
+First of all, it's a test project, so it's ok for me if something does
+not work at all, or something is not implemented. The goal is to
+to test different frameworks, methodologies, technologies, etc.
+
+FastAPI service is a middleware between services.
+it includes:
+    kafka consumer and producer
+    rabbitmq consumer and producer
+    redis connection for request caching
+    some descriptions for other services
+
+Ruby on Rails service:
+it includes:
+    rabbitmq consumer and producer
+
+Django app:
+it includes:
+    kafka consumer and producer
+
+Gin App:
+it includes:
+    gRPC client
+    kafka consumer and producer
+
+React App:
+    websockets and http connection
+    with FastAPI
