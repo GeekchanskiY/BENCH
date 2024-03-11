@@ -52,6 +52,22 @@ services:
       - finance_backend
       - rabbitmq
   
+  support_backend:
+    build:
+      context: ./support/
+      network: host
+    hostname: support
+    image: backend-bench-django:latest
+    container_name: bench-backend-django
+    ports:
+      - "3003:3003"
+    networks:
+      - backend_communicator
+    depends_on:
+      - coordinator_backend
+    volumes:
+      - ./support/:/app/
+  
   # Rails application
   ressearch_backend:
     build:
