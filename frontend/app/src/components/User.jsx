@@ -18,7 +18,6 @@ export default function User(){
         }
         getRequestAuth('http://0.0.0.0/users/whoami', jwt)
         .then(data => {
-            console.log(data)
             setUserData({
                 'email': data.response.email,
                 'username': data.response.name,

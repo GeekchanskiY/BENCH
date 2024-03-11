@@ -11,8 +11,7 @@ export default function WhoAmI(){
 
         getRequestAuth('http://0.0.0.0/users/whoami', jwt)
         .then(data => {
-            console.log(data)
-            setResponse(data.name)
+            setResponse(data.response.name)
         })
     }
 
