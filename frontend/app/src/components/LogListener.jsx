@@ -1,22 +1,24 @@
 import { useState, useEffect } from "react"
 import io from 'socket.io-client';
 
-const socket = io('ws://coordinator:80/ws');
+const socket = new WebSocket("ws://0.0.0.0:80/ws");
 
 export default function LogListener(){
     const [messages, setMessages] = useState([]);
     useEffect(() => {
-        socket.on('message', (data) => {
-          setMessages((prevMessages) => [...prevMessages, data]);
-        });
+        socket.onopen = function() {
+            alert("Соединение установлено.");
+          };
+        socket.onmessage = (event) => {
+          setMessages((prevMessages) => [...prevMessages, event.data]);
+        };
       }, []);
 
       const handleSubmit = (event) => {
         event.preventDefault();
         const message = event.target.elements.message.value;
-        socket.emit('message', message);
-        alert(message)
-        event.target.elements.message.value = '';
+        socket.send('message', message);
+        
       };
     
       return <div>

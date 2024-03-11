@@ -1,6 +1,6 @@
 import aiohttp
 
-from fastapi import FastAPI, WebSocket
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 
 from routers.users import router as user_router
 from routers.services import router as service_router
@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from repositories.models.db import get_db, get_redis
 import websockets
 import pika
+import asyncio
 
 app = FastAPI()
 
@@ -91,16 +92,45 @@ async def healthcheck():
         ],
     }
 
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: list[WebSocket] = []
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+
+    def disconnect(self, websocket: WebSocket):
+        self.active_connections.remove(websocket)
+
+    async def send_personal_message(self, message: str, websocket: WebSocket):
+        await websocket.send_text(message)
+
+    async def broadcast(self, message: str):
+        for connection in self.active_connections:
+            await connection.send_text(message)
+
+
+manager = ConnectionManager()
+
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    while True:
-        try:
+    await manager.connect(websocket)
+    await manager.broadcast(f"Current clients: {len(manager.active_connections)}")
+    try:
+        while True:
+           
             x = await websocket.receive_text()
             resp = {
             "message":"message from websocket" + x
             }
             await websocket.send_json(resp)
-        except Exception as e:
-            print(e)
-            break
+            await asyncio.sleep(2)
+            await websocket.send_json({'HAHA': 'IT WORKS'})
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+        await manager.broadcast(f"Client #{client_id} left the chat..")
+    except Exception as e:
+        await manager.broadcast(f"{str(e)}")
+        manager.disconnect(websocket)
+        
