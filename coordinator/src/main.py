@@ -111,7 +111,7 @@ class ConnectionManager:
             await connection.send_text(message)
 
 
-manager = ConnectionManager()
+manager: ConnectionManager = ConnectionManager()
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
