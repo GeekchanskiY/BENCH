@@ -1,6 +1,6 @@
 import aiohttp
 
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket
 
 from routers.users import router as user_router
 from routers.services import router as service_router
@@ -15,7 +15,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['http://0.0.0.0:3002'],
+    allow_origins=['*'],
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*']
@@ -90,3 +90,17 @@ async def healthcheck():
             }
         ],
     }
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    while True:
+        try:
+            x = await websocket.receive_text()
+            resp = {
+            "message":"message from websocket" + x
+            }
+            await websocket.send_json(resp)
+        except Exception as e:
+            print(e)
+            break
