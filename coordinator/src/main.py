@@ -8,7 +8,7 @@ from routers.services import router as service_router
 from fastapi.middleware.cors import CORSMiddleware
 
 from repositories.models.db import get_db, get_redis
-
+import websockets
 import pika
 
 app = FastAPI()
