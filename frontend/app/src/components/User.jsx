@@ -20,9 +20,9 @@ export default function User(){
         .then(data => {
             console.log(data)
             setUserData({
-                'email': data.email,
-                'username': data.name,
-                'ip': data.ip_adress
+                'email': data.response.email,
+                'username': data.response.name,
+                'ip': data.response.ip_adress
             })
         })
     }, [])

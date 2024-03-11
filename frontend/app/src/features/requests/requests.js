@@ -55,7 +55,8 @@ async function postRequest(url, body){
     )
     .then(res =>{ 
         status_code = res.status
-        res.json()
+        
+        return res.json()
     })
     .then(data => {
         if (status_code == 200){

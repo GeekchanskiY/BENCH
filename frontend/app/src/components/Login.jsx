@@ -21,7 +21,6 @@ export default function Login(){
     const navigate = useNavigate();
 
     async function login_request(values){
-        console.log(values)
         let data = await postRequest(
             'http://0.0.0.0:80/users/auth',
             {
@@ -32,11 +31,12 @@ export default function Login(){
         if (data.success == true){
           dispatch(
               login_slice({
-                  username: data.username,
-                  expires_at: data.expires_at,
-                  token: data.token
+                  username: data.response.username,
+                  expires_at: data.response.expires_at,
+                  token: data.response.token
               })
             )
+          
             
         } 
         return data
