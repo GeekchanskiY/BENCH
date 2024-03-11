@@ -51,4 +51,4 @@ RABBITMQ_DEFAULT_PASS=rmpassword
 
 
 # Services
-![Services](img/BENCH.drawio.png)
+![Services](img/BENCH_schema.drawio.png)
