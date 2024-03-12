@@ -34,7 +34,7 @@ async def send_one():
     await producer.start()
     try:
         # Produce message
-        await producer.send_and_wait("main-3", b"Super message")
+        await producer.send_and_wait("main", b"Super message")
         print('message produced')
     finally:
         # Wait for all pending messages to be delivered or expire.

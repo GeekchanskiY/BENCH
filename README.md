@@ -89,3 +89,4 @@ React App:
 kafka-topics.sh --create --topic main-1 --bootstrap-server kafka:9092
 kafka-topics.sh --describe --topic main-1 --bootstrap-server kafka:9092
 kafka-broker-api-versions.sh --bootstrap-server localhost:9092
+kafka-console-consumer.sh --topic main-1 --from-beginning --bootstrap-server kafka:9092
