@@ -120,17 +120,27 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
            
-            x = await websocket.receive_text()
-            resp = {
-            "message":"message from websocket" + x
-            }
-            await websocket.send_json(resp)
-            await asyncio.sleep(2)
-            await websocket.send_json({'HAHA': 'IT WORKS'})
+            recieved_message = await websocket.receive_text()
+            match recieved_message:
+                case 'On my way!':
+                    await websocket.send_json(
+                        {
+                            'message': f'Hi there! Current connections: {len(manager.active_connections)}'
+                        }
+                    )
+                
+                case 'Close connection':
+                    manager.disconnect(websocket)
+                    await websocket.close()
+                    break
+                case _:
+                    await websocket.send_json(f'Message recieved: {recieved_message}' )
+            
     except WebSocketDisconnect:
         manager.disconnect(websocket)
         await manager.broadcast(f"Client #{client_id} left the chat..")
     except Exception as e:
+        print(str(e))
         await manager.broadcast(f"{str(e)}")
         manager.disconnect(websocket)
         
