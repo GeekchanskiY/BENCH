@@ -9,7 +9,7 @@ from routers.sockets import router as socket_router
 from fastapi.middleware.cors import CORSMiddleware
 
 from repositories.models.db import get_db, get_redis
-
+import aiokafka
 import pika
 
 
@@ -27,9 +27,26 @@ app.include_router(user_router, prefix='/users')
 app.include_router(service_router, prefix='/services')
 app.include_router(socket_router, prefix='/sockets')
 
+async def send_one():
+    producer = aiokafka.AIOKafkaProducer(
+        bootstrap_servers='kafka:9092')
+    # Get cluster layout and initial topic/partition leadership information
+    await producer.start()
+    try:
+        # Produce message
+        await producer.send_and_wait("main-3", b"Super message")
+        print('message produced')
+    finally:
+        # Wait for all pending messages to be delivered or expire.
+        
+        await producer.stop()
+
+
 @app.get("/")
 async def root():
+    await send_one()
     return {'message': 'pong'}
+
 
 @app.get('/healthcheck')
 async def healthcheck():
