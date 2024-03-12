@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useWebsocket } from "../hooks/useWebSocket";
 
-const sockaddr = "ws://0.0.0.0:80/ws";
+const sockaddr = "ws://0.0.0.0:80/sockets/ws";
 
 export default function LogListener(){
     const [messages, setMessages] = useState([]);
