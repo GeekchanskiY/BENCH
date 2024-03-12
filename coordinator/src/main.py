@@ -4,13 +4,14 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 
 from routers.users import router as user_router
 from routers.services import router as service_router
+from routers.sockets import router as socket_router
 
 from fastapi.middleware.cors import CORSMiddleware
 
 from repositories.models.db import get_db, get_redis
-import websockets
+
 import pika
-import asyncio
+
 
 app = FastAPI()
 
@@ -24,6 +25,7 @@ app.add_middleware(
 
 app.include_router(user_router, prefix='/users')
 app.include_router(service_router, prefix='/services')
+app.include_router(socket_router, prefix='/sockets')
 
 @app.get("/")
 async def root():
@@ -92,55 +94,3 @@ async def healthcheck():
         ],
     }
 
-class ConnectionManager:
-    def __init__(self):
-        self.active_connections: list[WebSocket] = []
-
-    async def connect(self, websocket: WebSocket):
-        await websocket.accept()
-        self.active_connections.append(websocket)
-
-    def disconnect(self, websocket: WebSocket):
-        self.active_connections.remove(websocket)
-
-    async def send_personal_message(self, message: str, websocket: WebSocket):
-        await websocket.send_text(message)
-
-    async def broadcast(self, message: str):
-        for connection in self.active_connections:
-            await connection.send_text(message)
-
-
-manager: ConnectionManager = ConnectionManager()
-
-@app.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket):
-    await manager.connect(websocket)
-    await manager.broadcast(f"Current clients: {len(manager.active_connections)}")
-    try:
-        while True:
-           
-            recieved_message = await websocket.receive_text()
-            match recieved_message:
-                case 'On my way!':
-                    await websocket.send_json(
-                        {
-                            'message': f'Hi there! Current connections: {len(manager.active_connections)}'
-                        }
-                    )
-                
-                case 'Close connection':
-                    manager.disconnect(websocket)
-                    await websocket.close()
-                    break
-                case _:
-                    await websocket.send_json(f'Message recieved: {recieved_message}' )
-            
-    except WebSocketDisconnect:
-        manager.disconnect(websocket)
-        await manager.broadcast(f"Client #{client_id} left the chat..")
-    except Exception as e:
-        print(str(e))
-        await manager.broadcast(f"{str(e)}")
-        manager.disconnect(websocket)
-        
