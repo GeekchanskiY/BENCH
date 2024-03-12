@@ -46,12 +46,15 @@ services:
     networks:
       - backend_fastapi
       - backend_communicator
+      - kafka-net
     depends_on:
       - db-local
       - ressearch_backend
       - finance_backend
       - rabbitmq
+      - kafka
   
+  # Django application
   support_backend:
     build:
       context: ./support/
@@ -148,47 +151,39 @@ services:
       driver: none
   
   zookeeper:
-    image: confluentinc/cp-zookeeper:6.1.1
-    container_name: zookeeper
+    image: docker.io/bitnami/zookeeper:3.8
     ports:
       - "2181:2181"
+    hostname: zookeeper
+    volumes:
+      - "zookeeper_data:/bitnami"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
     networks:
       - kafka-net
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-  
   kafka:
-    image: confluentinc/cp-kafka:6.1.1
-    container_name: kafka
+    image: docker.io/bitnami/kafka:2.8
+    hostname: kafka
     ports:
       - "9092:9092"
+      - '29092:29092'
+    volumes:
+      - "kafka_data:/bitnami"
     environment:
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '1'
-      KAFKA_MIN_INSYNC_REPLICAS: '1'
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_LISTENERS=PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_ADVERTISED_HOST_NAME=kafka
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
     networks:
       - kafka-net
-  
-  init-kafka:
-    image: confluentinc/cp-kafka:6.1.1
-    depends_on:
-      - kafka
-    entrypoint: [ '/bin/sh', '-c' ]
-    command: |
-      "
-      # blocks until kafka is reachable
-      kafka-topics --bootstrap-server kafka:29092 --list
-
-      echo -e 'Creating kafka topics'
-      kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic my-topic-1 --replication-factor 1 --partitions 1
-      kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic my-topic-2 --replication-factor 1 --partitions 1
-
-      echo -e 'Successfully created the following topics:'
-      kafka-topics --bootstrap-server kafka:29092 --list
-      "
     
     
 #    environment:
@@ -204,6 +199,10 @@ volumes:
   pgdata_fastapi:
   pgdata_rails:
   redis-cache:
+    driver: local
+  zookeeper_data:
+    driver: local
+  kafka_data:
     driver: local
   rabbitmq_data:
   rabbitmq_log:

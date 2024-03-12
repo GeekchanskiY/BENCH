@@ -83,3 +83,9 @@ it includes:
 React App:
     websockets and http connection
     with FastAPI
+
+
+# Kafka
+kafka-topics.sh --create --topic main-1 --bootstrap-server kafka:9092
+kafka-topics.sh --describe --topic main-1 --bootstrap-server kafka:9092
+kafka-broker-api-versions.sh --bootstrap-server localhost:9092
