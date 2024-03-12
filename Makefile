@@ -8,7 +8,8 @@ up-d:
 
 up-build:
 	docker compose up --build -d \
-	&& docker compose run ressearch_backend bin/rails db:migrate
+	&& docker compose run ressearch_backend bin/rails db:migrate \
+	&& docker compose logs -f
 
 logs:
 	docker compose logs
