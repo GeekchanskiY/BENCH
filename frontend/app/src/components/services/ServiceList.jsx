@@ -34,7 +34,7 @@ export default function ServiceList(){
         <CreateService setReload={setReload}></CreateService>
         <div className="services">
         {services.map((service) => {
-            return <Service setReload={setReload} service={service}/>
+            return <Service key={service.id} setReload={setReload} service={service}/>
         })}
         </div>
     </div>

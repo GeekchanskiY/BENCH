@@ -33,7 +33,7 @@ export default function CreateService(props){
         )
 
         if (data.success){
-            // props.setReload(prev => !prev)
+            
             if (values.image.length != 0){
               let formData = new FormData();
               let file = document.getElementById('imageFileInput').files[0]
@@ -50,11 +50,15 @@ export default function CreateService(props){
                 }
               )
               .then(res =>{ 
+                  if (res.status != 200){
+                    alert('Image not uploaded!')
+                  }
                   console.log(res.status)
                   
                   return res.json()
-              }).then(a => console.error(a))
+              })
             }
+            props.setReload(prev => !prev)
           } else {
               alert('Error in request')
           }
