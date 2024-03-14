@@ -18,7 +18,7 @@ async def read_services(
     services = await service.get_services()
     return services
 
-@router.post('/create', tags=['services'], response_model=ServiceSchema)
+@router.post('/create', tags=['services'], response_model=FullServiceSchema)
 async def create_service(
     service_data: ServiceSchema,
     service: ServiceService = Depends(get_service_service),
