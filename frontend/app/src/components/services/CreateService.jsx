@@ -10,7 +10,9 @@ const ServiceSchema = Yup.object().shape({
     description: Yup.string().required(),
     is_active: Yup.boolean().required(),
     url: Yup.string().url().required(),
-    ping_url: Yup.string().url().required()
+    ping_url: Yup.string().url().required(),
+
+    image: Yup.mixed()
   });
 
 
@@ -25,15 +27,37 @@ export default function CreateService(props){
                 "description": values.description,
                 "is_active": values.is_active,
                 "url": values.url,
-                "ping_url": values.ping_url
+                "ping_url": values.ping_url,
             },
             jwt
         )
+
         if (data.success){
-            props.setReload(prev => !prev)
-        } else {
-            alert('Error in request')
-        }
+            // props.setReload(prev => !prev)
+            if (values.image.length != 0){
+              let formData = new FormData();
+              let file = document.getElementById('imageFileInput').files[0]
+              formData.append('image', file)
+             
+              return fetch(
+                'http://0.0.0.0:80/services/service/' + data.response.id,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + jwt
+                    },
+                    body: formData
+                }
+              )
+              .then(res =>{ 
+                  console.log(res.status)
+                  
+                  return res.json()
+              }).then(a => console.error(a))
+            }
+          } else {
+              alert('Error in request')
+          }
     }
     return <Formik
         initialValues={{
@@ -72,7 +96,7 @@ export default function CreateService(props){
               onBlur={handleBlur}
               value={values.name}
             /> <br />
-            <span className='errors'>{errors.name && touched.name && errors.name}</span> <br />
+            <span className='errors'>{errors.name && touched.name }</span> <br />
             <input
               type="text"
               name="description"
@@ -80,7 +104,7 @@ export default function CreateService(props){
               onBlur={handleBlur}
               value={values.description}
             /> <br />
-             <span className='errors'>{errors.description && touched.description && errors.description}</span> <br />
+             <span className='errors'>{errors.description && touched.description }</span> <br />
             <input 
                 type="checkbox"
                 name="is_active"
@@ -95,7 +119,7 @@ export default function CreateService(props){
               onBlur={handleBlur}
               value={values.url}
             /> <br />
-             <span className='errors'>{errors.url && touched.url && errors.url}</span> <br />
+             <span className='errors'>{errors.url && touched.url}</span> <br />
              <input
               type="text"
               name="url"
@@ -103,8 +127,17 @@ export default function CreateService(props){
               onBlur={handleBlur}
               value={values.ping_url}
             /> <br />
-             <span className='errors'>{errors.ping_url && touched.ping_url && errors.ping_url}</span> <br />
-
+             <span className='errors'>{errors.ping_url && touched.ping_url}</span> <br />
+             <input
+              type="file"
+              name="image"
+              id='imageFileInput'
+              accept="image/png, image/jpeg"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.image}
+            /> <br />
+             <span className='errors'>{errors.image && touched.image }</span> <br />
             <button type="submit" disabled={isSubmitting}>
               Submit
             </button>
