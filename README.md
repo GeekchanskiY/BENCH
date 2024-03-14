@@ -42,24 +42,24 @@ export CGO_ENABLED=1
 
 .env config:
 
-\# Postgres fastapi
+\# Postgres fastapi <br>
 POSTGRES_DB_FASTAPI=backend_fastapi
 POSTGRES_USER_FASTAPI=staffing
 POSTGRES_PASSWORD_FASTAPI=staffing
 POSTGRES_HOST_FASTAPI=db-fastapi
 
-\# Postgres rails
+\# Postgres rails <br>
 POSTGRES_DB_RAILS=backend_rails
 POSTGRES_USER_RAILS=staffing
 POSTGRES_PASSWORD_RAILS=staffing
 POSTGRES_HOST_RAILS=db-rails
 
-\# Postgres general
+\# Postgres general <br>
 POSTGRES_PORT=5432
 POSTGRES_HOST_AUTH_METHOD=trust
 
 
-\# RabbitMQ
+\# RabbitMQ <br>
 RABBITMQ_DEFAULT_USER=rmuser
 RABBITMQ_DEFAULT_PASS=rmpassword
 
@@ -68,7 +68,7 @@ RABBITMQ_DEFAULT_PASS=rmpassword
 ALLOW_ANONYMOUS_LOGIN=yes
 
 
-\# Kafka
+\# Kafka <br>
 KAFKA_BROKER_ID=1
 KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
 KAFKA_LISTENERS=PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
@@ -79,10 +79,10 @@ KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
 
 ALLOW_PLAINTEXT_LISTENER=yes
 
-\# Support
+\# Support <br>
 DJANGO_SECRET='django-secret'
 
-\# Coordinator
+\# Coordinator <br>
 JWT_SECRET='secret'
 
 
