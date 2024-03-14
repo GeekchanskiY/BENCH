@@ -6,7 +6,8 @@ from routers.users import router as user_router
 from routers.services import router as service_router
 from routers.sockets import router as socket_router
 
-from fastapi.middleware.cors import CORSMiddleware
+# from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.cors import CORSMiddleware
 
 from repositories.models.db import get_db, get_redis
 import aiokafka
@@ -17,9 +18,9 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=['*', 'http://0.0.0.0:3002'],
     allow_credentials=True,
-    allow_methods=['*'],
+    allow_methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allow_headers=['*']
 )
 
