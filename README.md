@@ -31,8 +31,16 @@ gRPC
     FE:
     JavaScript+ReactJS
 
-Libraries:
-  TODO: add
+Frameworks and libraries:
+  JS:
+    React, Redux, Redux-toolkit, Formik, Yup, React-router-dom,
+  Python:
+    FastAPI, SQLAlchemy, Alembic, pyjwt, bcrypt, django,
+    django-rest-framework
+  Ruby:
+    Ruby on Rails
+  Go:
+    Gin, GORM
 
 # Setup guide:
 
