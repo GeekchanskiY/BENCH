@@ -16,6 +16,8 @@ class Service(Base):
     url: Column = Column(String)
     ping_url: Column = Column(String)
 
+    image_url: Column = Column(String)
+
     logs: Mapped[List['ServiceLog']] = relationship(
         'ServiceLog',
         back_populates='service'

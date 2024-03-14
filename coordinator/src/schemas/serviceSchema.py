@@ -9,6 +9,7 @@ class ServiceSchema(BaseModel):
 
     url: str | None
     ping_url: str | None
+    image_url: str | None
 
 class ExtendedServiceSchema(ServiceSchema):
     id: int
