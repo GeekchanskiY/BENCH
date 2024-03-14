@@ -7,8 +7,13 @@ services:
     restart: always
     ports:
       - "8001:5432"
-    env_file:
-      - ./.env_db_fastapi
+    environment:
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_HOST_AUTH_METHOD=${POSTGRES_HOST_AUTH_METHOD}
+      - POSTGRES_DB=${POSTGRES_DB_FASTAPI}
+      - POSTGRES_USER=${POSTGRES_USER_FASTAPI}
+      - POSTGRES_PASSWORD_FASTAPI=${POSTGRES_PASSWORD_FASTAPI}
+      - POSTGRES_HOST_FASTAPI=${POSTGRES_HOST_FASTAPI}
     volumes:
       - pgdata_fastapi:/var/lib/postgresql/data
     networks:
@@ -21,8 +26,13 @@ services:
     restart: always
     ports:
       - "8002:5432"
-    env_file:
-      - ./.env_db_rails
+    environment:
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_HOST_AUTH_METHOD=${POSTGRES_HOST_AUTH_METHOD}
+      - POSTGRES_DB=${POSTGRES_DB_RAILS}
+      - POSTGRES_USER=${POSTGRES_USER_RAILS}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_RAILS}
+      - POSTGRES_HOST=${POSTGRES_HOST_RAILS}
     volumes:
       - pgdata_rails:/var/lib/postgresql/data
     networks:
@@ -62,6 +72,8 @@ services:
     hostname: support
     image: backend-bench-django:latest
     container_name: bench-backend-django
+    env_file:
+      - ./.env
     ports:
       - "3003:3003"
     networks:
@@ -78,7 +90,7 @@ services:
     container_name: bench-backend-rails
     hostname: ressearch
     env_file:
-      - .env
+      - ./.env
     volumes:
       - ./ressearch:/rails
     image:
@@ -99,6 +111,8 @@ services:
       network: host
     container_name: bench-backend-golang
     hostname: finance
+    env_file:
+      - ./.env
     volumes:
       - ./finance:/app
     image: finance_backend:latest
@@ -142,8 +156,9 @@ services:
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq/
       - rabbitmq_log:/var/log/rabbitmq/
-    env_file:
-      - ./.env_rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
     networks:
       - backend_communicator
     hostname: rabbitmq
@@ -158,9 +173,10 @@ services:
     volumes:
       - "zookeeper_data:/bitnami"
     environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
+      - ALLOW_ANONYMOUS_LOGIN=${ALLOW_ANONYMOUS_LOGIN}
     networks:
       - kafka-net
+  
   kafka:
     image: docker.io/bitnami/kafka:2.8
     hostname: kafka
@@ -170,16 +186,16 @@ services:
     volumes:
       - "kafka_data:/bitnami"
     environment:
-      - KAFKA_BROKER_ID=1
+      - KAFKA_BROKER_ID=${KAFKA_BROKER_ID}
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-      - KAFKA_LISTENERS=PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      - KAFKA_LISTENERS=${KAFKA_LISTENERS}
+      - KAFKA_ADVERTISED_LISTENERS=${KAFKA_ADVERTISED_LISTENERS}
 
-      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
-      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
-      - KAFKA_ADVERTISED_HOST_NAME=kafka
-      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=${KAFKA_LISTENER_SECURITY_PROTOCOL_MAP}
+      - KAFKA_INTER_BROKER_LISTENER_NAME=${KAFKA_INTER_BROKER_LISTENER_NAME}
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=${KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR}
+      - KAFKA_ADVERTISED_HOST_NAME=${KAFKA_ADVERTISED_HOST_NAME}
+      - ALLOW_PLAINTEXT_LISTENER=${ALLOW_PLAINTEXT_LISTENER}
     depends_on:
       - zookeeper
     networks:
