@@ -15,6 +15,9 @@ class ServiceRepository:
     def get_services(self) -> List[Service]:
         return self.db.query(Service).all()
 
+    def get_service_by_id(self, service_id: int) -> Service:
+        return self.db.query(Service).where(Service.id == service_id).first()
+
     def get_service_by_name(self, name: str) -> Service:
         return self.db.query(Service).where(Service.name == name).first()
 
@@ -26,7 +29,7 @@ class ServiceRepository:
         new_service.url = service.url
         new_service.ping_url = service.ping_url
         new_service.image_url = service.image_url
-        
+
         try:
             self.db.add(new_service)
             self.db.commit()
