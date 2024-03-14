@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 
 from .depends import get_service_service
 from services.serviceService import ServiceService
-from schemas.serviceSchema import ServiceSchema, ServiceLogSchema, ServiceWithLogsSchema
+from schemas.serviceSchema import ServiceSchema, ServiceLogSchema, ServiceWithLogsSchema, ExtendedServiceSchema
 from schemas.statusSchemas import MessageResponseSchema
 
 from .depends import get_jwt_bearer, JWTCredentials
@@ -10,7 +10,7 @@ from .depends import get_jwt_bearer, JWTCredentials
 
 router: APIRouter = APIRouter()
 
-@router.get("/", tags=["services"], response_model=list[ServiceSchema])
+@router.get("/", tags=["services"], response_model=list[ExtendedServiceSchema])
 async def read_services(
     service: ServiceService = Depends(get_service_service),
     ):
