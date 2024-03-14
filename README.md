@@ -1,11 +1,5 @@
 # GeekchanskiY's bench project
 
-TODO:
-create guide to create and apply config easily
-
-!!!
-export CGO_ENABLED=1
-
 ## Services:
 1 - Coordinator
 FastAPI
@@ -44,21 +38,52 @@ Frameworks and libraries:
 
 # Setup guide:
 
-need 2 .env files for RoR and FastApi applications databases:
-.env_db_fastapi
-.env_db_rails 
+export CGO_ENABLED=1
 
-Content:
-POSTGRES_DB=database_name
-POSTGRES_USER=database_user
-POSTGRES_PASSWORD=database_password
-POSTGRES_HOST=database_host
+.env config:
+
+\# Postgres fastapi
+POSTGRES_DB_FASTAPI=backend_fastapi
+POSTGRES_USER_FASTAPI=staffing
+POSTGRES_PASSWORD_FASTAPI=staffing
+POSTGRES_HOST_FASTAPI=db-fastapi
+
+\# Postgres rails
+POSTGRES_DB_RAILS=backend_rails
+POSTGRES_USER_RAILS=staffing
+POSTGRES_PASSWORD_RAILS=staffing
+POSTGRES_HOST_RAILS=db-rails
+
+\# Postgres general
 POSTGRES_PORT=5432
 POSTGRES_HOST_AUTH_METHOD=trust
 
-.env_rabbitmq
+
+\# RabbitMQ
 RABBITMQ_DEFAULT_USER=rmuser
 RABBITMQ_DEFAULT_PASS=rmpassword
+
+
+\# zookeeper
+ALLOW_ANONYMOUS_LOGIN=yes
+
+
+\# Kafka
+KAFKA_BROKER_ID=1
+KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+KAFKA_LISTENERS=PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
+KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+
+ALLOW_PLAINTEXT_LISTENER=yes
+
+\# Support
+DJANGO_SECRET='django-secret'
+
+\# Coordinator
+JWT_SECRET='secret'
 
 
 # Services
