@@ -64,7 +64,7 @@ RABBITMQ_DEFAULT_USER=rmuser
 RABBITMQ_DEFAULT_PASS=rmpassword
 
 
-\# zookeeper
+\# zookeeper \n
 ALLOW_ANONYMOUS_LOGIN=yes
 
 
