@@ -33,11 +33,12 @@ class ServiceService:
         
         service: FullServiceSchema = self.service_repository.get_service_by_id(service_id)
         data = FormData()
-        data.add_field('file', image.file.read(), filename=image.filename, content_type=image.content_type)
+        data.add_field('avatar', image.file.read(), filename=image.filename, content_type=image.content_type)
         async with aiohttp.ClientSession() as session:
             async with session.post('http://support:3003/profiles/', data=data) as resp:
                 data = await resp.json()
-        service.image_url = data['avatar']
+        print(data)
+        self.service_repository.add_service_image(service.id, data['avatar'])
         return service
 
 

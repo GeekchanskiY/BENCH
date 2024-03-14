@@ -21,6 +21,16 @@ class ServiceRepository:
     def get_service_by_name(self, name: str) -> Service:
         return self.db.query(Service).where(Service.name == name).first()
 
+    def add_service_image(self, service_id: int, image_url: str) -> Service:
+        try:
+            service: Service = self.db.query(Service).where(Service.id == service_id).first()
+            service.image_url = image_url
+            self.db.commit()
+        except Exception as e:
+            self.db.rollback()
+            raise e
+
+
     def create_service(self, service: ServiceSchema) -> Service:
         new_service: Service = Service()
         new_service.description = service.description
