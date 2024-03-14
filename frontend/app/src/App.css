@@ -152,6 +152,7 @@ form{
 .services{
   display: flex;
   flex-direction: row;
+  width: 100%;
 }
 
 .service_item{
