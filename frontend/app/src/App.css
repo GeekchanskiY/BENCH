@@ -148,3 +148,14 @@ form{
 .frm button:active, .frm button:focus, .frm button:hover{
   border: 1px solid #F4CE14;
 }
+
+.services{
+  display: flex;
+  flex-direction: row;
+}
+
+.service_item{
+  padding: 10px 20px;
+  text-align: center;
+  border: 1px solid white;
+}

@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react"
-import { getRequest, postRequestAuth } from "../features/requests/requests"
 import { Formik } from 'formik';
 import { useSelector } from "react-redux";
 import * as Yup from 'yup';
+import { postRequestAuth } from '../../features/requests/requests';
 
 const ServiceSchema = Yup.object().shape({
     name: Yup.string().required(),
@@ -15,7 +14,7 @@ const ServiceSchema = Yup.object().shape({
   });
 
 
-function CreateService(props){
+export default function CreateService(props){
     const jwt = useSelector((state) => state.jwt.token)
 
     async function createServiceRequest(values){
@@ -65,7 +64,7 @@ function CreateService(props){
           isSubmitting,
         }) => (
           <form onSubmit={handleSubmit} className='frm loginform'>
-            <h3>Create service</h3>
+            <h3>Add service</h3>
             <input
               type="text"
               name="name"
@@ -112,32 +111,4 @@ function CreateService(props){
           </form>
         )}
     </Formik>
-}
-
-function Service(props){
-    
-    return <div>
-        <span>{props.service.name}</span> <br />
-        <span>{props.service.description}</span> <br />
-        <span>{props.service.is_active ? "Active" : "Inactive"}</span> <br />
-    </div>
-}
-
-export default function ServiceList(){
-    const [services, setServices] = useState([])
-    const [reload, setReload] = useState(false)
-
-    useEffect(() => {
-        getRequest('http://0.0.0.0/services/')
-        .then(data => {
-            setServices(data.response)
-        })
-    }, [reload])
-    return <div>
-        <CreateService setReload={setReload}></CreateService>
-        {services.map((service) => {
-        
-            return <Service service={service}/>
-        })}
-    </div>
 }

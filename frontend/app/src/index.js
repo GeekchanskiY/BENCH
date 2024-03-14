@@ -10,7 +10,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Login from './components/Login';
 import User from './components/User';
-import ServiceList from './components/ServiceList';
+import ServiceList from './components/services/ServiceList';
 import LogListener from './components/LogListener';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -28,7 +28,7 @@ root.render(
           <Route path='/services' element={<ServiceList/>} />
           <Route path='/logs' element={<LogListener/>} />
         </Routes>
-      </div>
+    </div>
     <Footer></Footer>
   </BrowserRouter>
     
