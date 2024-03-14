@@ -51,3 +51,6 @@ rails-sandbox:
 
 rails-console:
 	docker compose exec -it ressearch_backend sh -c "bin/rails console"
+
+connect_db_fastapi:
+	docker compose exec -it db-local psql -U staffing -d backend_fastapi
