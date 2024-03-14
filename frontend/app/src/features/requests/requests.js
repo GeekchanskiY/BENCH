@@ -121,4 +121,43 @@ async function postRequestAuth(url, body, jwt){
     
 }
 
-export {postRequest, getRequest, getRequestAuth, postRequestAuth};
+async function deleteRequestAuth(url, jwt){
+    let status_code = 404
+    return fetch(
+        url,
+        {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + jwt
+            }
+        }
+    )
+    .then(res =>{ 
+        status_code = res.status
+        
+        return res.json()
+    })
+    .then(data => {
+        if (status_code == 200){
+            return {
+                'response': data,
+                'success': true
+            }
+        } else {
+            return {
+                'response': data,
+                'success': false
+            }
+        }
+    })
+    .catch(rejected => {
+        return {
+            'response': rejected,
+            'success': false
+        }
+    });
+    
+}
+
+export {postRequest, getRequest, getRequestAuth, postRequestAuth, deleteRequestAuth};
