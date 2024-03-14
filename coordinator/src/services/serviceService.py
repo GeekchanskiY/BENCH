@@ -14,7 +14,7 @@ class ServiceService:
     
     async def create_service(self, username: str, servicedata: ServiceSchema) -> ServiceSchema:
         user: UserSchema = self.user_repository.get_user_by_name(username)
-        print(user.is_staff)
+        
         if not user.is_staff:
             raise Exception('Not enough privileges!')
         
