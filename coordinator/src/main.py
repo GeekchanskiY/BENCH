@@ -5,6 +5,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from routers.users import router as user_router
 from routers.services import router as service_router
 from routers.sockets import router as socket_router
+from routers.other import router as other_router
 
 # from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.cors import CORSMiddleware
@@ -27,6 +28,7 @@ app.add_middleware(
 app.include_router(user_router, prefix='/users')
 app.include_router(service_router, prefix='/services')
 app.include_router(socket_router, prefix='/sockets')
+app.include_router(other_router, prefix='/other')
 
 async def send_one():
     producer = aiokafka.AIOKafkaProducer(
