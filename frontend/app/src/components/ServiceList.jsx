@@ -9,7 +9,7 @@ const ServiceSchema = Yup.object().shape({
 
     
     description: Yup.string().required(),
-    is_active: Yup.boolean().required().default(true),
+    is_active: Yup.boolean().required(),
     url: Yup.string().url().required(),
     ping_url: Yup.string().url().required()
   });
@@ -17,6 +17,7 @@ const ServiceSchema = Yup.object().shape({
 
 function CreateService(props){
     const jwt = useSelector((state) => state.jwt.token)
+
     async function createServiceRequest(values){
         let data = await postRequestAuth(
             'http://0.0.0.0:80/services/create',
@@ -29,6 +30,11 @@ function CreateService(props){
             },
             jwt
         )
+        if (data.success){
+            props.setReload(prev => !prev)
+        } else {
+            alert('Error in request')
+        }
     }
     return <Formik
         initialValues={{
@@ -44,9 +50,8 @@ function CreateService(props){
           let data = await createServiceRequest(values);
           if (data.success == true){
             setSubmitting(false);
-            // navigate('/me')
           } else {
-            setErrors({'email': 'Invalid login or password!'})
+            setErrors({'name': 'Error occured!'})
           }
           
         }}>
@@ -77,6 +82,30 @@ function CreateService(props){
               value={values.description}
             /> <br />
              <span className='errors'>{errors.description && touched.description && errors.description}</span> <br />
+            <input 
+                type="checkbox"
+                name="is_active"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                checked={values.is_active}
+            /> <br />
+            <input
+              type="text"
+              name="url"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.url}
+            /> <br />
+             <span className='errors'>{errors.url && touched.url && errors.url}</span> <br />
+             <input
+              type="text"
+              name="url"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.ping_url}
+            /> <br />
+             <span className='errors'>{errors.ping_url && touched.ping_url && errors.ping_url}</span> <br />
+
             <button type="submit" disabled={isSubmitting}>
               Submit
             </button>
@@ -96,16 +125,16 @@ function Service(props){
 
 export default function ServiceList(){
     const [services, setServices] = useState([])
+    const [reload, setReload] = useState(false)
 
     useEffect(() => {
         getRequest('http://0.0.0.0/services/')
         .then(data => {
-            console.error(data)
             setServices(data.response)
         })
-    }, [])
+    }, [reload])
     return <div>
-        <CreateService></CreateService>
+        <CreateService setReload={setReload}></CreateService>
         {services.map((service) => {
         
             return <Service service={service}/>
