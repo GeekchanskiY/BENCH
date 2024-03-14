@@ -28,7 +28,7 @@ class ServiceRepository:
         new_service.is_active = service.is_active
         new_service.url = service.url
         new_service.ping_url = service.ping_url
-        new_service.image_url = service.image_url
+        # new_service.image_url = service.image_url
 
         try:
             self.db.add(new_service)
