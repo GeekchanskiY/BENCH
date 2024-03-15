@@ -22,11 +22,11 @@ header {
     gap: 15px;
 }
 
-.center-header a{
+.center-header a {
     text-decoration: none;
     font-size: 18px;
     display: inline-block;
-    
+
 }
 
 .logo-header a {
@@ -46,7 +46,7 @@ header {
     border-radius: 30px;
 }
 
-.login-register{
+.login-register {
     display: flex;
     gap: 20px;
 }

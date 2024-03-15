@@ -40,7 +40,7 @@ export default function CreateService(props) {
         formData.append('image', file)
 
         fetch(
-          'http://0.0.0.0:80/services/service/'+data.response.id+'/upload_image',
+          'http://0.0.0.0:80/services/service/' + data.response.id + '/upload_image',
           {
             method: 'POST',
             headers: {

@@ -1,4 +1,4 @@
-*{
+* {
   margin: 0;
   padding: 0;
   color: #F5F7F8;
@@ -14,42 +14,40 @@
 @font-face {
   font-family: "Nunito";
   src: local("Nunito-VariableFont_wght"),
-   url("../fonts/Nunito-VariableFont_wght.ttf") format("truetype");
- }
+    url("../fonts/Nunito-VariableFont_wght.ttf") format("truetype");
+}
 
-
-body{
+body {
   background-color: #222222;
   font-family: "Nunito";
 }
 
-.content-wrap{
+.content-wrap {
   position: relative;
   min-height: calc(100vh - 90px);
   width: 100%;
-  
+
   /* uses to be able to inherit height:100% in childs */
-  height: 1px; 
-  
+  height: 1px;
+
 }
 
-
-
-form{
+form {
   color: #444;
 }
 
-.index-page{
+.index-page {
   text-align: center;
   padding-top: 40px;
 }
-.index-page p{
+
+.index-page p {
   margin-top: 20px;
   width: 70%;
   margin-left: 15%;
 }
 
-.frm{
+.frm {
   margin: 5rem auto;
   width: fit-content;
   padding: 40px;
@@ -57,7 +55,7 @@ form{
   color: #111;
 }
 
-.frm input{
+.frm input {
   color: #fff;
   margin-top: 10px;
   font-size: 18px;
@@ -68,15 +66,17 @@ form{
   outline: none;
   transition: .5s;
 }
-.frm input:active, .frm input:focus{
+
+.frm input:active,
+.frm input:focus {
   border-bottom: 1px solid #F4CE14;
 }
 
-.frm .errors{
+.frm .errors {
   color: red;
 }
 
-.frm button{
+.frm button {
   color: #fff;
   margin-top: 10px;
   font-size: 18px;
@@ -89,17 +89,20 @@ form{
   cursor: pointer;
   transition: .5s;
 }
-.frm button:active, .frm button:focus, .frm button:hover{
+
+.frm button:active,
+.frm button:focus,
+.frm button:hover {
   border: 1px solid #F4CE14;
 }
 
-.services{
+.services {
   display: flex;
   flex-direction: row;
   width: 100%;
 }
 
-.service_item{
+.service_item {
   padding: 10px 20px;
   text-align: center;
   border: 1px solid white;
