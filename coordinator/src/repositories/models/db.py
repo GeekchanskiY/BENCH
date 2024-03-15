@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, MetaData, Column, String, Integer
 from sqlalchemy.orm import Session
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 import aioredis
 from aioredis import Redis
