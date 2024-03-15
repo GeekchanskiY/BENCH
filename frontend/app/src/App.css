@@ -15,61 +15,23 @@ body{
   background-color: #222222;
 }
 
-header{
-  background-color: #111111;
-  width: 100%;
-  height: 60px;
-  display: flex;
-}
-footer{
-  position: absolute;
-  bottom: 0;
-  height: 30px;
-  width: 100%;
-  background-color: #111111;
-}
+
+
 .content-wrap{
   position: relative;
   min-height: calc(100vh - 30px - 60px);
   padding-bottom: 30px;
 }
 
-.side_header{
-  display: flex;
-  width: 33%;
-  align-items: center;
-}
-.side_header a{
-  display: flex;
-  width: 100%;
-  align-items: center;
-  text-decoration: none;
-}
 
-.side_header a img{
-  width: 60px;
-  height: 60px;
-  align-items: flex-end;
-  margin-left: 20px;
-  border-radius: 30px;
-}
 .serviceStatuses{
   width: 100%;
   display: flex;
 }
-.side_header h1{
+.side-header h1{
   margin-left: 20px;
 }
-.headerItem{
-  margin-left: 20px;
-  border-left: #444 1px dashed;
-  border-right: #444 1px dashed;
-  padding: 0 2px 0 2px;
-}
-.serviceStatusesHeader{
-  font-weight: bold;
-  margin-right: -10px;
-}
+
 
 .dot{
   display: inline-block;
