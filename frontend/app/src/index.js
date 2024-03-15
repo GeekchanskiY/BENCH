@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+
+import './fonts/Nunito-VariableFont_wght.ttf'
+import './styles/main.css';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 import store from './app/store';
