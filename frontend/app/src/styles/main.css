@@ -33,8 +33,105 @@ body {
 }
 
 form {
-  color: #444;
+  color: #000;
 }
+
+.form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20%;
+  margin-left: 40%;
+  background-color: #111111;
+  margin-top: 20px;
+  border-radius: 25px;
+  padding-bottom: 15px;
+}
+
+.form h3{
+  padding: 15px;
+}
+
+.form span.errors{
+  color: rgb(133, 0, 0);
+}
+
+.form input{
+  background-color: #222;
+  color: #fff;
+  height: 30px;
+  border-radius: 25px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border: none;
+  margin-top: 10px;
+  transition: .5s;
+}
+
+.form input:active,
+.form input:focus {
+  background-color: #333;
+  outline: none;
+}
+
+.form input[type=text]{
+  width: 50%;
+}
+.form input[type=password]{
+  width: 50%;
+}
+.form input[type=checkbox]{
+  width: 15px;
+  height: 15px;
+  margin-top: 0px;
+  margin-left: 10px;
+}
+.form .file-upload input{
+  display: none;
+}
+
+.form .checkbox{
+  font-size: 14px;
+}
+
+.form label{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-top: 10px;
+  font-size: 15px;
+  height: 30px;
+  color: #fff;
+  
+}
+
+.form .file-upload {
+  height: 22px;
+  border: 1px solid #333;
+  border-radius: 15px;
+  background-color: #222;
+  
+}
+
+.form input[type=submit], .form input[type=button]{
+  border: 1px solid #333;
+  width: 40%;
+  border-radius: 10px!important;
+  font-size: 15px;
+}
+
+.form input[type=submit]{
+  margin-top: 20px;
+}
+
+.form input[type=submit]:hover, .form input[type=submit]:active{
+  background-color: green;
+}
+
+
 
 .index-page {
   text-align: center;

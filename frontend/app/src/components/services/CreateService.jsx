@@ -2,6 +2,7 @@ import { Formik } from 'formik';
 import { useSelector } from "react-redux";
 import * as Yup from 'yup';
 import { postRequestAuth } from '../../features/requests/requests';
+import '../../styles/services.css'
 
 const ServiceSchema = Yup.object().shape({
   name: Yup.string().required(),
@@ -92,7 +93,7 @@ export default function CreateService(props) {
       handleSubmit,
       isSubmitting,
     }) => (
-      <form onSubmit={handleSubmit} className='frm loginform'>
+      <form onSubmit={handleSubmit} className='form form-create-service'>
         <h3>Add service</h3>
         <input
           type="text"
@@ -100,52 +101,60 @@ export default function CreateService(props) {
           onChange={handleChange}
           onBlur={handleBlur}
           value={values.name}
-        /> <br />
-        <span className='errors'>{errors.name && touched.name}</span> <br />
+        />
+        <span className='errors'>{errors.name && touched.name}</span> 
         <input
           type="text"
           name="description"
           onChange={handleChange}
           onBlur={handleBlur}
           value={values.description}
-        /> <br />
-        <span className='errors'>{errors.description && touched.description}</span> <br />
-        <input
-          type="checkbox"
-          name="is_active"
-          onChange={handleChange}
-          onBlur={handleBlur}
-          checked={values.is_active}
-        /> <br />
+        /> 
+        <span className='errors'>{errors.description && touched.description}</span> 
+        
+        <label className='checkbox'>
+          Is Active?
+          <input
+            type="checkbox"
+            name="is_active"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            checked={values.is_active}
+          /> 
+        </label>
+        
         <input
           type="text"
           name="url"
           onChange={handleChange}
           onBlur={handleBlur}
           value={values.url}
-        /> <br />
-        <span className='errors'>{errors.url && touched.url}</span> <br />
+        /> 
+        <span className='errors'>{errors.url && touched.url}</span> 
         <input
           type="text"
           name="url"
           onChange={handleChange}
           onBlur={handleBlur}
           value={values.ping_url}
-        /> <br />
-        <span className='errors'>{errors.ping_url && touched.ping_url}</span> <br />
-        <input
-          type="file"
-          name="image"
-          id='imageFileInput'
-          accept="image/png, image/jpeg"
-          onChange={handleChange}
-          onBlur={handleBlur}
-          value={values.image}
-        /> <br />
-        <span className='errors'>{errors.image && touched.image}</span> <br />
-        <button type="submit" disabled={isSubmitting}>
-          Submit
-        </button>
+        /> 
+        <span className='errors'>{errors.ping_url && touched.ping_url}</span>
+        <label class="file-upload">
+          <input
+            type="file"
+            name="image"
+            id='imageFileInput'
+            accept="image/png, image/jpeg"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.image}
+          /> 
+          Service image
+        </label>
+        
+        <span className='errors'>{errors.image && touched.image}</span> 
+        <input type="submit" disabled={isSubmitting} content='Submit'/>
+          
       </form>
     )}
   </Formik>
