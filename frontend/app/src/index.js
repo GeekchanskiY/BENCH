@@ -12,6 +12,10 @@ import Login from './components/Login';
 import User from './components/User';
 import ServiceList from './components/services/ServiceList';
 import LogListener from './components/LogListener';
+import Register from './components/Register';
+import Projects from './components/projects/Projects';
+import CVBuilder from './components/cvBuilder/CVBuilder';
+import Ressearch from './components/ressearch/Ressearch';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -22,11 +26,15 @@ root.render(
     <Header></Header>
     <div className='content-wrap'>
         <Routes>
-          <Route path="/" element={<App />}></Route>
+          <Route path="/" element={<App />} />
           <Route path='/me' element={<User/>}/>
-          <Route path="/login" element={<Login />}></Route>
+          <Route path="/login" element={<Login />} />
+          <Route path='/register' element={<Register/>} />
           <Route path='/services' element={<ServiceList/>} />
           <Route path='/logs' element={<LogListener/>} />
+          <Route path='/projects' element={<Projects/>} />
+          <Route path='/cv' element={<CVBuilder/>} />
+          <Route path='/ressearch' element={<Ressearch/>} />
         </Routes>
     </div>
     <Footer></Footer>
