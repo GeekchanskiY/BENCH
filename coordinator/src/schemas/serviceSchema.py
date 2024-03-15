@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict, validator
+from pydantic import BaseModel, ConfigDict
 
 class ServiceSchema(BaseModel):
     model_config: ConfigDict = ConfigDict(from_attributes=True)
