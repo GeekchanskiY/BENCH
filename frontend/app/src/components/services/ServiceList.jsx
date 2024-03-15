@@ -12,12 +12,16 @@ function Service(props) {
         let res = await deleteRequestAuth('http://0.0.0.0:80/services/service/' + props.service.id, jwt)
         props.setReload(prev => !prev)
     }
-    return <div className="service_item">
-        <h3>{props.service.name} {props.service.id}</h3>
+    return <div className="service-item">
+        <h3>{props.service.id}: {props.service.name}</h3>
         <p>{props.service.description}</p>
-        <span>{props.service.url}</span> <br />
-        <span>Status: {props.service.is_active ? "Active" : "Inactive"}</span> <br />
-        <button onClick={deleteService}>Delete </button>
+        <span>{props.service.url}</span>
+        <span>Status: {props.service.is_active ? "Active" : "Inactive"}</span>
+        <div className="service-controls">
+            <button className="delete-button" onClick={deleteService}>Delete</button>
+            <button>Refresh</button>
+        </div>
+        
     </div>
 }
 
@@ -33,7 +37,7 @@ export default function ServiceList() {
                 setServices(data.response)
             })
     }, [reload])
-    return <div>
+    return <div className="service-list">
         {jwt != null ? <CreateService setReload={setReload}></CreateService> : <Link to={'/login'}>Login to create new services</Link>}
 
         <div className="services">
