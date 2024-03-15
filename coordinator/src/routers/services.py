@@ -20,7 +20,7 @@ async def read_services(
 
 @router.post('/create', tags=['services'], response_model=FullServiceSchema)
 async def create_service(
-    service_data: ServiceSchema,
+    service_data: ServiceSchema, 
     service: ServiceService = Depends(get_service_service),
     credentials: JWTCredentials = Depends(get_jwt_bearer())):
 
@@ -38,7 +38,7 @@ async def delete_service(
     except Exception as e:
         raise HTTPException(404, str(e))
 
-@router.post('/service/{service_id}', tags=['services'], response_model=ServiceSchema)
+@router.post('/service/{service_id}/upload_image', tags=['services'], response_model=ServiceSchema)
 async def upload_service_image(
     service_id: int,
     image: UploadFile,
