@@ -12,6 +12,11 @@
     gap: 20px;
 }
 
+.about-me a{
+    font-size: 20px;
+    text-decoration: none;
+}
+
 .about-me img {
     width: 100px;
     height: 100px;

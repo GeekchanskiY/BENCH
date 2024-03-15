@@ -26,7 +26,16 @@ header {
     text-decoration: none;
     font-size: 18px;
     display: inline-block;
+    transition: .5s;
 
+}
+
+.center-header a:hover{
+    color: #F4CE14;
+}
+
+.logo-header a h1:hover{
+    color: #F4CE14;
 }
 
 .logo-header a {
@@ -36,6 +45,7 @@ header {
     align-items: center;
     justify-content: center;
     text-decoration: none;
+    transition: .5s;
 }
 
 .logo-header a img {
@@ -49,4 +59,13 @@ header {
 .login-register {
     display: flex;
     gap: 20px;
+}
+
+.login-register a{
+    font-size: 20px;
+    transition: .5s;
+}
+
+.login-register a:hover{
+    color: #F4CE14;
 }

@@ -22,7 +22,7 @@ export default function WhoAmI() {
     if (jwt != null) {
         get_my_data()
         return <div className="about-me">
-            <Link to={'/me'}>{response}</Link>
+            <Link to={'/me'}>Current user: {response}</Link>
         </div>
     } else {
         return <div className="login-register">
