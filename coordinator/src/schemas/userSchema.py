@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict, validator
+from pydantic import BaseModel, ConfigDict, field_validator
 
 class UserSchema(BaseModel):
     model_config: ConfigDict = ConfigDict(from_attributes=True)
@@ -16,7 +16,7 @@ class RegisterUserSchema(BaseModel):
     email: str = "SampleUserEmail"
     password: str = "SampleStrongPassword"
 
-    @validator('password')
+    @field_validator('password')
     def validate_password(cls, v: str, values: dict, **kwargs):
         if len(v) <= 8:
             raise ValueError('Password is too short!')
@@ -29,7 +29,7 @@ class LoginUserSchema(BaseModel):
     email: str = "SampleUserEmail"
     password: str = "SampleStrongPassword"
 
-    @validator('password')
+    @field_validator('password')
     def validate_password(cls, v: str, values: dict, **kwargs):
         if len(v) <= 8:
             raise ValueError('Password is too short!')
