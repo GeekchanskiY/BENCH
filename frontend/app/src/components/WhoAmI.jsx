@@ -21,14 +21,13 @@ export default function WhoAmI(){
 
     if (jwt != null){
         get_my_data()
-        return <div className="whoAmI">
-            <span>
-                <Link to={'/me'}>{response}</Link>
-            </span>
+        return <div className="about-me">
+            <Link to={'/me'}>{response}</Link>
         </div> 
     } else {
-        return <div className="whoAmI">
+        return <div className="login-register">
             <Link to={'/login'}>Login</Link>
+            <Link to={'/register'}>Register</Link>
         </div>
     }
 }

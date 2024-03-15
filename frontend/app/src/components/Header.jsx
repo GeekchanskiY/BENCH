@@ -6,7 +6,7 @@ import '../styles/header.css'
 
 export default function Header(){
     return <header>
-        <div className='side-header part-header'>
+        <div className='side-header part-header logo-header'>
             <Link to="/">
                 <img className='headeritem' src={logo} alt="logo" />
                 <h1 className='headeritem'>Bench</h1>

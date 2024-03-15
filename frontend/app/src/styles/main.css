@@ -23,8 +23,6 @@ body{
   font-family: "Nunito";
 }
 
-
-
 .content-wrap{
   position: relative;
   min-height: calc(100vh - 30px - 60px);
@@ -32,34 +30,6 @@ body{
 }
 
 
-.serviceStatuses{
-  width: 100%;
-  display: flex;
-}
-.side-header h1{
-  margin-left: 20px;
-}
-
-
-.dot{
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 5px;
-  position: relative;
-}
-
-.active{
-  background-color: green;
-}
-
-.inactive{
-  background-color: red;
-}
-
-.whoami{
-
-}
 
 form{
   color: #444;
