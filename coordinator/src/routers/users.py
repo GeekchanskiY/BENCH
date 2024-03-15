@@ -35,7 +35,7 @@ async def read_user(username: str, service: UserService = Depends(get_user_servi
     except Exception as e:
         raise HTTPException(400, str(e))
 
-@router.get("/whoami", tags=["users"])
+@router.get("/whoami", tags=["users"], response_model=UserSchema)
 async def whoami(credentials: JWTCredentials = Depends(JWTBearer()), service: UserService = Depends(get_user_service),):
     try:
         return await service.get_user_by_name(username=credentials.username)
