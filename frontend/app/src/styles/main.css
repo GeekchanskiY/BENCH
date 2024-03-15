@@ -25,8 +25,12 @@ body{
 
 .content-wrap{
   position: relative;
-  min-height: calc(100vh - 30px - 60px);
-  padding-bottom: 30px;
+  min-height: calc(100vh - 90px);
+  width: 100%;
+  
+  /* uses to be able to inherit height:100% in childs */
+  height: 1px; 
+  
 }
 
 

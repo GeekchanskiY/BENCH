@@ -1,0 +1,16 @@
+.about-me{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    height: 100%;
+    gap: 20px;
+}
+.user-data{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.about-me img{
+    width: 100px;
+    height: 100px;
+}

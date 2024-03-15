@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { getRequestAuth } from "../features/requests/requests"
 
+import '../styles/user.css'
+import logo from '../img/logo_GPT.jpg'
+
 export default function User(){
     const navigate = useNavigate()
     const jwt = useSelector((state) => state.jwt.token)
@@ -18,6 +21,7 @@ export default function User(){
         }
         getRequestAuth('http://0.0.0.0/users/whoami', jwt)
         .then(data => {
+            console.log(data)
             setUserData({
                 'email': data.response.email,
                 'username': data.response.name,
@@ -27,9 +31,13 @@ export default function User(){
     }, [])
     
 
-    return <div>
-        <span>Username: {userData.username}</span> <br />
-        <span>Ip Adress: {userData.ip}</span> <br />
-        <span>Email: {userData.email}</span> <br />
+    return <div className="about-me">
+        <img src={logo} alt="" />
+        <div className="user-data">
+            <span>Username: {userData.username}</span>
+            <span>Ip Adress: {userData.ip}</span>
+            <span>Email: {userData.email}</span>
+        </div>
+        
     </div>
 }
