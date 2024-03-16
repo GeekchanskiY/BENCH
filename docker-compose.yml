@@ -176,6 +176,7 @@ services:
       - ALLOW_ANONYMOUS_LOGIN=${ALLOW_ANONYMOUS_LOGIN}
     networks:
       - kafka-net
+    tmpfs: "/datalog"
   
   kafka:
     image: docker.io/bitnami/kafka:2.8
