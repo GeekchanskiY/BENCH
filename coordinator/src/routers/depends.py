@@ -7,6 +7,7 @@ from utils.jwt_utils import decodeJWT
 from typing import Tuple
 from datetime import datetime
 
+from .exceptions import exceptionHandler, NotAuthentificatedException
 
 class JWTCredentials(HTTPAuthorizationCredentials):
     username: str
@@ -20,11 +21,11 @@ class JWTBearer(HTTPBearer):
         credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
         if credentials:
             if not credentials.scheme == "Bearer":
-                raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
+                raise NotAuthentificatedException(detail='Invalid jwt scheme!')
             
             is_verified, username = self.verify_jwt(credentials.credentials)
             if not is_verified:
-                raise HTTPException(status_code=403, detail="Invalid token or expired token.")
+                raise NotAuthentificatedException(detail='Invalid token!')
             
             
             return JWTCredentials(
@@ -33,7 +34,7 @@ class JWTBearer(HTTPBearer):
                 username=username
             )
         else:
-            raise HTTPException(status_code=403, detail="Invalid authorization code.")
+            raise NotAuthentificatedException()
 
     def verify_jwt(self, jwtoken: str) -> Tuple[bool, str | None]:
         
