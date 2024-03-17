@@ -17,7 +17,9 @@ router: APIRouter = APIRouter()
             response_class=Response)
 async def get_image(domain: str, image_name: str):
     try:
-        response = await fetch_image(f'http://support:3003/media/{domain}/{image_name}')
+        response = await fetch_image(
+            f'http://support:3003/media/{domain}/{image_name}'
+        )
         return Response(content=response, media_type="image/jpg")
     except Exception as e:
         raise await exceptionHandler(e)
