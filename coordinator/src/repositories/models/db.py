@@ -5,7 +5,9 @@ from sqlalchemy.orm import sessionmaker
 import aioredis
 from aioredis import Redis
 
-SQLALCHEMY_DATABASE_URL = 'postgresql://staffing:staffing@db-fastapi:5432/backend_fastapi'
+from config import PG_DB, PG_HOST, PG_PORT, PG_PASSWORD, PG_USER
+
+SQLALCHEMY_DATABASE_URL = f'postgresql://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DB}'
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
