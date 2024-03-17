@@ -5,7 +5,7 @@ from repositories.models.userModel import User
 from repositories.models.db import get_db
 from .depends import UserService, get_user_service
 from schemas.userSchema import UserSchema, LoginUserSchema, UserPrivateSchema, RegisterUserSchema
-from schemas.jwtSchema import JWTDetailedSchema
+from schemas.jwtSchema import JWTDetailedSchema, JWTSchema
 from sqlalchemy.orm import Session
 from schemas.statusSchemas import MessageResponseSchema
 from .depends import JWTBearer, get_jwt_bearer, JWTCredentials
@@ -25,6 +25,16 @@ async def read_users(service: UserService = Depends(get_user_service)):
 async def authenticate_user(user: LoginUserSchema, service: UserService = Depends(get_user_service)):
     try:
         return await service.login(user)
+    except Exception as e:
+        raise HTTPException(400, str(e))
+
+@router.post("/auth/refresh", tags=["users", "jwt"], response_model=JWTDetailedSchema)
+async def refresh_token(
+    token: JWTSchema,
+    service: UserService = Depends(get_user_service),
+    _: JWTCredentials = Depends(get_jwt_bearer())):
+    try:
+        return await service.refresh_login(token)
     except Exception as e:
         raise HTTPException(400, str(e))
 
