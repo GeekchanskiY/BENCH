@@ -34,10 +34,16 @@ class UserService:
 
     async def refresh_login(self, token: JWTSchema) -> JWTDetailedSchema:
         token_data = jwt_utils.decodeJWT(token.token)
-        
-        return {
-            'asd'
-        }
+        new_token: str
+        expires_at: str
+        username: str = token_data['username']
+        new_token, expires_at = jwt_utils.encodeJWT(username)
+
+        return JWTDetailedSchema(
+            token=new_token,
+            username=username,
+            expires_at=expires_at
+        )
 
     async def register(self, userdata: RegisterUserSchema, ip: str) -> UserSchema:
         userdata.password = bcrypt_utils.hash_password(userdata.password).decode('utf-8')
