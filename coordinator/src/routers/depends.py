@@ -5,6 +5,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from utils.jwt_utils import decodeJWT
 from typing import Tuple
+from datetime import datetime
 
 
 class JWTCredentials(HTTPAuthorizationCredentials):
@@ -42,6 +43,14 @@ class JWTBearer(HTTPBearer):
             payload = None
         
         if payload:
+            expires_at: str = payload.get('expires_at', None)
+            
+            if expires_at == None:
+                return False, None
+            
+            if datetime.strptime(expires_at, '%Y-%m-%d %H:%M:%S.%f') < datetime.now():
+                return False, None
+            
             return True, payload.get('username')
         else:
             return False, None
