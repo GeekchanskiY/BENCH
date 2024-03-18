@@ -1,13 +1,12 @@
-import jwt
-from datetime import datetime, timedelta
 from repositories.userRepository import UserRepository
+
 from schemas.userSchema import UserSchema, LoginUserSchema, UserPrivateSchema \
     , RegisterUserSchema
-from schemas.jwtSchema import JWTDetailedSchema
+from schemas.jwtSchema import JWTDetailedSchema, JWTSchema
 from schemas.statusSchemas import MessageResponseSchema
-from utils import bcrypt_utils
 
-PREFIX = 'Bearer'
+from utils import bcrypt_utils, jwt_utils
+
 
 class UserService:
     user_repository: UserRepository
@@ -22,16 +21,28 @@ class UserService:
         
         if not bcrypt_utils.verify_password(db_user.password, userdata.password):
             raise Exception("Incorrect password!")
-
-        token: str = jwt.encode({
-            "username": db_user.name,
-            "expires_at": str(datetime.now() + timedelta(minutes=30))
-        }, "secret", algorithm="HS256")
+        
+        token: str
+        expires_at: str
+        token, expires_at = jwt_utils.encodeJWT(userdata.email)
 
         return JWTDetailedSchema(
             token=token,
             username=db_user.name,
-            expires_at=str(datetime.now() + timedelta(minutes=30))
+            expires_at=expires_at
+        )
+
+    async def refresh_login(self, token: JWTSchema) -> JWTDetailedSchema:
+        token_data = jwt_utils.decodeJWT(token.token)
+        new_token: str
+        expires_at: str
+        username: str = token_data['username']
+        new_token, expires_at = jwt_utils.encodeJWT(username)
+
+        return JWTDetailedSchema(
+            token=new_token,
+            username=username,
+            expires_at=expires_at
         )
 
     async def register(self, userdata: RegisterUserSchema, ip: str) -> UserSchema:

@@ -8,3 +8,4 @@ opt/
 users.txt
 
 *.pyc
+.vscode/
