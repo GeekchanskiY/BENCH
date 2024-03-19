@@ -74,9 +74,16 @@ class Query:
                 raise AttributeError('Invalid Experience')
         self.experience = experience
 
+        if schedule is not None and schedule not in self.available_schedule:
+            raise AttributeError('Incorrect schedule!')
         self.schedule = schedule
+
         self.salary = salary
+
         self.only_with_salary = only_with_salary
+
+        if part_time is not None and part_time not in self.available_part_time:
+            raise AttributeError('Incorrect part_time')
         self.part_time = part_time
 
         if page is not None and type(page) != int:
@@ -116,7 +123,7 @@ class Query:
         if self.area is not None:
             # L_save_args required if search by area enabled
             self.query_args.append(
-                ('L_save_args', True)
+                ('L_save_args', 'true')
             )
     
         if self.page is not None:
@@ -135,7 +142,36 @@ class Query:
             self.query_args.append(
                 ('text', self.text)
             )
+        
+        if self.schedule is not None:
+            self.query_args.append(
+                ('schedule', self.schedule)
+            )
+        
+        if self.salary is not None:
+            self.query_args.append(
+                ('salary', self.salary)
+            )
 
+        if self.only_with_salary == True:
+            self.query_args.append(
+                ('only_with_salary', 'true')
+            )
+        
+        if self.part_time is not None:
+            self.query_args.append(
+                ('part_time', self.part_time)
+            )
+        
+        if self.enable_snippets == True:
+            self.query_args.append(
+                'enable_snippets', 'true'
+            )
+        
+        if self.area is not None:
+            self.query_args.append(
+                ('area', str(self.area))
+            )
 
     def get_next_page(self) -> 'Query':
         new_query: Query = Query(
@@ -195,7 +231,11 @@ class ItemPreview:
 if __name__ == '__main__':
     q = Query(
         page=4,
-        search_query='python'
+        search_query='python',
+        salary=150_000,
+        only_with_salary=True,
+        experience='between1And3',
+        area=113
     )
     print(str(q))
     q1 = q.get_next_page()
