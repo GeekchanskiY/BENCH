@@ -1,25 +1,10 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from config import SEARCH_STRING
 
 from copy import deepcopy, copy
 
-
+# @dataclass(slots=True)
 class Query:
-
-    query_args: list = []
-    search_url: str = SEARCH_STRING
-    page: int = 1
-    text: str = None
-    search_fields: list[str] = list()
-    enable_snippets: bool = False
-    part_time: list[str] = list()
-    only_with_salary: bool = False
-    salary: int | None = None
-    area: int | None = None
-    L_save_area: int | None = None
-    experience: list[str] = list()
-    schedule: str | None = None
-    
 
     available_query_args: frozenset = frozenset((
         'text', # str
@@ -38,8 +23,6 @@ class Query:
     available_search_fields: frozenset = frozenset((
         'name', 'company_name', 'description'
     ))
-
-    
 
     available_part_time: frozenset = frozenset((
         'employment_part', # Not full day
@@ -62,6 +45,7 @@ class Query:
         'shift',
     ))
 
+
     def __init__(
             self,
             page: int|None = None,
@@ -75,71 +59,102 @@ class Query:
             experience: str|None = None,
             schedule: str|list|None = None
         ) -> None:
-        
-        if area is not None:
-            # L_save_args required if search by area enabled
-            self.query_args.append(
-                ('L_save_args', True)
-            )
-    
-        if page is not None and type(page) == int:
-            self.page = page
-            self.query_args.append(
-                ('page', page)
-            )
-        
+        '''
+            Initialization & validation
+        '''
+        self.search_url = SEARCH_STRING
+
+
+        self.area = area
+
         if experience is not None:
             if type(experience) is not str:
                 raise AttributeError('Experience must be str!')
             if experience not in self.available_experience:
                 raise AttributeError('Invalid Experience')
-            self.query_args.append(
-                ('experience', experience)
-            )
-        
-        if search_query is not None:
-            if type(search_query) is not str:
-                raise AttributeError('Search query must be a str')
-            self.query_args.append(
-                ('text', search_query)
-            )
+        self.experience = experience
 
+        self.schedule = schedule
+        self.salary = salary
+        self.only_with_salary = only_with_salary
+        self.part_time = part_time
+
+        if page is not None and type(page) != int:
+            raise AttributeError('Page must be int or None')
+        self.page = page
+
+        if type(search_query) is not str:
+            raise AttributeError('Search query must be a str')
+        self.text = search_query
+
+        self.enable_snippets = enable_snippets
+        
         if search_field is not None:
             
             if type(search_field) == str:
                 if search_field not in self.available_search_fields:
                     raise AttributeError('Invalid search_field')
-                self.query_args.append(
-                    ('search_field', search_field_param)
-                )
-            elif type(search_field) == list:
+                self.search_fields = (search_field,)
+            elif type(search_field) == list or type(search_field) == set:
                 search_field_param: str
                 for search_field_param in search_field:
                     if search_field_param not in self.available_search_fields:
                         raise AttributeError('Invalid search_field in iterable')
-                    self.query_args.append(
-                        ('search_field', search_field_param)
-                    )
                 del search_field_param
+
+                self.search_fields = set(search_field)
+                
             else:
                 raise AttributeError('search_field must be None, str or list[str]')
         else:
-            field: str
-            for field in self.available_search_fields:
-                self.query_args.append(
-                    ('search_field', field)
-                )
-        print(self.query_args)
+            self.search_fields = set(self.available_search_fields)
+        
+        
+
+    def fill_query_args(self):
+        self.query_args: list = list()
+        if self.area is not None:
+            # L_save_args required if search by area enabled
+            self.query_args.append(
+                ('L_save_args', True)
+            )
+    
+        if self.page is not None:
+            self.page = self.page
+            self.query_args.append(
+                ('page', self.page)
+            )
+        
+        if self.experience is not None:
+            self.query_args.append(
+                ('experience', self.experience)
+            )
+        
+        if self.text is not None:
+            
+            self.query_args.append(
+                ('text', self.text)
+            )
+
 
     def get_next_page(self) -> 'Query':
-        new_query: Query = copy(self)
-        new_query.query_args.clear()
+        new_query: Query = Query(
+            page=self.page + 1,
+            search_field=self.search_fields,
+            search_query=self.text,
+            enable_snippets=self.enable_snippets,
+            part_time=self.part_time,
+            only_with_salary=self.only_with_salary,
+            salary=self.salary,
+            area=self.area,
+            experience=self.experience,
+            schedule=self.schedule
+        )
         
-        new_query.page += 1
-        print(new_query.page)
         return new_query
 
     def __str__(self) -> str:
+        self.fill_query_args()
         for q in self.query_args:
             
             key, value = q
@@ -149,13 +164,14 @@ class Query:
     def __repr__(self) -> str:
         return str(self)
 
+
 @dataclass(slots=True)
 class Company:
     name: str
     rating: int | None
     description: str | None
     city: str | None
-    domains: list[str] | None
+    domains: set[str] | None
     site_url: str | None
 
 
@@ -182,4 +198,5 @@ if __name__ == '__main__':
         search_query='python'
     )
     print(str(q))
-    print(str(q.get_next_page()))
+    q1 = q.get_next_page()
+    print(str(q1))
