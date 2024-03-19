@@ -6,6 +6,8 @@ from classes import Query, Company, ItemPreview
 
 from selenium import webdriver
 
+from bs4 import BeautifulSoup
+
 logger = logging.getLogger(__name__)
 logging.basicConfig(encoding='utf-8', level=logging.DEBUG)
 
@@ -14,17 +16,25 @@ async def search_entities(query: str="") -> list:
 
 
 async def main():
+     q = Query(
+        page=1,
+        search_query='python',
+        salary=150_000,
+        only_with_salary=True,
+        experience='between1And3',
+        area=113
+    )
      async with aiohttp.ClientSession() as session:
-        async with session.get('https://hh.ru/search/vacancy?text=python&area=2814&hhtmFrom=main&hhtmFromLabel=vacancy_search_line') as response:
+        async with session.get(str(q)) as response:
 
             print("Status:", response.status)
             print("Content-type:", response.headers['content-type'])
 
             html = await response.text()
-            browser = webdriver.Firefox()
-            browser.get("data:text/html;charset=utf-8," + html)
-            with open('out.txt', 'w', encoding='utf-8') as f:
-                f.write(browser.page_source)
+            soup = BeautifulSoup(html, 'html.parser')
+            print(soup.find_all('span', attrs={'class': 'serp-item__title'}))
+            # with open('out.txt', 'w', encoding='utf-8') as f:
+            #     f.write(html)
             # print(html)
 
 if __name__ == '__main__':

@@ -88,8 +88,8 @@ class Query:
 
         if page is not None and type(page) != int:
             raise AttributeError('Page must be int or None')
-        if page is not None and page < 0:
-            raise AttributeError('Page cant be < 0')
+        if page is not None and page < 1:
+            raise AttributeError('Page cant be < 1')
         self.page = page -1
 
         if type(search_query) is not str:
