@@ -21,8 +21,10 @@ async def main():
             print("Content-type:", response.headers['content-type'])
 
             html = await response.text()
+            browser = webdriver.Firefox()
+            browser.get("data:text/html;charset=utf-8," + html)
             with open('out.txt', 'w', encoding='utf-8') as f:
-                f.write(html)
+                f.write(browser.page_source)
             # print(html)
 
 if __name__ == '__main__':
