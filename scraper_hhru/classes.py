@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from config import SEARCH_STRING
 from aiohttp import ClientSession
+from datetime import datetime
 
 from copy import deepcopy, copy
 
@@ -208,6 +209,22 @@ class Company:
     city: str | None
     domains: set[str] | None
     site_url: str | None
+
+
+@dataclass(slots=True, init=True)
+class Vacancy:
+    name: str
+    company: str
+    company_link: str
+    link: str
+    description: str
+    skills: list[str]
+    pub_date: str
+    adress: str
+    
+    current_viewers: int
+    required_experience_min: int
+    
 
 
 @dataclass(slots=True, init=True)

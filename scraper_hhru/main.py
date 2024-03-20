@@ -4,7 +4,7 @@ import logging
 
 from aiohttp.web_response import Response
 
-from classes import Query, Company, ItemPreview, ItemHolder
+from classes import Query, Company, ItemPreview, ItemHolder, Vacancy
 from classes import get_itemHolder
 
 from selenium import webdriver
@@ -67,14 +67,35 @@ async def main():
 
             current_page += 1
         
-        # item: ItemPreview
         
+        results: list[Vacancy] = list()
+
+        item: ItemPreview
         for item in items.item_previews:
             
             response: Response = await session.get(item.vacancy_link)
             html = await response.text()
             soup = BeautifulSoup(html, 'html.parser')
-            print(soup.find('h1', attrs={'class': 'bloko-header-section-1'}).text)
+            experience: str = soup.find('span', attrs={'data-qa': 'vacancy-experience'}).text
+            if experience == '1–3 года':
+                experience: int = 1
+            else:
+                experience: int = 0
+            
+            results.append(
+                Vacancy(
+                    name=soup.find('h1', attrs={'class': 'bloko-header-section-1'}).text,
+                    description=soup.find('div', attrs={'class': 'vacancy-description'}).text,
+                    company=soup.find('a', attrs={'data-qa': 'vacancy-company-name'}).text,
+                    company_link=soup.find('a', attrs={'data-qa': 'vacancy-company-name'})['href'],
+                    required_experience_min=experience,
+                    link=item.vacancy_link,
+                    skills=[el.text for el in soup.find_all('div', attrs={'class': 'bloko-tag_inline'})],
+                    current_viewers=int(soup.find('span', attrs={'class': 'vacancy-viewers-count'}).text.replace('человек', '')),
+                    pub_date=soup.find('p', attrs={'class': 'vacancy-creation-time-redesigned'}).text
+                )
+            )
+            pass
 
         
         logging.info(f'found {len(items)}')
