@@ -5,6 +5,9 @@ from copy import deepcopy, copy
 
 # @dataclass(slots=True)
 class Query:
+    '''
+        HH.ru Query Builder
+    '''
 
     available_query_args: frozenset = frozenset((
         'text', # str
@@ -118,7 +121,6 @@ class Query:
         else:
             self.search_fields = set(self.available_search_fields)
         
-        
 
     def fill_query_args(self):
         self.query_args: list = list()
@@ -129,9 +131,8 @@ class Query:
             )
     
         if self.page is not None:
-            self.page = self.page
             self.query_args.append(
-                ('page', self.page)
+                ('page', str(self.page))
             )
         
         if self.experience is not None:
@@ -144,6 +145,13 @@ class Query:
             self.query_args.append(
                 ('text', self.text)
             )
+        
+        if self.search_fields is not None:
+            f: str
+            for f in self.search_fields:
+                self.query_args.append(
+                    ('search_field', f)
+                )
         
         if self.schedule is not None:
             self.query_args.append(
@@ -176,23 +184,11 @@ class Query:
             )
 
     def get_next_page(self) -> 'Query':
-        new_query: Query = Query(
-            page=self.page + 1,
-            search_field=self.search_fields,
-            search_query=self.text,
-            enable_snippets=self.enable_snippets,
-            part_time=self.part_time,
-            only_with_salary=self.only_with_salary,
-            salary=self.salary,
-            area=self.area,
-            experience=self.experience,
-            schedule=self.schedule
-        )
-        
-        return new_query
+        self.page += 1
 
     def __str__(self) -> str:
         self.fill_query_args()
+        self.search_url = SEARCH_STRING
         for q in self.query_args:
             
             key, value = q
