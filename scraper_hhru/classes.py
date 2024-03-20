@@ -220,18 +220,18 @@ class ItemPreview:
 
     vacancy_city: str
 
-    experience_min: int
-    experience_max: int
+    experience_min: int | None
+    experience_max: int | None
 
-    remote_job: bool
+    remote_job: bool | None
 
-    contacts_preview: bool
+    contacts_preview: bool | None
 
 class ItemHolder:
     def __init__(self) -> None:
-        self.item_previews: list[ItemPreview]
+        self.item_previews: list[ItemPreview] = list()
     
-    def add_item(self, new_item: ItemPreview) -> bool:
+    def add_item_preview(self, new_item: ItemPreview) -> bool:
         exists: bool = False
         for item in self.item_previews:
             if item.vacancy_link == new_item.vacancy_link:
@@ -239,9 +239,12 @@ class ItemHolder:
                 break
         
         if not exists:
-            self.item_previews.add(ItemPreview)
+            self.item_previews.append(ItemPreview)
         
         return exists
+    
+    def __len__(self) -> int:
+        return len(self.item_previews)
 
 itemHolder = ItemHolder()
 

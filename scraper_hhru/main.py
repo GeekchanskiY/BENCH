@@ -2,11 +2,15 @@ import asyncio
 import aiohttp
 import logging
 
-from classes import Query, Company, ItemPreview
+from aiohttp.web_response import Response
+
+from classes import Query, Company, ItemPreview, ItemHolder
+from classes import get_itemHolder
 
 from selenium import webdriver
 
 from bs4 import BeautifulSoup
+from bs4.element import Tag, ResultSet
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(encoding='utf-8', level=logging.DEBUG)
@@ -16,7 +20,7 @@ async def search_entities(query: str="") -> list:
 
 
 async def main():
-     q = Query(
+    q = Query(
         page=1,
         search_query='python',
         # salary=150_000,
@@ -24,47 +28,47 @@ async def main():
         # experience='between1And3',
         area=113
     )
-     print(str(q))
-     async with aiohttp.ClientSession() as session:
-        response = await session.get(str(q))
-        print(str(q))
-        print("Status:", response.status)
-        print("Content-type:", response.headers['content-type'])
 
-        html = await response.text()
+    items: ItemHolder = get_itemHolder()
+
+    async with aiohttp.ClientSession() as session:
+        response: Response = await session.get(str(q))
+
+        html: str = await response.text()
         soup = BeautifulSoup(html, 'html.parser')
-        print(soup.find('div', attrs={'class': 'vacancysearch-xs-header'}).text)
-        print(soup.find_all('div', attrs={'class': 'vacancy-serp-item__layout'}).__len__())
-        current_page = 1
-        links: list = list()
+
+        current_page: int = 1
         num_pages = int(soup.find('span', attrs={'class': 'pager-item-not-in-short-range'}).text)
-        print(num_pages)
+        logging.info(f'Pages for query: {num_pages}')
         
-        while current_page < 4:
+        while current_page < num_pages:
             
             q.get_next_page()
-            print(str(q))
-            response = await session.get(str(q))
+            response: Response = await session.get(str(q))
 
+            html: str = await response.text()
+            soup: BeautifulSoup = BeautifulSoup(html, 'html.parser')
+            page_items: ResultSet = soup.find_all('div', attrs={'class': 'vacancy-serp-item__layout'})
 
-            html = await response.text()
-            soup = BeautifulSoup(html, 'html.parser')
-            # print(soup.find('div', attrs={'class': 'vacancysearch-xs-header'}).text)
-            items = soup.find_all('div', attrs={'class': 'vacancy-serp-item__layout'})
-            for item in items:
-                links.append(item.find('a', attrs={'class': 'bloko-link'})['href'])
-                # print(item.find('a', attrs={'class': 'bloko-link'}).text)
+            item: Tag
+            for item in page_items:
+                new_item_preview = ItemPreview(
+                    vacancy_name=item.find('span', attrs={'class': 'serp-item__title'}).text,
+                    vacancy_link=item.find('a', attrs={'class': 'bloko-link'})['href'],
+                    company_name=item.find('a', attrs={'class': 'bloko-link_kind-tertiary'}).text,
+                    company_link=item.find('a', attrs={'class': 'bloko-link_kind-tertiary'})['href'],
+                    vacancy_city=item.find('div', attrs={'data-qa': 'vacancy-serp__vacancy-address'}).text,
+                    experience_max=0,
+                    experience_min=0,
+                    remote_job=False,
+                    contacts_preview=False
+                )
+                items.add_item_preview(new_item_preview)
+
             current_page += 1
-        links = list(set(links))
-        print(links)
-        print(len(links))
         
-
-
-            
-            # with open('out.txt', 'w', encoding='utf-8') as f:
-            #     f.write(html)
-            # print(html)
+        logging.info(f'found {len(items)}')
+        
 
 if __name__ == '__main__':
     logging.info('Scraper hh.ru start')
