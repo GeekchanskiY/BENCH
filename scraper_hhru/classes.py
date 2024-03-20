@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from config import SEARCH_STRING
+from aiohttp import ClientSession
 
 from copy import deepcopy, copy
 
@@ -225,6 +226,27 @@ class ItemPreview:
     remote_job: bool
 
     contacts_preview: bool
+
+class ItemHolder:
+    def __init__(self) -> None:
+        self.item_previews: list[ItemPreview]
+    
+    def add_item(self, new_item: ItemPreview) -> bool:
+        exists: bool = False
+        for item in self.item_previews:
+            if item.vacancy_link == new_item.vacancy_link:
+                exists = True
+                break
+        
+        if not exists:
+            self.item_previews.add(ItemPreview)
+        
+        return exists
+
+itemHolder = ItemHolder()
+
+def get_itemHolder():
+    return itemHolder
 
 if __name__ == '__main__':
     q = Query(
