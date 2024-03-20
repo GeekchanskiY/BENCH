@@ -82,6 +82,7 @@ async def main():
             else:
                 experience: int = 0
             
+            print(item.vacancy_link)
             results.append(
                 Vacancy(
                     name=soup.find('h1', attrs={'class': 'bloko-header-section-1'}).text,
@@ -91,7 +92,7 @@ async def main():
                     required_experience_min=experience,
                     link=item.vacancy_link,
                     skills=[el.text for el in soup.find_all('div', attrs={'class': 'bloko-tag_inline'})],
-                    current_viewers=int(soup.find('span', attrs={'class': 'vacancy-viewers-count'}).text.replace('человек', '')),
+                    # adress=soup.find('span', attrs={'data-qa': 'vacancy-view-raw-address'}).text,
                     pub_date=soup.find('p', attrs={'class': 'vacancy-creation-time-redesigned'}).text
                 )
             )

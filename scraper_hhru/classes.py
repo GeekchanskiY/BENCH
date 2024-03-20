@@ -220,9 +220,9 @@ class Vacancy:
     description: str
     skills: list[str]
     pub_date: str
-    adress: str
+    # adress: str
     
-    current_viewers: int
+    # current_viewers: int
     required_experience_min: int
     
 
