@@ -52,7 +52,8 @@ async def main():
 
             item: Tag
             for item in page_items:
-                new_item_preview = ItemPreview(
+                
+                items.add_item_preview(ItemPreview(
                     vacancy_name=item.find('span', attrs={'class': 'serp-item__title'}).text,
                     vacancy_link=item.find('a', attrs={'class': 'bloko-link'})['href'],
                     company_name=item.find('a', attrs={'class': 'bloko-link_kind-tertiary'}).text,
@@ -62,10 +63,19 @@ async def main():
                     experience_min=0,
                     remote_job=False,
                     contacts_preview=False
-                )
-                items.add_item_preview(new_item_preview)
+                ))
 
             current_page += 1
+        
+        # item: ItemPreview
+        
+        for item in items.item_previews:
+            
+            response: Response = await session.get(item.vacancy_link)
+            html = await response.text()
+            soup = BeautifulSoup(html, 'html.parser')
+            print(soup.find('h1', attrs={'class': 'bloko-header-section-1'}).text)
+
         
         logging.info(f'found {len(items)}')
         

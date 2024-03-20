@@ -210,7 +210,7 @@ class Company:
     site_url: str | None
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, init=True)
 class ItemPreview:
     vacancy_name: str
     vacancy_link: str
@@ -227,6 +227,7 @@ class ItemPreview:
 
     contacts_preview: bool | None
 
+
 class ItemHolder:
     def __init__(self) -> None:
         self.item_previews: list[ItemPreview] = list()
@@ -239,10 +240,13 @@ class ItemHolder:
                 break
         
         if not exists:
-            self.item_previews.append(ItemPreview)
+            self.item_previews.append(new_item)
         
         return exists
     
+    def get_item_previews(self) -> list[ItemPreview]:
+        return set(self.item_previews)
+
     def __len__(self) -> int:
         return len(self.item_previews)
 
