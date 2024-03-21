@@ -13,7 +13,9 @@ func GetOneEmployee(c *gin.Context) {
 	var employee Models.Employee
 	err := Models.GetOneEmployee(&employee, id)
 	if err == nil {
+		// log.Printf(employee.Name)
 		ApiHelpers.RespondJSON(c, 200, employee)
+		return
 	}
 	ApiHelpers.RespondJSON(c, 404, employee)
 
@@ -34,6 +36,7 @@ func AddNewEmployee(c *gin.Context) {
 		ApiHelpers.RespondJSON(c, 400, employee)
 		return
 	}
+
 	ApiHelpers.RespondJSON(c, 200, employee)
 
 }
