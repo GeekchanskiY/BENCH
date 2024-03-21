@@ -1,5 +1,6 @@
 from services.userService import UserService
 from services.serviceService import ServiceService
+from services.employeeService import EmployeeService
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
@@ -63,9 +64,13 @@ def get_jwt_bearer():
 
 user_service = UserService()
 service_service = ServiceService()
+employee_service = EmployeeService()
 
 def get_user_service():
     return user_service
 
 def get_service_service():
     return service_service
+
+def get_employee_service():
+    return employee_service
