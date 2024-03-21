@@ -1,15 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
-	"Finance/Models"
 	"Finance/Routers"
+	"Finance/config"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
@@ -23,13 +21,11 @@ func LoggerMiddleware() gin.HandlerFunc {
 }
 
 func main() {
-	var err error
-	Models.DB, err = gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	var db *gorm.DB
+	config.SetupDBConnection(db)
 
-	if err != nil {
-		fmt.Println("status: ", err)
-	}
-	Models.Migrate()
+	config.Setup()
+
 	r := Routers.SetupRouter()
 
 	r.Use(LoggerMiddleware())

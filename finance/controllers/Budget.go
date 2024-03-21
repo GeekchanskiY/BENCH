@@ -2,7 +2,7 @@ package Controllers
 
 import (
 	"Finance/ApiHelpers"
-	"Finance/Models"
+	"Finance/models"
 	"log"
 
 	"fmt"
@@ -12,8 +12,8 @@ import (
 
 func GetOneBudget(c *gin.Context) {
 	id := c.Params.ByName("id")
-	var budget Models.Budget
-	err := Models.GetOneBudget(&budget, id)
+	var budget models.Budget
+	err := models.GetOneBudget(&budget, id)
 	if err != nil {
 		ApiHelpers.RespondJSON(c, 404, budget)
 	} else {
@@ -22,8 +22,8 @@ func GetOneBudget(c *gin.Context) {
 }
 
 func ListBudget(c *gin.Context) {
-	var budget []Models.Budget
-	err := Models.GetAllBudgets(&budget)
+	var budget []models.Budget
+	err := models.GetAllBudgets(&budget)
 	if err != nil {
 		ApiHelpers.RespondJSON(c, 404, budget)
 	} else {
@@ -32,7 +32,7 @@ func ListBudget(c *gin.Context) {
 }
 
 func AddNewBudget(c *gin.Context) {
-	var budget Models.Budget
+	var budget models.Budget
 	var err error
 	c.BindJSON(&budget)
 	fmt.Println(budget)
@@ -44,7 +44,7 @@ func AddNewBudget(c *gin.Context) {
 		return
 	}
 
-	err = Models.AddNewBudget(&budget)
+	err = models.AddNewBudget(&budget)
 	if err != nil {
 		ApiHelpers.RespondJSON(c, 404, budget)
 		return

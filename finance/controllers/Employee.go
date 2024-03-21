@@ -2,7 +2,7 @@ package Controllers
 
 import (
 	"Finance/ApiHelpers"
-	"Finance/Models"
+	"Finance/models"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -10,8 +10,8 @@ import (
 
 func GetOneEmployee(c *gin.Context) {
 	id := c.Params.ByName("id")
-	var employee Models.Employee
-	err := Models.GetOneEmployee(&employee, id)
+	var employee models.Employee
+	err := models.GetOneEmployee(&employee, id)
 	if err == nil {
 		// log.Printf(employee.Name)
 		ApiHelpers.RespondJSON(c, 200, employee)
@@ -21,8 +21,19 @@ func GetOneEmployee(c *gin.Context) {
 
 }
 
+func DeleteEmployee(c *gin.Context) {
+	id := c.Params.ByName("id")
+	err := models.DeleteEmployee(id)
+	if err == nil {
+		c.JSON(200, gin.H{"deleted": "True"})
+		return
+	}
+	c.JSON(400, gin.H{"error": "Cant delete :("})
+
+}
+
 func AddNewEmployee(c *gin.Context) {
-	var employee Models.Employee
+	var employee models.Employee
 	var err error
 	c.BindJSON(&employee)
 	err = employee.Validate()
@@ -31,7 +42,7 @@ func AddNewEmployee(c *gin.Context) {
 		ApiHelpers.RespondJSON(c, 400, employee)
 		return
 	}
-	err = Models.AddNewEmployee(&employee)
+	err = models.AddNewEmployee(&employee)
 	if err != nil {
 		ApiHelpers.RespondJSON(c, 400, employee)
 		return

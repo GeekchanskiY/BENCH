@@ -1,4 +1,4 @@
-package Models
+package models
 
 import (
 	"time"
@@ -165,23 +165,4 @@ type ResponsibilityConflict struct {
 
 func (rc *ResponsibilityConflict) TableName() string {
 	return "responsibility_conflict"
-}
-
-func Migrate() {
-	DB.AutoMigrate(&Budget{})
-	DB.AutoMigrate(&Employee{})
-	DB.AutoMigrate(&Company{})
-	DB.AutoMigrate(&Vacancy{})
-	DB.AutoMigrate(&Skill{})
-	DB.AutoMigrate(&VacancySkill{})
-	DB.AutoMigrate(&Domain{})
-	DB.AutoMigrate(&SkillDomain{})
-	DB.AutoMigrate(&SkillConflict{})
-	DB.AutoMigrate(&VacancyDomain{})
-	DB.AutoMigrate(&Responsibility{})
-	DB.AutoMigrate(&ResponsibilityConflict{})
-	DB.AutoMigrate(&ResponsibilitySynonim{})
-	DB.AutoMigrate(&CV{})
-	DB.AutoMigrate(&CVResponsibility{})
-
 }
