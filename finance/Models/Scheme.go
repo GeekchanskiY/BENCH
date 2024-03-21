@@ -1,7 +1,6 @@
 package Models
 
 import (
-	"Finance/Config"
 	"time"
 
 	"gorm.io/gorm"
@@ -18,13 +17,16 @@ func (b *Budget) TableName() string {
 	return "budget"
 }
 
-func Migrate() {
-	Config.DB.AutoMigrate(&Budget{})
-}
-
 type Employee struct {
 	gorm.Model
 	Name string `json:"name"`
+	Age  int    `json:"age"`
+	// Level       int    `json:"level"`
+	// Description string `json:"description"`
+}
+
+func (e *Employee) TableName() string {
+	return "employee"
 }
 
 type Company struct {
@@ -36,10 +38,15 @@ type Company struct {
 	Link        string `json:"link"`
 }
 
+func (c *Company) TableName() string {
+	return "company"
+}
+
 type Vacancy struct {
 	gorm.Model
-	Name        string    `json:"name"`
-	Company     string    `json:"company"`
+	Name        string `json:"name"`
+	CompanyID   uint
+	Company     *Company  `json:"company"`
 	CompanyLink string    `json:"company_link"`
 	VacancyLink string    `json:"vacancy_link"`
 	Description string    `json:"description"`
@@ -47,25 +54,45 @@ type Vacancy struct {
 	Experience  int       `json:"experience"`
 }
 
-type VacancySkills struct {
-	Vacancy  Vacancy `json:"vacancy"`
-	Skill    Skill   `json:"skill"`
-	Priority int     `json:"priority"`
+func (v *Vacancy) TableName() string {
+	return "vacancy"
+}
+
+type VacancySkill struct {
+	VacancyID uint
+	Vacancy   Vacancy `json:"vacancy"`
+	SkillID   uint
+	Skill     Skill `json:"skill"`
+	Priority  int   `json:"priority"`
+}
+
+func (vs *VacancySkill) TableName() string {
+	return "vacancy_skill"
 }
 
 type Skill struct {
 	gorm.Model
-	Name        string `json:"name"`
-	Skill       *Skill `gorm:"null" json:"parent_skill"`
-	Description string `json:"Description"`
+	Name        string  `json:"name"`
+	Skill       []Skill `gorm:"foreignkey:ID;null" json:"parent_skill"`
+	Description string  `json:"Description"`
+}
+
+func (s *Skill) TableName() string {
+	return "skill"
 }
 
 type SkillConflict struct {
 	gorm.Model
-	Skill1   *Skill `json:"skill_1"`
-	Skill2   *Skill `json:"skill_2"`
+	Skill1ID uint
+	Skill1   Skill `json:"skill_1"`
+	Skill2ID uint
+	Skill2   Skill  `json:"skill_2"`
 	Comment  string `json:"Comment"`
 	Priority int    `json:"Priority"`
+}
+
+func (s *SkillConflict) TableName() string {
+	return "skill_conflict"
 }
 
 type Domain struct {
@@ -73,48 +100,111 @@ type Domain struct {
 	Name string `json:"name"`
 }
 
+func (d *Domain) TableName() string {
+	return "domain"
+}
+
 type VacancyDomain struct {
-	Vacancy  Vacancy `json:"vacancy"`
-	Domain   Domain  `json:"domain"`
-	Priority int     `json:"priority"`
+	VacancyID uint
+	Vacancy   Vacancy `json:"vacancy"`
+	DomainID  uint
+	Domain    Domain `json:"domain"`
+	Priority  int    `json:"priority"`
+}
+
+func (vd *VacancyDomain) TableName() string {
+	return "vacancy_domain"
 }
 
 type SkillDomain struct {
-	Skill    *Skill  `json:"skill"`
-	Domain   *Domain `json:"domain"`
-	Priority int     `json:"priority"`
+	SkillID  uint
+	Skill    Skill `json:"skill"`
+	DomainID uint
+	Domain   Domain `json:"domain"`
+	Priority int    `json:"priority"`
+}
+
+func (sd *SkillDomain) TableName() string {
+	return "skill_domain"
 }
 
 type CV struct {
 	gorm.Model
-	Employee *Employee `json:"employee"`
-	Vacancy  *Vacancy  `json:"vacancy"`
+	EmployeeID uint
+	Employee   Employee `json:"employee"`
+	VacancyID  uint
+	Vacancy    Vacancy `json:"vacancy"`
 }
 
-type CVSkills struct {
-	CV    *CV    `json:"CV"`
-	Skill *Skill `json:"skill"`
-	Years int    `json:"years"`
+func (c *CV) TableName() string {
+	return "cv"
+}
+
+type CVResponsibility struct {
+	CVID    uint
+	CV      CV `json:"CV"`
+	SkillID uint
+	Skill   Skill `json:"skill"`
+	Years   int   `json:"years"`
+}
+
+func (cr *CVResponsibility) TableName() string {
+	return "cv_responsibility"
 }
 
 type Responsibility struct {
 	gorm.Model
-	Skill           *Skill `json:"skill"`
+	SkillID         uint
+	Skill           Skill  `json:"skill"`
 	Priority        int    `json:"priority"`
 	Name            string `json:"name"`
 	Comments        string `json:"comments" gorm:"null"`
 	ExperienceLevel int    `json:"experience_level"`
 }
 
+func (r *Responsibility) TableName() string {
+	return "responsibility"
+}
+
 type ResponsibilitySynonim struct {
 	gorm.Model
-	Responsibility *Responsibility `json:"responsibility"`
-	Name           string          `json:"Name"`
+	ResponsibilityID uint
+	Responsibility   Responsibility `json:"responsibility"`
+	Name             string         `json:"Name"`
+}
+
+func (rs *ResponsibilitySynonim) TableName() string {
+	return "responsibility_synonim"
 }
 
 type ResponsibilityConflict struct {
 	gorm.Model
-	Responsibility1 *Responsibility `json:"responsibility_1"`
-	Responsibility2 *Responsibility `json:"responsibility_2"`
-	Priority        int             `json:"Priority"`
+	Responsibility1ID uint
+	Responsibility1   Responsibility `json:"responsibility_1"`
+	Responsibility2ID uint
+	Responsibility2   Responsibility `json:"responsibility_2"`
+	Priority          int            `json:"Priority"`
+}
+
+func (rc *ResponsibilityConflict) TableName() string {
+	return "responsibility_conflict"
+}
+
+func Migrate() {
+	DB.AutoMigrate(&Budget{})
+	DB.AutoMigrate(&Employee{})
+	DB.AutoMigrate(&Company{})
+	DB.AutoMigrate(&Vacancy{})
+	DB.AutoMigrate(&Skill{})
+	DB.AutoMigrate(&VacancySkill{})
+	DB.AutoMigrate(&Domain{})
+	DB.AutoMigrate(&SkillDomain{})
+	DB.AutoMigrate(&SkillConflict{})
+	DB.AutoMigrate(&VacancyDomain{})
+	DB.AutoMigrate(&Responsibility{})
+	DB.AutoMigrate(&ResponsibilityConflict{})
+	DB.AutoMigrate(&ResponsibilitySynonim{})
+	DB.AutoMigrate(&CV{})
+	DB.AutoMigrate(&CVResponsibility{})
+
 }
