@@ -6,29 +6,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type Budget struct {
-	gorm.Model
-	Name          string  `json:"name"`
-	Author        string  `json:"author"`
-	CurrentAmount float64 `json:"currentAmount"`
-}
-
-func (b *Budget) TableName() string {
-	return "budget"
-}
-
-type Employee struct {
-	gorm.Model
-	Name string `json:"name"`
-	Age  int    `json:"age"`
-	// Level       int    `json:"level"`
-	// Description string `json:"description"`
-}
-
-func (e *Employee) TableName() string {
-	return "employee"
-}
-
 type Company struct {
 	gorm.Model
 	Name        string `json:"name"`

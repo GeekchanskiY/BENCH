@@ -2,7 +2,20 @@ package Models
 
 import (
 	"errors"
+
+	"gorm.io/gorm"
 )
+
+type Budget struct {
+	gorm.Model
+	Name          string  `json:"name"`
+	Author        string  `json:"author"`
+	CurrentAmount float64 `json:"currentAmount"`
+}
+
+func (b *Budget) TableName() string {
+	return "budget"
+}
 
 func (b *Budget) Validate() error {
 

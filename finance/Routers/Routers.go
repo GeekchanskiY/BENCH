@@ -16,9 +16,12 @@ func SetupRouter() *gin.Engine {
 				"message": "pong",
 			})
 		})
-		v1.GET("/", Controllers.ListBudget)
-		v1.POST("/add", Controllers.AddNewBudget)
-		v1.GET("/get/:id", Controllers.GetOneBudget)
+	}
+
+	employee := v1.Group("/employee")
+	{
+		employee.GET("/get/:id", Controllers.GetOneEmployee)
+		employee.POST("/create", Controllers.AddNewEmployee)
 	}
 
 	return r
