@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 
-	"Finance/Config"
 	"Finance/Models"
 	"Finance/Routers"
 	"time"
@@ -25,7 +24,7 @@ func LoggerMiddleware() gin.HandlerFunc {
 
 func main() {
 	var err error
-	Config.DB, err = gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	Models.DB, err = gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 
 	if err != nil {
 		fmt.Println("status: ", err)
