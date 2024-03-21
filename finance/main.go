@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"Finance/Routers"
 	"Finance/config"
+	"Finance/routers"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -22,11 +22,11 @@ func LoggerMiddleware() gin.HandlerFunc {
 
 func main() {
 	var db *gorm.DB
-	config.SetupDBConnection(db)
+	// config.SetupDBConnection(db)
 
-	config.Setup()
+	db = config.Setup(db)
 
-	r := Routers.SetupRouter()
+	r := routers.SetupRouter(db)
 
 	r.Use(LoggerMiddleware())
 

@@ -18,7 +18,7 @@ func GetDBConnection() *gorm.DB {
 	return db
 }
 
-func Setup() {
+func Setup(DB *gorm.DB) *gorm.DB {
 
 	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 
@@ -40,5 +40,5 @@ func Setup() {
 	db.AutoMigrate(&models.ResponsibilitySynonim{})
 	db.AutoMigrate(&models.CV{})
 	db.AutoMigrate(&models.CVResponsibility{})
-
+	return db
 }

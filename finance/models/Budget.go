@@ -33,25 +33,3 @@ func (b *Budget) Validate() error {
 
 	return nil
 }
-
-func GetAllBudgets(b *[]Budget) (err error) {
-	if err = config.db.Find(b).Error; err != nil {
-		return err
-	}
-	return nil
-}
-
-func GetOneBudget(b *Budget, id string) (err error) {
-	if err := config.db.Where("id = ?", id).First(b).Error; err != nil {
-		return err
-	}
-	return nil
-}
-
-func AddNewBudget(b *Budget) (err error) {
-	err = config.db.Create(b).Error
-	if err != nil {
-		return err
-	}
-	return nil
-}
