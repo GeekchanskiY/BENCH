@@ -8,5 +8,5 @@ type EmployeeRepository interface {
 	FindAll() ([]models.Employee, error)
 	FindByID(id uint) (models.Employee, error)
 	Create(employee models.Employee) (models.Employee, error)
-	Delete(employee models.Employee) error
+	Delete(id uint) error
 }

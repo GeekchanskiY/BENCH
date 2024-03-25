@@ -28,6 +28,8 @@ func main() {
 
 	r := routers.SetupRouter(db)
 
+	r.Use(gin.ErrorLogger())
+
 	r.Use(LoggerMiddleware())
 
 	r.Run(":3001")

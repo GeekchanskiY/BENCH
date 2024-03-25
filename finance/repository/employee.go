@@ -32,7 +32,8 @@ func (c *employeeDatabase) Create(employee models.Employee) (models.Employee, er
 	return employee, err
 }
 
-func (c *employeeDatabase) Delete(employee models.Employee) error {
-	err := c.DB.Delete(&employee).Error
+func (c *employeeDatabase) Delete(id uint) error {
+
+	err := c.DB.Delete(&models.Employee{}, id).Error
 	return err
 }

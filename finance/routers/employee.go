@@ -19,7 +19,8 @@ func SetupEmployee(base_group *gin.RouterGroup, db *gorm.DB) {
 	employee := base_group.Group("/employee")
 	{
 		employee.GET("/", EmployeeController.FindAll)
-		employee.GET("/get/:id", EmployeeController.FindByID)
-		employee.POST("/create", EmployeeController.Create)
+		employee.GET("/:id", EmployeeController.FindByID)
+		employee.DELETE("/:id", EmployeeController.Delete)
+		employee.POST("/", EmployeeController.Create)
 	}
 }
