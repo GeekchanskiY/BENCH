@@ -2,7 +2,7 @@ package repository
 
 import (
 	"Finance/models"
-	"Finance/repository/interfaces"
+	"Finance/repositories/interfaces"
 
 	"gorm.io/gorm"
 )

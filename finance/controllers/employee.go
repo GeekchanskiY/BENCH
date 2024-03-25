@@ -3,7 +3,7 @@ package controllers
 import (
 	controller "Finance/controllers/interfaces"
 	"Finance/models"
-	interfaces "Finance/repository/interfaces"
+	interfaces "Finance/repositories/interfaces"
 	"strconv"
 
 	"github.com/gin-gonic/gin"

@@ -7,9 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
-	repo_interfaces "Finance/repository/interfaces"
+	repo_interfaces "Finance/repositories/interfaces"
 
-	repos "Finance/repository"
+	repos "Finance/repositories"
 )
 
 func SetupEmployee(base_group *gin.RouterGroup, db *gorm.DB) {
