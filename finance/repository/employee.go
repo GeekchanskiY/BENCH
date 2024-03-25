@@ -3,7 +3,6 @@ package repository
 import (
 	"Finance/models"
 	"Finance/repository/interfaces"
-	"context"
 
 	"gorm.io/gorm"
 )
@@ -16,24 +15,24 @@ func NewEmployeeRepository(DB *gorm.DB) interfaces.EmployeeRepository {
 	return &employeeDatabase{DB}
 }
 
-func (c *employeeDatabase) FindAll(ctx context.Context) ([]models.Employee, error) {
+func (c *employeeDatabase) FindAll() ([]models.Employee, error) {
 	var employees []models.Employee
 	err := c.DB.Find(&employees).Error
 	return employees, err
 }
 
-func (c *employeeDatabase) FindByID(ctx context.Context, id uint) (models.Employee, error) {
+func (c *employeeDatabase) FindByID(id uint) (models.Employee, error) {
 	var employee models.Employee
 	err := c.DB.First(&employee, id).Error
 	return employee, err
 }
 
-func (c *employeeDatabase) Create(ctx context.Context, employee models.Employee) (models.Employee, error) {
+func (c *employeeDatabase) Create(employee models.Employee) (models.Employee, error) {
 	err := c.DB.Save(&employee).Error
 	return employee, err
 }
 
-func (c *employeeDatabase) Delete(ctx context.Context, employee models.Employee) error {
+func (c *employeeDatabase) Delete(employee models.Employee) error {
 	err := c.DB.Delete(&employee).Error
 	return err
 }

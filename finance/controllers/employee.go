@@ -20,36 +20,48 @@ func NewUserController(repo interfaces.EmployeeRepository) controller.EmployeeCo
 }
 
 func (c *employeeController) FindAll(ctx *gin.Context) {
-	c.employeeRepository.FindAll(ctx)
-
+	employees, err := c.employeeRepository.FindAll()
+	if err != nil {
+		ctx.JSON(400, gin.H{"error": err})
+		return
+	}
+	ctx.JSON(200, employees)
 }
 
 func (c *employeeController) FindByID(ctx *gin.Context) {
 	var params_id string = ctx.Params.ByName("id")
 	i, err := strconv.ParseUint(params_id, 10, 32)
 	if err != nil {
-		panic(err)
+		ctx.JSON(400, gin.H{"error": err})
+		return
 	}
-	var ui uint = uint(i)
-	employee, err := c.employeeRepository.FindByID(ctx, ui)
-	ctx.JSON(200, gin.H{"nice": employee.Name})
+	var uid uint = uint(i)
+	employee, err := c.employeeRepository.FindByID(uid)
+	if err != nil {
+		ctx.JSON(400, gin.H{"error": err})
+		return
+	}
+	ctx.JSON(200, employee)
 
 }
 
 func (c *employeeController) Create(ctx *gin.Context) {
 	var employee models.Employee
-	employee, err := c.employeeRepository.Create(ctx, employee)
+	ctx.BindJSON(&employee)
+	employee, err := c.employeeRepository.Create(employee)
 	if err != nil {
-		ctx.JSON(400, gin.H{"error": "asd"})
+		ctx.JSON(400, gin.H{"error": err})
+		return
 	}
-	ctx.JSON(200, gin.H{"name": employee.Name})
-
+	ctx.JSON(200, employee)
 }
 
 func (c *employeeController) Delete(ctx *gin.Context) {
 	var employee models.Employee
-	err := c.employeeRepository.Delete(ctx, employee)
+	err := c.employeeRepository.Delete(employee)
 	if err != nil {
 		ctx.JSON(400, gin.H{"error": "error"})
+		return
 	}
+	ctx.JSON(200, gin.H{"deleted": true})
 }
