@@ -1,19 +1,25 @@
 info:
   contact: {}
 paths:
-  /example/helloworld:
-    get:
+  /company/{id}:
+    delete:
       consumes:
       - application/json
-      description: PINGI
+      description: Delete company by ID
+      parameters:
+      - description: Company ID
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: OK
-          schema:
-            type: string
-      summary: ping example
+        "400":
+          description: Bad Request
+      summary: Delete company
       tags:
-      - example
+      - company
 swagger: "2.0"

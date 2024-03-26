@@ -15,9 +15,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/example/helloworld": {
-            "get": {
-                "description": "PINGI",
+        "/company/{id}": {
+            "delete": {
+                "description": "Delete company by ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -25,15 +25,24 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "example"
+                    "company"
                 ],
-                "summary": "ping example",
+                "summary": "Delete company",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Company ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
                     }
                 }
             }
