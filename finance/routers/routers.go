@@ -25,6 +25,7 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 
 	SetupEmployee(v1, db)
 	SetupCompany(v1, db)
+	SetupVacancy(v1, db)
 
 	return r
 }

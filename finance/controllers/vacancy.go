@@ -48,8 +48,13 @@ func (c *vacancyController) FindByID(ctx *gin.Context) {
 
 func (c *vacancyController) Create(ctx *gin.Context) {
 	var vacancy models.Vacancy
-	ctx.BindJSON(&vacancy)
-	vacancy, err := c.vacancyRepository.Create(vacancy)
+	err := ctx.BindJSON(&vacancy)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+
+	vacancy, err = c.vacancyRepository.Create(vacancy)
 	if err != nil {
 		ctx.JSON(400, ctx.Error(err))
 		return
