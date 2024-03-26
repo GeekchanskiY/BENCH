@@ -48,8 +48,12 @@ func (c *companyController) FindByID(ctx *gin.Context) {
 
 func (c *companyController) Create(ctx *gin.Context) {
 	var company models.Company
-	ctx.BindJSON(&company)
-	company, err := c.companyRepository.Create(company)
+	err := ctx.BindJSON(&company)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	company, err = c.companyRepository.Create(company)
 	if err != nil {
 		ctx.JSON(400, ctx.Error(err))
 		return
