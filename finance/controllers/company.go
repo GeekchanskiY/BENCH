@@ -57,6 +57,17 @@ func (c *companyController) Create(ctx *gin.Context) {
 	ctx.JSON(200, company)
 }
 
+//	@BasePath	/api/v1
+
+// PingExample godoc
+//	@Summary	ping example
+//	@Schemes
+//	@Description	PINGI
+//	@Tags			example
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{string}	Helloworld
+//	@Router			/example/helloworld [get]
 func (c *companyController) Delete(ctx *gin.Context) {
 	var params_id string = ctx.Params.ByName("id")
 	i, err := strconv.ParseUint(params_id, 10, 32)

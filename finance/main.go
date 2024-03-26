@@ -22,6 +22,7 @@ func LoggerMiddleware() gin.HandlerFunc {
 
 func main() {
 	var db *gorm.DB
+
 	// config.SetupDBConnection(db)
 
 	db = config.Setup(db)
