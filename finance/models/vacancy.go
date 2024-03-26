@@ -8,14 +8,12 @@ import (
 
 type Vacancy struct {
 	gorm.Model
-	Name        string `json:"name" binding:"required"`
-	CompanyID   uint
-	Company     *Company  `json:"company" binding:"required"`
-	CompanyLink string    `json:"company_link" binding:"required"`
-	VacancyLink string    `json:"vacancy_link" binding:"required"`
-	Description string    `json:"description" binding:"required"`
-	PubDate     time.Time `json:"publishedAt" binding:"required"`
-	Experience  int       `json:"experience" binding:"required"`
+	Name        string
+	Company     Company `gorm:"references:CompanyID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	VacancyLink string
+	Description string
+	PubDate     time.Time
+	Experience  int
 }
 
 func (v *Vacancy) TableName() string {
