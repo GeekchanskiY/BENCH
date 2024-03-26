@@ -6,10 +6,10 @@ import (
 
 type VacancySkill struct {
 	VacancyID uint
-	Vacancy   Vacancy `json:"vacancy"`
+	Vacancy   Vacancy `json:"vacancy" binding:"required"`
 	SkillID   uint
-	Skill     Skill `json:"skill"`
-	Priority  int   `json:"priority"`
+	Skill     Skill `json:"skill" binding:"required"`
+	Priority  int   `json:"priority" binding:"required"`
 }
 
 func (vs *VacancySkill) TableName() string {
@@ -18,9 +18,9 @@ func (vs *VacancySkill) TableName() string {
 
 type Skill struct {
 	gorm.Model
-	Name        string  `json:"name"`
-	Skill       []Skill `gorm:"foreignkey:ID;null" json:"parent_skill"`
-	Description string  `json:"Description"`
+	Name        string  `json:"name" binding:"required"`
+	Skill       []Skill `gorm:"foreignkey:ID;null" json:"parent_skill" binding:"required"`
+	Description string  `json:"Description" binding:"required"`
 }
 
 func (s *Skill) TableName() string {
@@ -30,11 +30,11 @@ func (s *Skill) TableName() string {
 type SkillConflict struct {
 	gorm.Model
 	Skill1ID uint
-	Skill1   Skill `json:"skill_1"`
+	Skill1   Skill `json:"skill_1" binding:"required"`
 	Skill2ID uint
-	Skill2   Skill  `json:"skill_2"`
-	Comment  string `json:"Comment"`
-	Priority int    `json:"Priority"`
+	Skill2   Skill  `json:"skill_2" binding:"required"`
+	Comment  string `json:"Comment" binding:"required"`
+	Priority int    `json:"Priority" binding:"required"`
 }
 
 func (s *SkillConflict) TableName() string {
@@ -43,7 +43,7 @@ func (s *SkillConflict) TableName() string {
 
 type Domain struct {
 	gorm.Model
-	Name string `json:"name"`
+	Name string `json:"name" binding:"required"`
 }
 
 func (d *Domain) TableName() string {
@@ -52,10 +52,10 @@ func (d *Domain) TableName() string {
 
 type VacancyDomain struct {
 	VacancyID uint
-	Vacancy   Vacancy `json:"vacancy"`
+	Vacancy   Vacancy `json:"vacancy" binding:"required"`
 	DomainID  uint
-	Domain    Domain `json:"domain"`
-	Priority  int    `json:"priority"`
+	Domain    Domain `json:"domain" binding:"required"`
+	Priority  int    `json:"priority" binding:"required"`
 }
 
 func (vd *VacancyDomain) TableName() string {
@@ -64,10 +64,10 @@ func (vd *VacancyDomain) TableName() string {
 
 type SkillDomain struct {
 	SkillID  uint
-	Skill    Skill `json:"skill"`
+	Skill    Skill `json:"skill" binding:"required"`
 	DomainID uint
-	Domain   Domain `json:"domain"`
-	Priority int    `json:"priority"`
+	Domain   Domain `json:"domain" binding:"required"`
+	Priority int    `json:"priority" binding:"required"`
 }
 
 func (sd *SkillDomain) TableName() string {
@@ -77,9 +77,9 @@ func (sd *SkillDomain) TableName() string {
 type CV struct {
 	gorm.Model
 	EmployeeID uint
-	Employee   Employee `json:"employee"`
+	Employee   Employee `json:"employee" binding:"required"`
 	VacancyID  uint
-	Vacancy    Vacancy `json:"vacancy"`
+	Vacancy    Vacancy `json:"vacancy" binding:"required"`
 }
 
 func (c *CV) TableName() string {
@@ -88,10 +88,10 @@ func (c *CV) TableName() string {
 
 type CVResponsibility struct {
 	CVID    uint
-	CV      CV `json:"CV"`
+	CV      CV `json:"CV" binding:"required"`
 	SkillID uint
-	Skill   Skill `json:"skill"`
-	Years   int   `json:"years"`
+	Skill   Skill `json:"skill" binding:"required"`
+	Years   int   `json:"years" binding:"required"`
 }
 
 func (cr *CVResponsibility) TableName() string {
@@ -101,11 +101,11 @@ func (cr *CVResponsibility) TableName() string {
 type Responsibility struct {
 	gorm.Model
 	SkillID         uint
-	Skill           Skill  `json:"skill"`
-	Priority        int    `json:"priority"`
-	Name            string `json:"name"`
-	Comments        string `json:"comments" gorm:"null"`
-	ExperienceLevel int    `json:"experience_level"`
+	Skill           Skill  `json:"skill" binding:"required"`
+	Priority        int    `json:"priority" binding:"required"`
+	Name            string `json:"name" binding:"required"`
+	Comments        string `json:"comments" gorm:"null" binding:"required"`
+	ExperienceLevel int    `json:"experience_level" binding:"required"`
 }
 
 func (r *Responsibility) TableName() string {
@@ -115,8 +115,8 @@ func (r *Responsibility) TableName() string {
 type ResponsibilitySynonim struct {
 	gorm.Model
 	ResponsibilityID uint
-	Responsibility   Responsibility `json:"responsibility"`
-	Name             string         `json:"Name"`
+	Responsibility   Responsibility `json:"responsibility" binding:"required"`
+	Name             string         `json:"Name" binding:"required"`
 }
 
 func (rs *ResponsibilitySynonim) TableName() string {
@@ -126,10 +126,10 @@ func (rs *ResponsibilitySynonim) TableName() string {
 type ResponsibilityConflict struct {
 	gorm.Model
 	Responsibility1ID uint
-	Responsibility1   Responsibility `json:"responsibility_1"`
+	Responsibility1   Responsibility `json:"responsibility_1" binding:"required"`
 	Responsibility2ID uint
-	Responsibility2   Responsibility `json:"responsibility_2"`
-	Priority          int            `json:"Priority"`
+	Responsibility2   Responsibility `json:"responsibility_2" binding:"required"`
+	Priority          int            `json:"Priority" binding:"required"`
 }
 
 func (rc *ResponsibilityConflict) TableName() string {
