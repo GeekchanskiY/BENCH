@@ -5,11 +5,11 @@ import "gorm.io/gorm"
 type Responsibility struct {
 	gorm.Model
 	SkillID         uint
-	Skill           Skill  `json:"skill" binding:"required"`
-	Priority        int    `json:"priority" binding:"required"`
-	Name            string `json:"name" binding:"required"`
-	Comments        string `json:"comments" gorm:"null" binding:"required"`
-	ExperienceLevel int    `json:"experience_level" binding:"required"`
+	Skill           Skill
+	Priority        int
+	Name            string
+	Comments        string
+	ExperienceLevel int
 }
 
 func (r *Responsibility) TableName() string {
@@ -19,8 +19,8 @@ func (r *Responsibility) TableName() string {
 type ResponsibilitySynonim struct {
 	gorm.Model
 	ResponsibilityID uint
-	Responsibility   Responsibility `json:"responsibility" binding:"required"`
-	Name             string         `json:"Name" binding:"required"`
+	Responsibility   Responsibility `gorm:"foreignKey:ResponsibilityID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Name             string
 }
 
 func (rs *ResponsibilitySynonim) TableName() string {
@@ -30,10 +30,10 @@ func (rs *ResponsibilitySynonim) TableName() string {
 type ResponsibilityConflict struct {
 	gorm.Model
 	Responsibility1ID uint
-	Responsibility1   Responsibility `json:"responsibility_1" binding:"required"`
+	Responsibility1   Responsibility `gorm:"foreignKey:Responsibility1ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	Responsibility2ID uint
-	Responsibility2   Responsibility `json:"responsibility_2" binding:"required"`
-	Priority          int            `json:"Priority" binding:"required"`
+	Responsibility2   Responsibility `gorm:"foreignKey:Responsibility2ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Priority          int
 }
 
 func (rc *ResponsibilityConflict) TableName() string {

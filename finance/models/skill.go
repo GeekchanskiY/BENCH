@@ -4,37 +4,47 @@ import "gorm.io/gorm"
 
 type Skill struct {
 	gorm.Model
-	Name        string  `json:"name" binding:"required"`
-	Skill       []Skill `gorm:"foreignkey:ID;null" json:"parent_skill" binding:"required"`
-	Description string  `json:"Description" binding:"required"`
+	Name        string
+	Description string
 }
 
 func (s *Skill) TableName() string {
 	return "skill"
 }
 
-type VacancySkill struct {
-	VacancyID uint
-	Vacancy   Vacancy `json:"vacancy" binding:"required"`
-	SkillID   uint
-	Skill     Skill `json:"skill" binding:"required"`
-	Priority  int   `json:"priority" binding:"required"`
+type SkillDependency struct {
+	ParentSkillID uint
+	ParentSkill   Skill `gorm:"foreignKey:ParentSkillID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	ChildSkillID  uint
+	ChildSkill    Skill `gorm:"foreignKey:ChildSkillID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
-func (vs *VacancySkill) TableName() string {
-	return "vacancy_skill"
+func (s *SkillDependency) TableName() string {
+	return "skill_dependency"
 }
 
 type SkillConflict struct {
 	gorm.Model
 	Skill1ID uint
-	Skill1   Skill `json:"skill_1" binding:"required"`
+	Skill1   Skill `gorm:"foreignKey:Skill1ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	Skill2ID uint
-	Skill2   Skill  `json:"skill_2" binding:"required"`
-	Comment  string `json:"Comment" binding:"required"`
-	Priority int    `json:"Priority" binding:"required"`
+	Skill2   Skill `gorm:"foreignKey:Skill2ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Comment  string
+	Priority int
 }
 
 func (s *SkillConflict) TableName() string {
 	return "skill_conflict"
+}
+
+type SkillDomain struct {
+	SkillID  uint
+	Skill    Skill
+	DomainID uint
+	Domain   Domain
+	Priority int
+}
+
+func (sd *SkillDomain) TableName() string {
+	return "skill_domain"
 }

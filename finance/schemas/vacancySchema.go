@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+//
+// 	VacancySchema
+//
+
 type VacancySchema struct {
 	ID          uint      `json:"id"`
 	Name        string    `json:"name" binding:"required"`
@@ -33,4 +37,52 @@ func (c *VacancySchema) FromModel(model *models.Vacancy) {
 	c.Description = model.Description
 	c.PubDate = model.PubDate
 	c.Experience = model.Experience
+}
+
+//
+// VacancySkillSchema
+//
+
+type VacancySkillSchema struct {
+	VacancyID uint `json:"vacancy_id" binding:"required"`
+	SkillID   uint `json:"skill_id" binding:"required"`
+	Priority  int  `json:"priority" binding:"required"`
+}
+
+func (c *VacancySkillSchema) ToModel(model *models.VacancySkill) {
+	model.VacancyID = c.VacancyID
+	model.SkillID = c.SkillID
+	model.Priority = c.Priority
+
+}
+
+func (c *VacancySkillSchema) FromModel(model *models.VacancySkill) {
+	c.VacancyID = model.VacancyID
+	c.SkillID = model.SkillID
+	c.Priority = model.Priority
+
+}
+
+//
+//	VacancyDomain
+//
+
+type VacancyDomainSchema struct {
+	VacancyID uint `json:"vacancy_id" binding:"required"`
+	DomainID  uint `json:"domain_id" binding:"required"`
+	Priority  int  `json:"priority" binding:"required"`
+}
+
+func (c *VacancyDomainSchema) ToModel(model *models.VacancyDomain) {
+	model.VacancyID = c.VacancyID
+	model.DomainID = c.DomainID
+	model.Priority = c.Priority
+
+}
+
+func (c *VacancyDomainSchema) FromModel(model *models.VacancyDomain) {
+	c.VacancyID = model.VacancyID
+	c.DomainID = model.DomainID
+	c.Priority = model.Priority
+
 }
