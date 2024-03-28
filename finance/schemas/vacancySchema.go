@@ -6,7 +6,7 @@ import (
 )
 
 type VacancySchema struct {
-	ID          uint      `json:"id" binding:"required"`
+	ID          uint      `json:"id"`
 	Name        string    `json:"name" binding:"required"`
 	CompanyID   uint      `json:"company_id" binding:"required"`
 	VacancyLink string    `json:"vacancy_link" binding:"required"`

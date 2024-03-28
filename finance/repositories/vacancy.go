@@ -37,7 +37,20 @@ func (c *vacancyDatabase) FindByID(id uint) (schemas.VacancySchema, error) {
 }
 
 func (c *vacancyDatabase) Create(vacancy schemas.VacancySchema) (schemas.VacancySchema, error) {
-	err := c.DB.Save(&vacancy).Error
+	var model models.Vacancy = models.Vacancy{}
+	var company models.Company
+	err := c.DB.First(&company, vacancy.CompanyID).Error
+	if err != nil {
+		return vacancy, err
+	}
+
+	vacancy.ToModel(&model)
+	model.Company = company
+	err = c.DB.Save(&model).Error
+	if err != nil {
+		return vacancy, err
+	}
+	vacancy.FromModel(&model)
 	return vacancy, err
 }
 

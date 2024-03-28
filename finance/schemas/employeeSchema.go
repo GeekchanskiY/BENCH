@@ -3,7 +3,7 @@ package schemas
 import "Finance/models"
 
 type EmployeeSchema struct {
-	ID   uint   `json:"id" binding:"required"`
+	ID   uint   `json:"id"`
 	Age  int    `json:"age" binding:"required"`
 	Name string `json:"name" binding:"required"`
 }

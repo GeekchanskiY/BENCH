@@ -2,8 +2,8 @@ package controllers
 
 import (
 	controller "Finance/controllers/interfaces"
-	"Finance/models"
 	interfaces "Finance/repositories/interfaces"
+	"Finance/schemas"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -47,7 +47,7 @@ func (c *employeeController) FindByID(ctx *gin.Context) {
 }
 
 func (c *employeeController) Create(ctx *gin.Context) {
-	var employee models.Employee
+	var employee schemas.EmployeeSchema
 	ctx.BindJSON(&employee)
 	employee, err := c.employeeRepository.Create(employee)
 	if err != nil {

@@ -9,7 +9,8 @@ import (
 type Vacancy struct {
 	gorm.Model
 	Name        string
-	Company     Company `gorm:"references:CompanyID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	CompanyID   uint
+	Company     Company `gorm:"foreignKey:CompanyID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	VacancyLink string
 	Description string
 	PubDate     time.Time

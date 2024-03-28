@@ -40,6 +40,7 @@ func (c *companyDatabase) Create(company schemas.CompanySchema) (schemas.Company
 	var company_model models.Company = models.Company{}
 	company.ToModel(&company_model)
 	err := c.DB.Save(&company_model).Error
+	company.FromModel(&company_model)
 	return company, err
 }
 

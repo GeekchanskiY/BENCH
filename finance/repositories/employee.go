@@ -40,6 +40,7 @@ func (c *employeeDatabase) Create(employee schemas.EmployeeSchema) (schemas.Empl
 	var model models.Employee = models.Employee{}
 	employee.ToModel(&model)
 	err := c.DB.Save(&model).Error
+	employee.FromModel(&model)
 	return employee, err
 }
 
