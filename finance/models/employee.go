@@ -8,8 +8,8 @@ import (
 
 type Employee struct {
 	gorm.Model
-	Name string `json:"name"`
-	Age  int    `json:"age"`
+	Name string `json:"name" binding:"required"`
+	Age  int    `json:"age" binding:"required"`
 	// Level       int    `json:"level"`
 	// Description string `json:"description"`
 }

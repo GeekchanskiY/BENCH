@@ -1,12 +1,12 @@
 package interfaces
 
 import (
-	"Finance/models"
+	"Finance/schemas"
 )
 
 type EmployeeRepository interface {
-	FindAll() ([]models.Employee, error)
-	FindByID(id uint) (models.Employee, error)
-	Create(employee models.Employee) (models.Employee, error)
+	FindAll() ([]schemas.EmployeeSchema, error)
+	FindByID(id uint) (schemas.EmployeeSchema, error)
+	Create(employee schemas.EmployeeSchema) (schemas.EmployeeSchema, error)
 	Delete(id uint) error
 }

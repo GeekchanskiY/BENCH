@@ -9,26 +9,26 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type employeeController struct {
-	employeeRepository interfaces.EmployeeRepository
+type vacancyController struct {
+	vacancyRepository interfaces.VacancyRepository
 }
 
-func NewUserController(repo interfaces.EmployeeRepository) controller.EmployeeController {
-	return &employeeController{
-		employeeRepository: repo,
+func NewVacancyController(repo interfaces.VacancyRepository) controller.VacancyController {
+	return &vacancyController{
+		vacancyRepository: repo,
 	}
 }
 
-func (c *employeeController) FindAll(ctx *gin.Context) {
-	employees, err := c.employeeRepository.FindAll()
+func (c *vacancyController) FindAll(ctx *gin.Context) {
+	companies, err := c.vacancyRepository.FindAll()
 	if err != nil {
 		ctx.JSON(400, ctx.Error(err))
 		return
 	}
-	ctx.JSON(200, employees)
+	ctx.JSON(200, companies)
 }
 
-func (c *employeeController) FindByID(ctx *gin.Context) {
+func (c *vacancyController) FindByID(ctx *gin.Context) {
 	var params_id string = ctx.Params.ByName("id")
 	i, err := strconv.ParseUint(params_id, 10, 32)
 	if err != nil {
@@ -37,27 +37,32 @@ func (c *employeeController) FindByID(ctx *gin.Context) {
 
 	}
 	var uid uint = uint(i)
-	employee, err := c.employeeRepository.FindByID(uid)
+	company, err := c.vacancyRepository.FindByID(uid)
 	if err != nil {
 		ctx.JSON(400, ctx.Error(err))
 		return
 	}
-	ctx.JSON(200, employee)
+	ctx.JSON(200, company)
 
 }
 
-func (c *employeeController) Create(ctx *gin.Context) {
-	var employee schemas.EmployeeSchema
-	ctx.BindJSON(&employee)
-	employee, err := c.employeeRepository.Create(employee)
+func (c *vacancyController) Create(ctx *gin.Context) {
+	var vacancy schemas.VacancySchema
+	err := ctx.BindJSON(&vacancy)
 	if err != nil {
 		ctx.JSON(400, ctx.Error(err))
 		return
 	}
-	ctx.JSON(200, employee)
+
+	vacancy, err = c.vacancyRepository.Create(vacancy)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, vacancy)
 }
 
-func (c *employeeController) Delete(ctx *gin.Context) {
+func (c *vacancyController) Delete(ctx *gin.Context) {
 	var params_id string = ctx.Params.ByName("id")
 	i, err := strconv.ParseUint(params_id, 10, 32)
 	if err != nil {
@@ -65,7 +70,7 @@ func (c *employeeController) Delete(ctx *gin.Context) {
 		return
 	}
 	var uid uint = uint(i)
-	err = c.employeeRepository.Delete(uid)
+	err = c.vacancyRepository.Delete(uid)
 	if err != nil {
 		ctx.JSON(400, ctx.Error(err))
 		return

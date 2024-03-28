@@ -2,8 +2,8 @@ package controllers
 
 import (
 	controller "Finance/controllers/interfaces"
-	"Finance/models"
 	interfaces "Finance/repositories/interfaces"
+	"Finance/schemas"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -47,9 +47,13 @@ func (c *companyController) FindByID(ctx *gin.Context) {
 }
 
 func (c *companyController) Create(ctx *gin.Context) {
-	var company models.Company
-	ctx.BindJSON(&company)
-	company, err := c.companyRepository.Create(company)
+	var company schemas.CompanySchema
+	err := ctx.BindJSON(&company)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	company, err = c.companyRepository.Create(company)
 	if err != nil {
 		ctx.JSON(400, ctx.Error(err))
 		return

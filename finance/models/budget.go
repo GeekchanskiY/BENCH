@@ -8,9 +8,9 @@ import (
 
 type Budget struct {
 	gorm.Model
-	Name          string  `json:"name"`
-	Author        string  `json:"author"`
-	CurrentAmount float64 `json:"currentAmount"`
+	Name          string  `json:"name" binding:"required"`
+	Author        string  `json:"author" binding:"required"`
+	CurrentAmount float64 `json:"currentAmount" binding:"required"`
 }
 
 func (b *Budget) TableName() string {

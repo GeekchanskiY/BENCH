@@ -6,11 +6,11 @@ import (
 
 type Company struct {
 	gorm.Model
-	Name        string `json:"name"`
-	Rating      int    `json:"rating"`
-	Description string `json:"description"`
-	City        string `json:"city"`
-	Link        string `json:"link"`
+	Name        string
+	Rating      int
+	Description string
+	City        string
+	Link        string
 }
 
 func (c *Company) TableName() string {

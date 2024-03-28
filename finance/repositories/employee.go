@@ -3,6 +3,7 @@ package repositories
 import (
 	"Finance/models"
 	"Finance/repositories/interfaces"
+	"Finance/schemas"
 
 	"gorm.io/gorm"
 )
@@ -15,20 +16,31 @@ func NewEmployeeRepository(DB *gorm.DB) interfaces.EmployeeRepository {
 	return &employeeDatabase{DB}
 }
 
-func (c *employeeDatabase) FindAll() ([]models.Employee, error) {
+func (c *employeeDatabase) FindAll() ([]schemas.EmployeeSchema, error) {
 	var employees []models.Employee
 	err := c.DB.Find(&employees).Error
-	return employees, err
+	var employee_schemas []schemas.EmployeeSchema
+	var schema schemas.EmployeeSchema
+	for _, e := range employees {
+		schema.FromModel(&e)
+		employee_schemas = append(employee_schemas, schema)
+	}
+	return employee_schemas, err
 }
 
-func (c *employeeDatabase) FindByID(id uint) (models.Employee, error) {
+func (c *employeeDatabase) FindByID(id uint) (schemas.EmployeeSchema, error) {
 	var employee models.Employee
 	err := c.DB.First(&employee, id).Error
-	return employee, err
+	var employee_schema schemas.EmployeeSchema = schemas.EmployeeSchema{}
+	employee_schema.FromModel(&employee)
+	return employee_schema, err
 }
 
-func (c *employeeDatabase) Create(employee models.Employee) (models.Employee, error) {
-	err := c.DB.Save(&employee).Error
+func (c *employeeDatabase) Create(employee schemas.EmployeeSchema) (schemas.EmployeeSchema, error) {
+	var model models.Employee = models.Employee{}
+	employee.ToModel(&model)
+	err := c.DB.Save(&model).Error
+	employee.FromModel(&model)
 	return employee, err
 }
 

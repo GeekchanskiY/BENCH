@@ -1,0 +1,25 @@
+info:
+  contact: {}
+paths:
+  /company/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete company by ID
+      parameters:
+      - description: Company ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+      summary: Delete company
+      tags:
+      - company
+swagger: "2.0"
