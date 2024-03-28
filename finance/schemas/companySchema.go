@@ -3,7 +3,7 @@ package schemas
 import "Finance/models"
 
 type CompanySchema struct {
-	ID          int    `json:"id"`
+	ID          uint   `json:"id"`
 	Name        string `json:"name" binding:"required"`
 	Rating      int    `json:"rating" binding:"required"`
 	Description string `json:"description" binding:"required"`
@@ -12,7 +12,7 @@ type CompanySchema struct {
 }
 
 func (c *CompanySchema) ToModel(model *models.Company) {
-	model.ID = uint(c.ID)
+	model.ID = c.ID
 	model.Name = c.Name
 	model.City = c.City
 	model.Description = c.Description
@@ -21,7 +21,7 @@ func (c *CompanySchema) ToModel(model *models.Company) {
 }
 
 func (c *CompanySchema) FromModel(model *models.Company) {
-	c.ID = int(model.ID)
+	c.ID = model.ID
 	c.Name = model.Name
 	c.City = model.City
 	c.Rating = model.Rating

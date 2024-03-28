@@ -3,6 +3,7 @@ package repositories
 import (
 	"Finance/models"
 	"Finance/repositories/interfaces"
+	"Finance/schemas"
 
 	"gorm.io/gorm"
 )
@@ -15,19 +16,27 @@ func NewVacancyRepository(DB *gorm.DB) interfaces.VacancyRepository {
 	return &vacancyDatabase{DB}
 }
 
-func (c *vacancyDatabase) FindAll() ([]models.Vacancy, error) {
+func (c *vacancyDatabase) FindAll() ([]schemas.VacancySchema, error) {
 	var vacancies []models.Vacancy
 	err := c.DB.Find(&vacancies).Error
-	return vacancies, err
+	var vacancy_schemas []schemas.VacancySchema
+	var schema schemas.VacancySchema
+	for _, e := range vacancies {
+		schema.FromModel(&e)
+		vacancy_schemas = append(vacancy_schemas, schema)
+	}
+	return vacancy_schemas, err
 }
 
-func (c *vacancyDatabase) FindByID(id uint) (models.Vacancy, error) {
+func (c *vacancyDatabase) FindByID(id uint) (schemas.VacancySchema, error) {
 	var vacancy models.Vacancy
 	err := c.DB.First(&vacancy, id).Error
-	return vacancy, err
+	var vacancy_schema schemas.VacancySchema = schemas.VacancySchema{}
+	vacancy_schema.FromModel(&vacancy)
+	return vacancy_schema, err
 }
 
-func (c *vacancyDatabase) Create(vacancy models.Vacancy) (models.Vacancy, error) {
+func (c *vacancyDatabase) Create(vacancy schemas.VacancySchema) (schemas.VacancySchema, error) {
 	err := c.DB.Save(&vacancy).Error
 	return vacancy, err
 }

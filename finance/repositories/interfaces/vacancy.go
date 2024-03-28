@@ -1,12 +1,12 @@
 package interfaces
 
 import (
-	"Finance/models"
+	"Finance/schemas"
 )
 
 type VacancyRepository interface {
-	FindAll() ([]models.Vacancy, error)
-	FindByID(id uint) (models.Vacancy, error)
-	Create(vacancy models.Vacancy) (models.Vacancy, error)
+	FindAll() ([]schemas.VacancySchema, error)
+	FindByID(id uint) (schemas.VacancySchema, error)
+	Create(vacancy schemas.VacancySchema) (schemas.VacancySchema, error)
 	Delete(id uint) error
 }
