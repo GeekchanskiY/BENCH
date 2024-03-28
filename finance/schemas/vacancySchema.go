@@ -28,7 +28,7 @@ func (c *VacancySchema) ToModel(model *models.Vacancy) {
 func (c *VacancySchema) FromModel(model *models.Vacancy) {
 	c.ID = model.ID
 	c.Name = model.Name
-	c.CompanyID = model.Company.ID
+	c.CompanyID = model.CompanyID
 	c.Description = model.Description
 	c.Description = model.Description
 	c.PubDate = model.PubDate
