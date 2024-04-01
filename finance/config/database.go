@@ -34,6 +34,7 @@ func Setup(DB *gorm.DB) *gorm.DB {
 	db.AutoMigrate(&models.Domain{})
 	db.AutoMigrate(&models.SkillDomain{})
 	db.AutoMigrate(&models.SkillConflict{})
+	db.AutoMigrate(&models.SkillDependency{})
 	db.AutoMigrate(&models.VacancyDomain{})
 	db.AutoMigrate(&models.Responsibility{})
 	db.AutoMigrate(&models.ResponsibilityConflict{})

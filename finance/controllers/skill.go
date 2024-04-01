@@ -28,6 +28,15 @@ func (c *skillController) FindAll(ctx *gin.Context) {
 	ctx.JSON(200, skills)
 }
 
+func (c *skillController) FindAllDependency(ctx *gin.Context) {
+	skills, err := c.skillRepository.FindAllDependency()
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, skills)
+}
+
 func (c *skillController) FindByID(ctx *gin.Context) {
 	var params_id string = ctx.Params.ByName("id")
 	i, err := strconv.ParseUint(params_id, 10, 32)
@@ -75,4 +84,37 @@ func (c *skillController) Delete(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(200, gin.H{"deleted": true})
+}
+
+func (c *skillController) DeleteSkillDependency(ctx *gin.Context) {
+	var skilldep schemas.SkillDependencySchema
+	err := ctx.BindJSON(&skilldep)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	err = c.skillRepository.DeleteSkillDependency(skilldep)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, gin.H{"deleted": true})
+}
+
+func (c *skillController) CreateSkillDependency(ctx *gin.Context) {
+	var skilldep schemas.SkillDependencySchema
+
+	err := ctx.BindJSON(&skilldep)
+	if err != nil {
+
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+
+	skilldep, err = c.skillRepository.CreateSkillDependency(skilldep)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, skilldep)
 }

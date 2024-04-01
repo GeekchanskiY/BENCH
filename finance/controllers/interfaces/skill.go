@@ -9,4 +9,7 @@ type SkillController interface {
 	FindByID(ctx *gin.Context)
 	Create(ctx *gin.Context)
 	Delete(ctx *gin.Context)
+	CreateSkillDependency(ctx *gin.Context)
+	DeleteSkillDependency(ctx *gin.Context)
+	FindAllDependency(ctx *gin.Context)
 }
