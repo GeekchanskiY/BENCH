@@ -5,9 +5,9 @@ import "gorm.io/gorm"
 type CV struct {
 	gorm.Model
 	EmployeeID uint
-	Employee   Employee `json:"employee" binding:"required"`
+	Employee   Employee `gorm:"foreignKey:EmployeeID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	VacancyID  uint
-	Vacancy    Vacancy `json:"vacancy" binding:"required"`
+	Vacancy    Vacancy `gorm:"foreignKey:VacancyID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
 func (c *CV) TableName() string {
@@ -16,10 +16,10 @@ func (c *CV) TableName() string {
 
 type CVResponsibility struct {
 	CVID    uint
-	CV      CV `json:"CV" binding:"required"`
+	CV      CV
 	SkillID uint
-	Skill   Skill `json:"skill" binding:"required"`
-	Years   int   `json:"years" binding:"required"`
+	Skill   Skill `gorm:"foreignKey:SkillID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Years   int
 }
 
 func (cr *CVResponsibility) TableName() string {
