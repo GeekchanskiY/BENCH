@@ -24,7 +24,6 @@ func (s *SkillDependency) TableName() string {
 }
 
 type SkillConflict struct {
-	gorm.Model
 	Skill1ID uint
 	Skill1   Skill `gorm:"foreignKey:Skill1ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	Skill2ID uint
