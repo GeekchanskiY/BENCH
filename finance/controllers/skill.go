@@ -168,3 +168,49 @@ func (c *skillController) DeleteSkillConflict(ctx *gin.Context) {
 	}
 	ctx.JSON(200, gin.H{"deleted": true})
 }
+
+//
+// Skill Domain
+//
+
+func (c *skillController) CreateSkillDomain(ctx *gin.Context) {
+	var skilldom schemas.SkillDomainSchema
+
+	err := ctx.BindJSON(&skilldom)
+	if err != nil {
+
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+
+	skilldom, err = c.skillRepository.CreateSkillDomain(skilldom)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, skilldom)
+}
+
+func (c *skillController) FindAllSkillDomains(ctx *gin.Context) {
+	skills, err := c.skillRepository.FindAllSkillDomains()
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, skills)
+}
+
+func (c *skillController) DeleteSkillDomain(ctx *gin.Context) {
+	var skilldom schemas.SkillDomainSchema
+	err := ctx.BindJSON(&skilldom)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	err = c.skillRepository.DeleteSkillDomain(skilldom)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, gin.H{"deleted": true})
+}

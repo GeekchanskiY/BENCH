@@ -20,4 +20,9 @@ type SkillController interface {
 	CreateSkillConflict(ctx *gin.Context)
 	DeleteSkillConflict(ctx *gin.Context)
 	FindAllSkillConflicts(ctx *gin.Context)
+
+	// Skill Domain
+	CreateSkillDomain(ctx *gin.Context)
+	DeleteSkillDomain(ctx *gin.Context)
+	FindAllSkillDomains(ctx *gin.Context)
 }

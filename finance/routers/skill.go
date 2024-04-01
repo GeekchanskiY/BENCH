@@ -26,6 +26,10 @@ func SetupSkill(base_group *gin.RouterGroup, db *gorm.DB) {
 		skill_group.POST("/conflict", SkillController.CreateSkillConflict)
 		skill_group.DELETE("/conflict", SkillController.DeleteSkillConflict)
 
+		skill_group.GET("/domain", SkillController.FindAllSkillDomains)
+		skill_group.POST("/domain", SkillController.CreateSkillDomain)
+		skill_group.DELETE("/domain", SkillController.DeleteSkillDomain)
+
 		skill_group.GET("/", SkillController.FindAll)
 		skill_group.GET("/:id", SkillController.FindByID)
 		skill_group.DELETE("/:id", SkillController.Delete)

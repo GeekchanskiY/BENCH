@@ -148,3 +148,53 @@ func (c *skillDatabase) FindAllSkillConflicts() ([]schemas.SkillConflictSchema, 
 	}
 	return skill_schemas, err
 }
+
+//
+//	SkillDomain
+//
+
+func (c *skillDatabase) CreateSkillDomain(skillDomain schemas.SkillDomainSchema) (schemas.SkillDomainSchema, error) {
+	var skill_domain_model models.SkillDomain = models.SkillDomain{}
+	var skill models.Skill
+	var domain models.Domain
+
+	err := c.DB.First(&skill, skillDomain.SkillID).Error
+	if err != nil {
+		return skillDomain, errors.New("skill not found")
+	}
+	err = c.DB.First(&domain, skillDomain.DomainID).Error
+	if err != nil {
+		return skillDomain, errors.New("child skill not found")
+	}
+	skill_domain_model.SkillID = skill.ID
+	skill_domain_model.DomainID = domain.ID
+	skill_domain_model.Priority = skillDomain.Priority
+	err = c.DB.Create(skill_domain_model).Error
+	skillDomain.FromModel(&skill_domain_model)
+	return skillDomain, err
+}
+
+func (c *skillDatabase) DeleteSkillDomain(skillDomain schemas.SkillDomainSchema) error {
+	var skill_domain_model models.SkillDomain = models.SkillDomain{}
+	skillDomain.ToModel(&skill_domain_model)
+
+	res := c.DB.Where("skill_id = ? AND domain_id = ?", skill_domain_model.SkillID, skill_domain_model.DomainID).Delete(&skill_domain_model)
+	if res.Error != nil {
+		return res.Error
+	} else if res.RowsAffected < 1 {
+		return errors.New("skill domain does not exists")
+	}
+	return nil
+}
+
+func (c *skillDatabase) FindAllSkillDomains() ([]schemas.SkillDomainSchema, error) {
+	var skill_domains []models.SkillDomain
+	err := c.DB.Find(&skill_domains).Error
+	var skill_schemas []schemas.SkillDomainSchema
+	var schema schemas.SkillDomainSchema
+	for _, s := range skill_domains {
+		schema.FromModel(&s)
+		skill_schemas = append(skill_schemas, schema)
+	}
+	return skill_schemas, err
+}

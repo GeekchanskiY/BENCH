@@ -20,4 +20,9 @@ type SkillRepository interface {
 	CreateSkillConflict(skillConflict schemas.SkillConflictSchema) (schemas.SkillConflictSchema, error)
 	DeleteSkillConflict(skillConflict schemas.SkillConflictSchema) error
 	FindAllSkillConflicts() ([]schemas.SkillConflictSchema, error)
+
+	// Skill domain
+	CreateSkillDomain(skillDomain schemas.SkillDomainSchema) (schemas.SkillDomainSchema, error)
+	DeleteSkillDomain(skillDomain schemas.SkillDomainSchema) error
+	FindAllSkillDomains() ([]schemas.SkillDomainSchema, error)
 }
