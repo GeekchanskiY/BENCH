@@ -28,15 +28,6 @@ func (c *skillController) FindAll(ctx *gin.Context) {
 	ctx.JSON(200, skills)
 }
 
-func (c *skillController) FindAllDependency(ctx *gin.Context) {
-	skills, err := c.skillRepository.FindAllDependency()
-	if err != nil {
-		ctx.JSON(400, ctx.Error(err))
-		return
-	}
-	ctx.JSON(200, skills)
-}
-
 func (c *skillController) FindByID(ctx *gin.Context) {
 	var params_id string = ctx.Params.ByName("id")
 	i, err := strconv.ParseUint(params_id, 10, 32)
@@ -86,6 +77,19 @@ func (c *skillController) Delete(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{"deleted": true})
 }
 
+//
+// Skill Dependency
+//
+
+func (c *skillController) FindAllDependency(ctx *gin.Context) {
+	skills, err := c.skillRepository.FindAllDependency()
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, skills)
+}
+
 func (c *skillController) DeleteSkillDependency(ctx *gin.Context) {
 	var skilldep schemas.SkillDependencySchema
 	err := ctx.BindJSON(&skilldep)
@@ -117,4 +121,50 @@ func (c *skillController) CreateSkillDependency(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(200, skilldep)
+}
+
+//
+// Skill Conflict
+//
+
+func (c *skillController) CreateSkillConflict(ctx *gin.Context) {
+	var skilldep schemas.SkillConflictSchema
+
+	err := ctx.BindJSON(&skilldep)
+	if err != nil {
+
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+
+	skilldep, err = c.skillRepository.CreateSkillConflict(skilldep)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, skilldep)
+}
+
+func (c *skillController) FindAllSkillConflicts(ctx *gin.Context) {
+	skills, err := c.skillRepository.FindAllSkillConflicts()
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, skills)
+}
+
+func (c *skillController) DeleteSkillConflict(ctx *gin.Context) {
+	var skilldep schemas.SkillConflictSchema
+	err := ctx.BindJSON(&skilldep)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	err = c.skillRepository.DeleteSkillConflict(skilldep)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, gin.H{"deleted": true})
 }

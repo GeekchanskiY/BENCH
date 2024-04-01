@@ -51,6 +51,10 @@ func (c *skillDatabase) Delete(id uint) error {
 	return err
 }
 
+//
+// Skill Dependency
+//
+
 func (c *skillDatabase) FindAllDependency() ([]schemas.SkillDependencySchema, error) {
 	var skilldeps []models.SkillDependency
 	err := c.DB.Find(&skilldeps).Error
@@ -93,4 +97,54 @@ func (c *skillDatabase) DeleteSkillDependency(skillDependency schemas.SkillDepen
 		return errors.New("skill dependency does not exists")
 	}
 	return nil
+}
+
+//
+// Skill Conflict
+//
+
+func (c *skillDatabase) CreateSkillConflict(skillConflict schemas.SkillConflictSchema) (schemas.SkillConflictSchema, error) {
+	var skill_conflict_model models.SkillConflict = models.SkillConflict{}
+	var skill_1, skill_2 models.Skill
+
+	err := c.DB.First(&skill_1, skillConflict.Skill1ID).Error
+	if err != nil {
+		return skillConflict, errors.New("skill_1 not found")
+	}
+	err = c.DB.First(&skill_2, skillConflict.Skill2ID).Error
+	if err != nil {
+		return skillConflict, errors.New("child skill not found")
+	}
+	skill_conflict_model.Skill1ID = skill_1.ID
+	skill_conflict_model.Skill2ID = skill_2.ID
+	skill_conflict_model.Comment = skillConflict.Comment
+	skill_conflict_model.Priority = skillConflict.Priority
+	err = c.DB.Create(skill_conflict_model).Error
+	skillConflict.FromModel(&skill_conflict_model)
+	return skillConflict, err
+}
+
+func (c *skillDatabase) DeleteSkillConflict(skillConflict schemas.SkillConflictSchema) error {
+	var skill_conflict_model models.SkillConflict = models.SkillConflict{}
+	skillConflict.ToModel(&skill_conflict_model)
+
+	res := c.DB.Where("skill_1_id = ? AND skill_2_id = ?", skill_conflict_model.Skill1ID, skill_conflict_model.Skill2ID).Delete(&skill_conflict_model)
+	if res.Error != nil {
+		return res.Error
+	} else if res.RowsAffected < 1 {
+		return errors.New("skill dependency does not exists")
+	}
+	return nil
+}
+
+func (c *skillDatabase) FindAllSkillConflicts() ([]schemas.SkillConflictSchema, error) {
+	var skill_conflicts []models.SkillConflict
+	err := c.DB.Find(&skill_conflicts).Error
+	var skill_schemas []schemas.SkillConflictSchema
+	var schema schemas.SkillConflictSchema
+	for _, s := range skill_conflicts {
+		schema.FromModel(&s)
+		skill_schemas = append(skill_schemas, schema)
+	}
+	return skill_schemas, err
 }
