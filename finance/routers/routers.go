@@ -27,6 +27,7 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	SetupCompany(v1, db)
 	SetupVacancy(v1, db)
 	SetupDomain(v1, db)
+	SetupSkill(v1, db)
 
 	return r
 }
