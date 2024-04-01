@@ -20,12 +20,12 @@ func NewDomainController(repo interfaces.DomainRepository) controller.DomainCont
 }
 
 func (c *domainController) FindAll(ctx *gin.Context) {
-	companies, err := c.domainRepository.FindAll()
+	skills, err := c.domainRepository.FindAll()
 	if err != nil {
 		ctx.JSON(400, ctx.Error(err))
 		return
 	}
-	ctx.JSON(200, companies)
+	ctx.JSON(200, skills)
 }
 
 func (c *domainController) FindByID(ctx *gin.Context) {
