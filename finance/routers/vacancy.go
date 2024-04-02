@@ -14,13 +14,21 @@ import (
 
 func SetupVacancy(base_group *gin.RouterGroup, db *gorm.DB) {
 	var VacancyRepository repo_interfaces.VacancyRepository = repos.NewVacancyRepository(db)
-	var VacancyController crtl_interfaces.EmployeeController = controllers.NewVacancyController(VacancyRepository)
+	var VacancyController crtl_interfaces.VacancyController = controllers.NewVacancyController(VacancyRepository)
 
-	employee := base_group.Group("/vacancy")
+	vacancy := base_group.Group("/vacancy")
 	{
-		employee.GET("/", VacancyController.FindAll)
-		employee.GET("/:id", VacancyController.FindByID)
-		employee.DELETE("/:id", VacancyController.Delete)
-		employee.POST("/", VacancyController.Create)
+		vacancy.GET("/skill", VacancyController.FindAllVacancySkill)
+		vacancy.POST("/skill", VacancyController.CreateVacancySkill)
+		vacancy.DELETE("/skill", VacancyController.DeleteVacancySkill)
+
+		vacancy.GET("/domain", VacancyController.FindAllVacancyDomain)
+		vacancy.POST("/domain", VacancyController.CreateVacancyDomain)
+		vacancy.DELETE("/domain", VacancyController.DeleteVacancyDomain)
+
+		vacancy.GET("/", VacancyController.FindAll)
+		vacancy.GET("/:id", VacancyController.FindByID)
+		vacancy.DELETE("/:id", VacancyController.Delete)
+		vacancy.POST("/", VacancyController.Create)
 	}
 }

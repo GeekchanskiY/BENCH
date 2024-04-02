@@ -99,16 +99,16 @@ func (c *vacancyDatabase) DeleteVacancyDomain(skillDomain schemas.VacancyDomainS
 	return nil
 }
 
-func (c *vacancyDatabase) FindAllVacancyDomain() []schemas.VacancyDomainSchema {
+func (c *vacancyDatabase) FindAllVacancyDomain() ([]schemas.VacancyDomainSchema, error) {
 	var vacancy_domains []models.VacancyDomain
-	c.DB.Find(&vacancy_domains)
+	err := c.DB.Find(&vacancy_domains).Error
 	var skill_schemas []schemas.VacancyDomainSchema
 	var schema schemas.VacancyDomainSchema
 	for _, s := range vacancy_domains {
 		schema.FromModel(&s)
 		skill_schemas = append(skill_schemas, schema)
 	}
-	return skill_schemas
+	return skill_schemas, err
 }
 
 //
@@ -149,14 +149,14 @@ func (c *vacancyDatabase) DeleteVacancySkill(vacancySkill schemas.VacancySkillSc
 	return nil
 }
 
-func (c *vacancyDatabase) FindAllVacancySkill() []schemas.VacancySkillSchema {
+func (c *vacancyDatabase) FindAllVacancySkill() ([]schemas.VacancySkillSchema, error) {
 	var vacancy_skills []models.VacancySkill
-	c.DB.Find(&vacancy_skills)
+	err := c.DB.Find(&vacancy_skills).Error
 	var skill_schemas []schemas.VacancySkillSchema
 	var schema schemas.VacancySkillSchema
 	for _, s := range vacancy_skills {
 		schema.FromModel(&s)
 		skill_schemas = append(skill_schemas, schema)
 	}
-	return skill_schemas
+	return skill_schemas, err
 }
