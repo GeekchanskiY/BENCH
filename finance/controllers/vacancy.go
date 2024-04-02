@@ -77,3 +77,95 @@ func (c *vacancyController) Delete(ctx *gin.Context) {
 	}
 	ctx.JSON(200, gin.H{"deleted": true})
 }
+
+//
+// Vacancy Domain
+//
+
+func (c *vacancyController) FindAllVacancyDomain(ctx *gin.Context) {
+	skills, err := c.vacancyRepository.FindAllVacancyDomain()
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, skills)
+}
+
+func (c *vacancyController) DeleteVacancyDomain(ctx *gin.Context) {
+	var vacancy_schema schemas.VacancyDomainSchema
+	err := ctx.BindJSON(&vacancy_schema)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	err = c.vacancyRepository.DeleteVacancyDomain(vacancy_schema)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, gin.H{"deleted": true})
+}
+
+func (c *vacancyController) CreateVacancyDomain(ctx *gin.Context) {
+	var vacancy_schema schemas.VacancyDomainSchema
+
+	err := ctx.BindJSON(&vacancy_schema)
+	if err != nil {
+
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+
+	vacancy_schema, err = c.vacancyRepository.CreateVacancyDomain(vacancy_schema)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, vacancy_schema)
+}
+
+//
+// Vacancy Skill
+//
+
+func (c *vacancyController) FindAllVacancySkill(ctx *gin.Context) {
+	skills, err := c.vacancyRepository.FindAllVacancySkill()
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, skills)
+}
+
+func (c *vacancyController) DeleteVacancySkill(ctx *gin.Context) {
+	var vacancy_schema schemas.VacancySkillSchema
+	err := ctx.BindJSON(&vacancy_schema)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	err = c.vacancyRepository.DeleteVacancySkill(vacancy_schema)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, gin.H{"deleted": true})
+}
+
+func (c *vacancyController) CreateVacancySkill(ctx *gin.Context) {
+	var vacancy_schema schemas.VacancySkillSchema
+
+	err := ctx.BindJSON(&vacancy_schema)
+	if err != nil {
+
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+
+	vacancy_schema, err = c.vacancyRepository.CreateVacancySkill(vacancy_schema)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, vacancy_schema)
+}
