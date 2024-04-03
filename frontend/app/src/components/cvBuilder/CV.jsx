@@ -1,5 +1,5 @@
 export default function CV(){
-    return <div>
-        <h1>CV</h1>
+    return <div className="cv_model">
+        <h1>CV's</h1>
     </div>
 }
