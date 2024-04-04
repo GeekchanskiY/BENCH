@@ -11,6 +11,9 @@ let employeeSchema = object({
 async function fetchUsers(){
     let response = await fetch('http://0.0.0.0:3001/v1/employee/')
     let employees = await response.json()
+    if (employees == null){
+      return []
+    }
     let validatedObjects = await Promise.all(employees.map(async (object) => {
         await employeeSchema.validate(object, { abortEarly: false });
         return object;
@@ -18,7 +21,7 @@ async function fetchUsers(){
     return await validatedObjects
 }
 
-function CreateEmployeeForm(){
+function CreateEmployeeForm({refresh, setRefresh}){
     async function createEmployee(data){
         console.log(data)
         try {
@@ -35,8 +38,9 @@ function CreateEmployeeForm(){
                     })
                 }
             )
-            // let data = await response.json()
-            // console.log(data)
+            //let data = await response.json()
+            //console.log(data)
+            setRefresh(!refresh)
         } catch (errors) {
             console.log(errors)
             return {
@@ -49,7 +53,7 @@ function CreateEmployeeForm(){
     }
 
     return <Formik
-      initialValues={{ name: 'Dmitry', age: '12' }}
+      initialValues={{ name: 'Dmitry', age: 20 }}
       validationSchema={employeeSchema}
       onSubmit={async (values, { setSubmitting, setErrors }) => {
 
@@ -98,27 +102,54 @@ function CreateEmployeeForm(){
 
 
 function EmployeeComponent(props){
+    async function deleteEmployee(){
+      let response = await fetch(
+        'http://0.0.0.0:3001/v1/employee/'+props.employee.id,
+        {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }
+        
+      )
+      props.setRefresh(!props.refresh)
+    }
     return <div className='cv_instance'>
-        <span>ID: {props.employee.id}</span> <br />
-        <span>Name: {props.employee.name}</span> <br />
-        <span>Age: {props.employee.age}</span>    
+        <ul>
+          <li>ID: {props.employee.id}</li>
+          <li>Name: {props.employee.name}</li>
+          <li>Age: {props.employee.age}</li>
+        </ul>
+        <button onClick={deleteEmployee}>Delete</button>   
     </div>
 }
 
 export default function Employee(){
     const [employees, setEmployees] = useState([])
+    const [refresh, setRefresh] = useState(false)
     async function setUp(){
         setEmployees(await fetchUsers())
     }
     useEffect(() => {
         setUp()
-    }, [])
-    
+    }, [refresh])
+    console.log(employees)
+    if (employees.length == 0){
+      return <div className="cv_model">
+        <h1>Employees</h1>
+        <span>No records found!</span>
+        <CreateEmployeeForm refresh={refresh} setRefresh={setRefresh}/>
+      </div>
+    } 
     return <div className="cv_model">
         <h1>Employees</h1>
-        {employees.map((employee)=>{
-            return <EmployeeComponent employee={employee}/>
-        })}
-        <CreateEmployeeForm></CreateEmployeeForm>
+        <div className='cv_instances'>
+          {employees.map((employee)=>{
+              return <EmployeeComponent employee={employee} key={employee.id} refresh={refresh} setRefresh={setRefresh}/>
+          })}
+        </div>
+        <CreateEmployeeForm refresh={refresh} setRefresh={setRefresh}></CreateEmployeeForm>
     </div>
+    
 }
