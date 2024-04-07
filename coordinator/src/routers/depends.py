@@ -1,6 +1,6 @@
 from services.userService import UserService
 from services.serviceService import ServiceService
-from services.employeeService import EmployeeService
+from services.cvbuilder.employeeService import EmployeeService
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 

@@ -1,16 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, UploadFile, File
-from services.employeeService import EmployeeService
-from .depends import get_employee_service
-from schemas.employeeSchema import EmployeeSchema, EmployeeFullSchema
+from services.cvbuilder.employeeService import EmployeeService
+from routers.depends import get_employee_service
+from schemas.cvbuilder.employeeSchema import EmployeeSchema, EmployeeDetailedSchema
 from schemas.statusSchemas import MessageResponseSchema
 
-from .depends import get_jwt_bearer, JWTCredentials
-from .exceptions import exceptionHandler
+from routers.depends import get_jwt_bearer, JWTCredentials
+from routers.exceptions import exceptionHandler
 
 
 router: APIRouter = APIRouter()
 
-@router.get("/{id}", tags=["employees"], response_model=EmployeeFullSchema)
+@router.get("/{id}", tags=["employees"], response_model=EmployeeDetailedSchema)
 async def read_employees(id: int, service = Depends(get_employee_service)):
     try:
         employee = await service.get_employee(id=id)
@@ -18,7 +18,7 @@ async def read_employees(id: int, service = Depends(get_employee_service)):
     except Exception as e:
         raise await exceptionHandler(e)
     
-@router.post("/create", tags=["employees"], response_model=EmployeeFullSchema)
+@router.post("/create", tags=["employees"], response_model=EmployeeDetailedSchema)
 async def create_employee(employee: EmployeeSchema, service: EmployeeService  = Depends(get_employee_service)):
   
     try:
