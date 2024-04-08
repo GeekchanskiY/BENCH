@@ -115,12 +115,40 @@ function CreateSkillForm({ refresh, setRefresh }) {
 }
 
 export function SkillDomain(props) {
+    const [skillDomain, setSkillDomain] = useState([])
+
+    async function fetchSkillDomain(){
+        let response = await fetch(
+            'http://0.0.0.0:3001/v1/skill/domain',
+            {
+                method: 'GET',
+            }
+        )
+        let skilldomain = await response.json()
+        if (skilldomain.length == 0) {
+            setSkillDomain([])
+        }
+        let validatedObjects = await Promise.all(skilldomain.map(async (object) => {
+            await skillDomainSchema.validate(object, { abortEarly: false });
+            return object;
+        }));
+        return validatedObjects;
+    }
+
+    async function setUp(){
+        setSkillDomain(await fetchSkillDomain())
+        console.log(skillDomain)
+    }
+    useEffect(() => {
+        setUp()
+    }, [])
     async function createSkillDomain(data) {
         try {
-            let res = await skillSchema.validate(data, { abortEarly: false });
+            console.log(data)
+            let res = await skillDomainSchema.validate(data, { abortEarly: false });
             console.log(res)
             let response = await fetch(
-                'http://0.0.0.0:3001/v1/skill/',
+                'http://0.0.0.0:3001/v1/skill/domain',
                 {
                     method: 'POST',
                     headers: {
@@ -142,6 +170,76 @@ export function SkillDomain(props) {
     }
     return <div>
         <h3>Domains</h3>
+        <div className='cv_instances'>
+            {skillDomain.map((skill, index) => {
+                return <div key={index} className='cv_instance'>
+                    <ul>
+                        <li>Skill_id: {skill.skill_id}</li>
+                        <li>Domain_id: {skill.domain_id}</li>
+                        <li>Priority: {skill.priority}</li>
+                    </ul>
+                    
+                </div>
+            })}
+        </div>
+        <Formik
+            initialValues={{
+                skill_id: 1,
+                domain_id: 2,
+                priority: 1,
+            }}
+            validationSchema={skillDomainSchema}
+            onSubmit={async (values, { setSubmitting, setErrors }) => {
+
+                let data = await createSkillDomain(values)
+                if (data.success == true) {
+                    setSubmitting(false);
+                } else {
+                    setErrors({ 'comment': 'error!' })
+                }
+
+            }}>
+            {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+            }) => (
+                <form onSubmit={handleSubmit} className='frm '>
+                    <h3>Create Skill Domain</h3>
+                    <input
+                        type="text"
+                        name="skill_id"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.skill_id}
+                    /> <br />
+                    <span className='errors'>{errors.parent_skill && touched.parent_skill && errors.parent_skill}</span> <br />
+                    <input
+                        type="text"
+                        name="domain_id"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.domain_id}
+                    /> <br />
+                    <span className='errors'>{errors.child_skill && touched.child_skill && errors.child_skill}</span> <br />
+                    <input
+                        type="number"
+                        name="priority"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.priority}
+                    /> <br />
+                    <span className='errors'>{errors.priority && touched.priority && errors.priority}</span> <br />
+                    <button type="submit" disabled={isSubmitting}>
+                        Create
+                    </button>
+                </form>
+            )}
+        </Formik>
     </div>
 }
 
@@ -201,8 +299,8 @@ export function SkillDependency(props) {
     return <div>
         <h3>Dependencies</h3>
         <div className='cv_instances'>
-            {skillDependency.map((skill) => {
-                return <div className='cv_instance'><ul>
+            {skillDependency.map((skill, num) => {
+                return <div key={"skill_dependency_" + num} className='cv_instance'><ul>
                     <li> Parent: {skill.parent_skill}</li>
                     <li>Child: {skill.child_skill}</li>
                 </ul></div>
