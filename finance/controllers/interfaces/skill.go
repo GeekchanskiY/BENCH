@@ -12,6 +12,7 @@ type SkillController interface {
 	Delete(ctx *gin.Context)
 
 	// Skill Dependency
+	FindSkillDependencies(ctx *gin.Context)
 	CreateSkillDependency(ctx *gin.Context)
 	DeleteSkillDependency(ctx *gin.Context)
 	FindAllDependency(ctx *gin.Context)

@@ -81,6 +81,22 @@ func (c *skillController) Delete(ctx *gin.Context) {
 // Skill Dependency
 //
 
+func (c *skillController) FindSkillDependencies(ctx *gin.Context) {
+	var params_id string = ctx.Params.ByName("id")
+	i, err := strconv.ParseUint(params_id, 10, 32)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	var uid uint = uint(i)
+	skilldeps, err := c.skillRepository.FindSkillDependencies(uid)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, skilldeps)
+}
+
 func (c *skillController) FindAllDependency(ctx *gin.Context) {
 	skills, err := c.skillRepository.FindAllDependency()
 	if err != nil {

@@ -67,6 +67,18 @@ func (c *skillDatabase) FindAllDependency() ([]schemas.SkillDependencySchema, er
 	return skill_schemas, err
 }
 
+func (c *skillDatabase) FindSkillDependencies(skill_id uint) ([]schemas.SkillDependencySchema, error) {
+	var skilldeps []models.SkillDependency
+	err := c.DB.Where("child_skill_id = ?", skill_id).Find(&skilldeps).Error
+	var skill_schemas []schemas.SkillDependencySchema
+	var schema schemas.SkillDependencySchema
+	for _, s := range skilldeps {
+		schema.FromModel(&s)
+		skill_schemas = append(skill_schemas, schema)
+	}
+	return skill_schemas, err
+}
+
 func (c *skillDatabase) CreateSkillDependency(skillDependency schemas.SkillDependencySchema) (schemas.SkillDependencySchema, error) {
 	var skill_dependency_model models.SkillDependency = models.SkillDependency{}
 	var parent_skill, child_skill models.Skill
