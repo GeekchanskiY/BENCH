@@ -84,7 +84,7 @@ function CreateCompanyForm({refresh, setRefresh}){
         isSubmitting,
       }) => (
         <form onSubmit={handleSubmit} className='frm loginform'>
-          <h3>Create Domain</h3>
+          <h3>Create Company</h3>
           <input
             type="text"
             name="name"
@@ -164,7 +164,7 @@ export default function Company(){
       <h1>Companies</h1>
       <div className='cv_instances'>
         {companies.map((domain)=>{
-            return <CompanyComponent company={domain} key={"domain_"+domain.id} refresh={refresh} setRefresh={setRefresh}/>
+            return <CompanyComponent company={domain} key={"company_"+domain.id} refresh={refresh} setRefresh={setRefresh}/>
         })}
       </div>
       <CreateCompanyForm refresh={refresh} setRefresh={setRefresh}></CreateCompanyForm>
