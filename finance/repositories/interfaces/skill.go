@@ -12,7 +12,7 @@ type SkillRepository interface {
 	Delete(id uint) error
 
 	// Skill dependency
-	FindSkillDependencies(skill_id uint) ([]schemas.SkillDependencySchema, error)
+	FindSkillDependencies(skill_id uint) ([]schemas.SkillSchema, error)
 	CreateSkillDependency(skillDependency schemas.SkillDependencySchema) (schemas.SkillDependencySchema, error)
 	DeleteSkillDependency(skillDependency schemas.SkillDependencySchema) error
 	FindAllDependency() ([]schemas.SkillDependencySchema, error)
