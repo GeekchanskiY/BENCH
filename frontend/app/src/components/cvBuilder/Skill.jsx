@@ -315,6 +315,7 @@ export function SkillDependency(props) {
             onSubmit={async (values, { setSubmitting, setErrors }) => {
 
                 let data = await createSkillDependency(values)
+                setUp()
                 if (data.success == true) {
                     setSubmitting(false);
                 } else {
@@ -359,8 +360,140 @@ export function SkillDependency(props) {
 }
 
 export function SkillConflict() {
+    const [skillConflict, setSkillConflict] = useState([])
+
+    async function fetchSkillConflict() {
+        let response = await fetch(
+            'http://0.0.0.0:3001/v1/skill/conflict',
+            {
+                method: 'GET',
+            }
+        )
+        let skillconflict = await response.json()
+        if (skillconflict.length == 0) {
+            setSkillConflict([])
+        }
+        let validatedObjects = await Promise.all(skillconflict.map(async (object) => {
+            await skillConflictSchema.validate(object, { abortEarly: false });
+            return object;
+        }));
+        return validatedObjects;
+    }
+
+    async function setUp(){
+        setSkillConflict(await fetchSkillConflict())
+        console.log(skillConflict)
+    }
+    useEffect(() => {
+        setUp()
+    }, [])
+    async function createSkillConflict(data) {
+        try {
+            let res = await skillConflictSchema.validate(data, { abortEarly: false });
+            console.log(res)
+            let response = await fetch(
+                'http://0.0.0.0:3001/v1/skill/conflict',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(res)
+                }
+            )
+        } catch (errors) {
+            console.log(errors)
+            return {
+                success: false
+            }
+        }
+        return {
+            success: true
+        }
+    }
     return <div>
         <h3>Conflicts</h3>
+        <div className='cv_instances'>
+            {skillConflict.map((skill, index) => {
+                return <div key={index} className='cv_instance'>
+                    <ul>
+                        <li>Skill_1_id: {skill.skill_1}</li>
+                        <li>Skill_2_id: {skill.skill_2}</li>
+                        <li>Comment: {skill.comment}</li>
+                        <li>Priority: {skill.priority}</li>
+                    </ul>
+                    
+                </div>
+            })}
+        </div>
+        <Formik
+            initialValues={{
+                skill_1: 1,
+                skill_2: 2,
+                comment: 'You cant use them both!',
+                priority: 1
+            }}
+            validationSchema={skillConflictSchema}
+            onSubmit={async (values, { setSubmitting, setErrors }) => {
+
+                let data = await createSkillConflict(values)
+                setUp()
+                if (data.success == true) {
+                    setSubmitting(false);
+                } else {
+                    setErrors({ 'comment': 'error!' })
+                }
+
+            }}>
+            {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+            }) => (
+                <form onSubmit={handleSubmit} className='frm '>
+                    <h3>Create Skill Domain</h3>
+                    <input
+                        type="text"
+                        name="skill_1"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.skill_1}
+                    /> <br />
+                    <span className='errors'>{errors.skill_1 && touched.skill_1 && errors.skill_1}</span> <br />
+                    <input
+                        type="text"
+                        name="skill_2"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.skill_2}
+                    /> <br />
+                    <span className='errors'>{errors.skill_2 && touched.skill_2 && errors.skill_2}</span> <br />
+                    <input
+                        type="number"
+                        name="priority"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.priority}
+                    /> <br />
+                    <span className='errors'>{errors.priority && touched.priority && errors.priority}</span> <br />
+                    <input
+                        type="text"
+                        name="comment"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.comment}
+                    /> <br />
+                    <span className='errors'>{errors.comment && touched.comment && errors.comment}</span> <br />
+                    <button type="submit" disabled={isSubmitting}>
+                        Create
+                    </button>
+                </form>
+            )}
+        </Formik>
     </div>
 }
 
