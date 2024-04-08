@@ -6,7 +6,7 @@ from routers.users import router as user_router
 from routers.services import router as service_router
 from routers.sockets import router as socket_router
 from routers.other import router as other_router
-from routers.employees import router as employee_router
+from routers.cvbuilder.employee import router as employee_router
 
 # from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.cors import CORSMiddleware

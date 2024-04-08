@@ -28,7 +28,7 @@ body {
   width: 100%;
 
   /* uses to be able to inherit height:100% in childs */
-  height: 1px;
+  /* height: 1px; */
 
 }
 

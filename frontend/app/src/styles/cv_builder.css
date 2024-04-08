@@ -1,0 +1,20 @@
+.cv_model{
+    border-bottom: 1px dashed white;
+}
+
+.cv_instances{
+    display: flex;
+    flex-wrap: wrap;
+    /* gap: 50px; */
+}
+.cv_instance{
+    position: relative;
+    flex: 1 0 21%;
+    text-align: center;
+}
+
+.cv_instance button{
+    margin-top: 10px;
+    color: #000;
+    padding: 5px;
+}
