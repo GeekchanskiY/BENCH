@@ -25,7 +25,6 @@ let skillConflictSchema = object().shape({
 let skillDependencySchema = object().shape({
     parent_skill: number().positive().integer().required(),
     child_skill: number().positive().integer().required(),
-    priority: number().positive().integer().required()
 });
 
 
@@ -147,12 +146,39 @@ export function SkillDomain(props) {
 }
 
 export function SkillDependency(props) {
+    const [skillDependency, setSkillDependency] = useState([])
+    async function fetchSkilldeps() {
+        let response = await fetch(
+            'http://0.0.0.0:3001/v1/skill/dependency',
+            {
+                method: 'GET',
+            }
+        )
+        let skilldeps = await response.json()
+        if (skilldeps.length == 0) {
+            setSkillDependency([])
+        }
+        let validatedObjects = await Promise.all(skilldeps.map(async (object) => {
+            await skillDependencySchema.validate(object, { abortEarly: false });
+            return object;
+        }));
+        return validatedObjects;
+
+    }
+    async function setUp() {
+        setSkillDependency(await fetchSkilldeps())
+        console.log(skillDependency)
+    }
+    useEffect(() => {
+        setUp()
+    }, [])
     async function createSkillDependency(data) {
         try {
+            // console.log(data)
             let res = await skillDependencySchema.validate(data, { abortEarly: false });
             console.log(res)
             let response = await fetch(
-                'http://0.0.0.0:3001/v1/skill/',
+                'http://0.0.0.0:3001/v1/skill/dependency',
                 {
                     method: 'POST',
                     headers: {
@@ -161,9 +187,9 @@ export function SkillDependency(props) {
                     body: JSON.stringify(res)
                 }
             )
-            props.setRefresh(!props.refresh)
+            setUp()
         } catch (errors) {
-            console.log(errors)
+            console.error(errors)
             return {
                 success: false
             }
@@ -174,6 +200,63 @@ export function SkillDependency(props) {
     }
     return <div>
         <h3>Dependencies</h3>
+        <div className='cv_instances'>
+            {skillDependency.map((skill) => {
+                return <div className='cv_instance'><ul>
+                    <li> Parent: {skill.parent_skill}</li>
+                    <li>Child: {skill.child_skill}</li>
+                </ul></div>
+            })}
+        </div>
+        <Formik
+            initialValues={{
+                parent_skill: 1,
+                child_skill: 2
+            }}
+            validationSchema={skillDependencySchema}
+            onSubmit={async (values, { setSubmitting, setErrors }) => {
+
+                let data = await createSkillDependency(values)
+                if (data.success == true) {
+                    setSubmitting(false);
+                } else {
+                    setErrors({ 'comment': 'error!' })
+                }
+
+            }}>
+            {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+            }) => (
+                <form onSubmit={handleSubmit} className='frm '>
+                    <h3>Create Skill Dependency</h3>
+                    <input
+                        type="text"
+                        name="parent_skill"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.parent_skill}
+                    /> <br />
+                    <span className='errors'>{errors.parent_skill && touched.parent_skill && errors.parent_skill}</span> <br />
+                    <input
+                        type="text"
+                        name="child_skill"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.child_skill}
+                    /> <br />
+                    <span className='errors'>{errors.child_skill && touched.child_skill && errors.child_skill}</span> <br />
+                    <button type="submit" disabled={isSubmitting}>
+                        Create
+                    </button>
+                </form>
+            )}
+        </Formik>
     </div>
 }
 
@@ -231,9 +314,11 @@ export default function Skill() {
                 return <SkillComponent skill={skill} key={"skill_" + skill.id} refresh={refresh} setRefresh={setRefresh} />
             })}
         </div>
+        <CreateSkillForm refresh={refresh} setRefresh={setRefresh}></CreateSkillForm>
+
         <SkillDomain refresh={refresh} setRefresh={setRefresh}></SkillDomain>
         <SkillConflict refresh={refresh} setRefresh={setRefresh}></SkillConflict>
         <SkillDependency refresh={refresh} setRefresh={setRefresh}></SkillDependency>
-        <CreateSkillForm refresh={refresh} setRefresh={setRefresh}></CreateSkillForm>
+
     </div>
 }
