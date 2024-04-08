@@ -1,3 +1,36 @@
+.cvbuilder_main{
+    display: flex;
+}
+
+.cvbuilder_sidebar{
+    position: relative;
+    padding-left: 10px;
+    width: 20%;
+}
+
+.cvbuilder_sidebar ul{
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+.cvbuilder_sidebar ul li{
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: 600;
+    transition: .5s;
+
+}
+
+.cvbuilder_sidebar ul li:hover{
+    color: #F4CE14;
+}
+
+.cvbuilder_content{
+    position: relative;
+    width: 80%;
+}
+
 .cv_model{
     border-bottom: 1px dashed white;
 }
