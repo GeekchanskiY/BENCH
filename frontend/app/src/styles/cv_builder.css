@@ -47,6 +47,12 @@
 .cv_instances table{
     width: 60%;
     float: left;
+    border-collapse: collapse;
+}
+
+.clickable_row{
+    cursor: pointer;
+    text-decoration: underline;
 }
 .cv_instances form{
     width: 40%;
@@ -54,12 +60,37 @@
     float: left;
 }
 
+.popup_instance table{
+    width: 100%;
+    text-align: center;
+}
+
+.hidden{
+    display: none;
+}
+
+.popup{
+    box-shadow: #000 0 0 10px;
+    position: fixed;
+    width: 50%;
+    left: 25%;
+    height: 70%;
+    top: 15%;
+    overflow-y: scroll;
+    background-color: #222;
+    border: 1px solid #111;
+}
+
 .cv_instances table thead tr{
+    background-color: #444;
     height: 30px;
 }
+
 .cv_instances table tbody tr{
+    border-bottom: 1px solid black;
     height: 30px;
 }
+
 .cv_instances table tbody tr td button{
     background-color: #444;
     border-radius: 10px;

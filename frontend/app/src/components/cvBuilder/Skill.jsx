@@ -16,8 +16,8 @@ let skillDomainSchema = object().shape({
 });
 
 let skillConflictSchema = object().shape({
-    skill_1: number().positive().integer().required(),
-    skill_2: number().positive().integer().required(),
+    skill_1: number().integer().moreThan(-1).required(),
+    skill_2: number().integer().moreThan(-1).required(),
     priority: number().positive().integer().required(),
     comment: string().required()
 });
@@ -244,7 +244,7 @@ export function SkillDependency(props) {
     const [skillDependency, setSkillDependency] = useState([])
     async function fetchSkilldeps() {
         let response = await fetch(
-            'http://0.0.0.0:3001/v1/skill/dependency',
+            'http://0.0.0.0:3001/v1/skill/'+ props.selectedSkill.id +'/dependency',
             {
                 method: 'GET',
             }
@@ -367,19 +367,20 @@ export function SkillDependency(props) {
     </div>
 }
 
-export function SkillConflict() {
+export function SkillConflict(props) {
     const [skillConflict, setSkillConflict] = useState([])
 
     async function fetchSkillConflict() {
+       
         let response = await fetch(
-            'http://0.0.0.0:3001/v1/skill/conflict',
+            'http://0.0.0.0:3001/v1/skill/'+ props.selectedSkill +'/conflicts',
             {
                 method: 'GET',
             }
         )
         let skillconflict = await response.json()
         if (skillconflict.length == 0) {
-            setSkillConflict([])
+            return []
         }
         let validatedObjects = await Promise.all(skillconflict.map(async (object) => {
             await skillConflictSchema.validate(object, { abortEarly: false });
@@ -419,18 +420,28 @@ export function SkillConflict() {
     }
     return <div>
         <h3>Conflicts</h3>
-        <div className='cv_instances'>
-            {skillConflict.map((skill, index) => {
-                return <div key={index} className='cv_instance'>
-                    <ul>
-                        <li>Skill_1_id: {skill.skill_1}</li>
-                        <li>Skill_2_id: {skill.skill_2}</li>
-                        <li>Comment: {skill.comment}</li>
-                        <li>Priority: {skill.priority}</li>
-                    </ul>
-                    
-                </div>
-            })}
+        <div className='cv_instances popup_instance'>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Skill 1</th>
+                        <th>Skill 2</th>
+                        <th>Priority</th>
+                        <th>Comment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {skillConflict.map((skillConflict, index) => (
+                        <tr key={"skill_conflict_table_item_"+index}>
+                            <td>{skillConflict.skill_1}</td>
+                            <td>{skillConflict.skill_2}</td>
+                            <td>{skillConflict.priority}</td>
+                            <td>{skillConflict.comment}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            
         </div>
         <Formik
             initialValues={{
@@ -462,6 +473,7 @@ export function SkillConflict() {
             }) => (
                 <form onSubmit={handleSubmit} className='frm '>
                     <h3>Create Skill Domain</h3>
+                    <span className='value_name'>Skill 1</span> <br />
                     <input
                         type="text"
                         name="skill_1"
@@ -470,6 +482,7 @@ export function SkillConflict() {
                         value={values.skill_1}
                     /> <br />
                     <span className='errors'>{errors.skill_1 && touched.skill_1 && errors.skill_1}</span> <br />
+                    <span>Skill 2</span> <br />
                     <input
                         type="text"
                         name="skill_2"
@@ -478,6 +491,7 @@ export function SkillConflict() {
                         value={values.skill_2}
                     /> <br />
                     <span className='errors'>{errors.skill_2 && touched.skill_2 && errors.skill_2}</span> <br />
+                    <span className='value_name'>Priority</span> <br />
                     <input
                         type="number"
                         name="priority"
@@ -486,6 +500,7 @@ export function SkillConflict() {
                         value={values.priority}
                     /> <br />
                     <span className='errors'>{errors.priority && touched.priority && errors.priority}</span> <br />
+                    <span className='value_name'>Comment</span> <br />
                     <input
                         type="text"
                         name="comment"
@@ -533,25 +548,61 @@ function SkillComponent(props) {
             }
         )
         const data = await response.json()
-        if (data != null){
-            console.log("skill_id:" + props.skill.id)
-            console.log(data)
-        }
         setSkillDependency(data)
         return data
     }
 
+    async function getSkillConflicts() {
+        // alert(props.skill.id)
+        const response = await fetch(
+            'http://0.0.0.0:3001/v1/skill/' + props.skill.id + '/conflicts',
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }
+        )
+        const data = await response.json()
+        
+        setSkillConflict(data)
+        return data
+    }
+
+    async function getSkillDomains() {
+        const response = await fetch(
+            'http://0.0.0.0:3001/v1/skill/' + props.skill.id + '/domains',
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }
+        )
+        const data = await response.json()
+        
+        setSkillDomain(data)
+        return data
+    }
+
+    function callPopup(caller) {
+        props.setPopup(caller, props.skill.id)
+    }
+
     useEffect(() => {
         getSkillDependencies()
+        getSkillConflicts()
+        getSkillDomains()
     }, [])
 
     return  <tr>
+        <td><input type="checkbox" name={'skill_' + props.skill.id} /></td>
         <td>{props.skill.id}</td>
         <td>{props.skill.name}</td>
         <td>{props.skill.description}</td>
-        <td></td>
-        <td>{skillDependency === null ? "No dependencies" : skillDependency.length}</td>
-        <td></td>
+        <td className={skillDomain !== null ? "clickable_row" : ""} onClick={() => callPopup("skill_domain")}>{skillDomain === null ? "-" : skillDomain.length}</td>
+        <td className={skillDependency !== null ? "clickable_row" : ""} onClick={() => callPopup("skill_dependency")} >{skillDependency === null ? "-" : skillDependency.length}</td>
+        <td className={skillConflict !== null ? "clickable_row" : ""} onClick={() => callPopup("skill_conflict")}>{skillConflict === null ? "-" : skillConflict.length}</td>
         <td>
             <button onClick={deleteSkill}>Delete</button>
         </td>
@@ -561,12 +612,37 @@ function SkillComponent(props) {
 export default function Skill() {
     const [skills, setSkills] = useState([])
     const [refresh, setRefresh] = useState(false)
+    const [popup, setPopup] = useState(null)
+    const [popup_block, setPopupBlock] = useState(null)
+    const [selectedSkill, setSelectedSkill] = useState(0)
     async function setUp() {
         setSkills(await fetchSkills())
     }
     useEffect(() => {
         setUp()
-    }, [refresh])
+        
+    }, [refresh, popup, selectedSkill])
+    function selectPopup(new_popup, skill){
+        setSelectedSkill(skill)
+        console.log(skill)
+        console.log(new_popup)
+        switch (new_popup) {
+            case "skill_domain":
+                setPopupBlock(<SkillDomain refresh={refresh} setRefresh={setRefresh} selectedSkill={skill}></SkillDomain>)
+                break;
+            case "skill_dependency":
+                setPopupBlock(<SkillDependency refresh={refresh} setRefresh={setRefresh} selectedSkill={skill}></SkillDependency>)
+                break;
+            case "skill_conflict":
+                
+                setPopupBlock(<SkillConflict refresh={refresh} setRefresh={setRefresh} selectedSkill={skill}></SkillConflict>)
+                break;
+            default:
+                setPopupBlock(<span>Empty</span>)
+        }
+        setPopup(new_popup)
+        
+    }
     if (skills.length == 0) {
         return <div className="cv_model">
             <h1>Skills</h1>
@@ -574,6 +650,8 @@ export default function Skill() {
             <CreateSkillForm refresh={refresh} setRefresh={setRefresh} />
         </div>
     }
+    
+    
     return <div className="cv_model">
         <div className='cv_instances'>
             <table>
@@ -582,6 +660,7 @@ export default function Skill() {
                 </caption>
                 <thead>
                     <tr>
+                        <th></th>
                         <th>ID</th>
                         <th>Name</th>
                         <th>Description</th>
@@ -592,16 +671,11 @@ export default function Skill() {
                     </tr>
                 </thead>
                 <tbody>
-                    {skills.map((skill, index) => <SkillComponent key={"skill_"+index} skill={skill} refresh={refresh} setRefresh={setRefresh} />)}
+                    {skills.map((skill, index) => <SkillComponent setPopup={selectPopup} key={"skill_"+index} skill={skill} refresh={refresh} setRefresh={setRefresh} />)}
                 </tbody>
             </table>
             <CreateSkillForm refresh={refresh} setRefresh={setRefresh}></CreateSkillForm>
         </div>
-        
-
-        <SkillDomain refresh={refresh} setRefresh={setRefresh}></SkillDomain>
-        <SkillConflict refresh={refresh} setRefresh={setRefresh}></SkillConflict>
-        <SkillDependency refresh={refresh} setRefresh={setRefresh}></SkillDependency>
-
+        <div className={popup !== null? 'popup' : 'hidden'}><button onClick={() => setPopup(null)}>Close</button>{popup_block}</div>
     </div>
 }
