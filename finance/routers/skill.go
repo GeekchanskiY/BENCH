@@ -19,7 +19,6 @@ func SetupSkill(base_group *gin.RouterGroup, db *gorm.DB) {
 	skill_group := base_group.Group("/skill")
 	{
 		skill_group.GET("/dependency", SkillController.FindAllDependency)
-		skill_group.GET("/dependency/:id", SkillController.FindSkillDependencies)
 		skill_group.POST("/dependency", SkillController.CreateSkillDependency)
 		skill_group.DELETE("/dependency", SkillController.DeleteSkillDependency)
 
@@ -33,6 +32,9 @@ func SetupSkill(base_group *gin.RouterGroup, db *gorm.DB) {
 
 		skill_group.GET("/", SkillController.FindAll)
 		skill_group.GET("/:id", SkillController.FindByID)
+		skill_group.GET("/:id/dependencies", SkillController.FindSkillDependencies)
+		skill_group.GET("/:id/conflicts", SkillController.FindSkillConflicts)
+		skill_group.GET("/:id/domains", SkillController.FindSkillDomains)
 		skill_group.DELETE("/:id", SkillController.Delete)
 		skill_group.POST("/", SkillController.Create)
 
