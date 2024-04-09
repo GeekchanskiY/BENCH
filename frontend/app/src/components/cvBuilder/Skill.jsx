@@ -244,17 +244,17 @@ export function SkillDependency(props) {
     const [skillDependency, setSkillDependency] = useState([])
     async function fetchSkilldeps() {
         let response = await fetch(
-            'http://0.0.0.0:3001/v1/skill/'+ props.selectedSkill.id +'/dependency',
+            'http://0.0.0.0:3001/v1/skill/'+ props.selectedSkill +'/dependencies',
             {
                 method: 'GET',
             }
         )
         let skilldeps = await response.json()
-        if (skilldeps.length == 0) {
-            setSkillDependency([])
+        if (skilldeps === null) {
+            return []
         }
         let validatedObjects = await Promise.all(skilldeps.map(async (object) => {
-            await skillDependencySchema.validate(object, { abortEarly: false });
+            await skillSchema.validate(object, { abortEarly: false });
             return object;
         }));
         return validatedObjects;
@@ -272,7 +272,7 @@ export function SkillDependency(props) {
             // console.log(data)
             let res = await skillDependencySchema.validate(data, { abortEarly: false });
            
-            let response = await fetch(
+            await fetch(
                 'http://0.0.0.0:3001/v1/skill/dependency',
                 {
                     method: 'POST',
@@ -300,19 +300,33 @@ export function SkillDependency(props) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(skill)
+            body: JSON.stringify({
+                'parent_skill': skill.id,
+                'child_skill':  props.selectedSkill
+            })
         })
     }
     return <div>
         <h3>Dependencies</h3>
-        <div className='cv_instances'>
-            {skillDependency.map((skill, num) => {
-                return <div key={"skill_dependency_" + num} className='cv_instance'><ul>
-                    <li>Parent: {skill.parent_skill}</li>
-                    <li>Child: {skill.child_skill}</li>
-                    <li><button onClick={() => deleteSkillDependency(skill)}>Delete</button></li>
-                </ul></div>
-            })}
+        <div className='cv_instances popup_instance'>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Child skill</th>
+                        <th>Parent skill</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {skillDependency === null ?'asd': skillDependency.map((skill, index) => {
+                        return <tr key={index}>
+                            <td>{props.selectedSkill}</td>
+                            <td>{skill.id} - {skill.name}</td>
+                            <td><button onClick={() => deleteSkillDependency(skill)}>Delete</button></td>
+                        </tr>
+                    })}
+                </tbody>
+            </table>
         </div>
         <Formik
             initialValues={{
