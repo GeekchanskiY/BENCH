@@ -144,7 +144,7 @@ func (c *skillDatabase) CreateSkillConflict(skillConflict schemas.SkillConflictS
 func (c *skillDatabase) FindSkillConflicts(skill_id uint) ([]schemas.SkillConflictSchema, error) {
 	var skill_conflicts []schemas.SkillConflictSchema
 	var skill_models []models.SkillConflict
-	query := c.DB.Model(&models.SkillConflict{}).Where("skill_1_id = ? or skill_2_id = ?", skill_id, skill_id).Order("priority")
+	query := c.DB.Model(&models.SkillConflict{}).Where("skill1_id = ? or skill2_id = ?", skill_id, skill_id).Order("priority")
 	err := query.Find(&skill_models).Error
 	for _, skill_conflict := range skill_models {
 		skill_conflict_schema := schemas.SkillConflictSchema{}
@@ -158,7 +158,7 @@ func (c *skillDatabase) DeleteSkillConflict(skillConflict schemas.SkillConflictS
 	var skill_conflict_model models.SkillConflict = models.SkillConflict{}
 	skillConflict.ToModel(&skill_conflict_model)
 
-	res := c.DB.Where("skill_1_id = ? AND skill_2_id = ?", skill_conflict_model.Skill1ID, skill_conflict_model.Skill2ID).Delete(&skill_conflict_model)
+	res := c.DB.Where("skill1_id = ? AND skill2_id = ?", skill_conflict_model.Skill1ID, skill_conflict_model.Skill2ID).Delete(&skill_conflict_model)
 	if res.Error != nil {
 		return res.Error
 	} else if res.RowsAffected < 1 {
