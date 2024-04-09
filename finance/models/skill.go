@@ -14,9 +14,9 @@ func (s *Skill) TableName() string {
 
 type SkillDependency struct {
 	ParentSkillID uint
-	ParentSkill   Skill `gorm:"foreignKey:ParentSkillID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	ParentSkill   Skill `gorm:"foreignKey:ParentSkillID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;uniqueIndex:idx_skill_dependency_skills;"`
 	ChildSkillID  uint
-	ChildSkill    Skill `gorm:"foreignKey:ChildSkillID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	ChildSkill    Skill `gorm:"foreignKey:ChildSkillID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;uniqueIndex:idx_skill_dependency_skills;"`
 }
 
 func (s *SkillDependency) TableName() string {

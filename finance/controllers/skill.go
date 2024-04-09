@@ -81,6 +81,22 @@ func (c *skillController) Delete(ctx *gin.Context) {
 // Skill Dependency
 //
 
+func (c *skillController) FindSkillDependencies(ctx *gin.Context) {
+	var params_id string = ctx.Params.ByName("id")
+	i, err := strconv.ParseUint(params_id, 10, 32)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	var uid uint = uint(i)
+	skilldeps, err := c.skillRepository.FindSkillDependencies(uid)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, skilldeps)
+}
+
 func (c *skillController) FindAllDependency(ctx *gin.Context) {
 	skills, err := c.skillRepository.FindAllDependency()
 	if err != nil {
@@ -127,6 +143,23 @@ func (c *skillController) CreateSkillDependency(ctx *gin.Context) {
 // Skill Conflict
 //
 
+func (c *skillController) FindSkillConflicts(ctx *gin.Context) {
+	var skillconflicts []schemas.SkillConflictSchema
+	var params_id string = ctx.Params.ByName("id")
+	i, err := strconv.ParseUint(params_id, 10, 32)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	var uid uint = uint(i)
+	skillconflicts, err = c.skillRepository.FindSkillConflicts(uid)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, skillconflicts)
+}
+
 func (c *skillController) CreateSkillConflict(ctx *gin.Context) {
 	var skilldep schemas.SkillConflictSchema
 
@@ -172,6 +205,23 @@ func (c *skillController) DeleteSkillConflict(ctx *gin.Context) {
 //
 // Skill Domain
 //
+
+func (c *skillController) FindSkillDomains(ctx *gin.Context) {
+	var skilldomains []schemas.SkillDomainSchema
+	var params_id string = ctx.Params.ByName("id")
+	i, err := strconv.ParseUint(params_id, 10, 32)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	var uid uint = uint(i)
+	skilldomains, err = c.skillRepository.FindSkillDomains(uid)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, skilldomains)
+}
 
 func (c *skillController) CreateSkillDomain(ctx *gin.Context) {
 	var skilldom schemas.SkillDomainSchema

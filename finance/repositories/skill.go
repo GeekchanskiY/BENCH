@@ -67,6 +67,23 @@ func (c *skillDatabase) FindAllDependency() ([]schemas.SkillDependencySchema, er
 	return skill_schemas, err
 }
 
+func (c *skillDatabase) FindSkillDependencies(skill_id uint) ([]schemas.SkillSchema, error) {
+	var skilldeps []models.SkillDependency
+	err := c.DB.Where("child_skill_id = ?", skill_id).Find(&skilldeps).Error
+	var skill_schemas []schemas.SkillSchema
+	var schema schemas.SkillSchema
+	var skill models.Skill
+	for _, s := range skilldeps {
+		err := c.DB.First(&skill, s.ChildSkillID).Error
+		if err != nil {
+			return skill_schemas, err
+		}
+		schema.FromModel(&skill)
+		skill_schemas = append(skill_schemas, schema)
+	}
+	return skill_schemas, err
+}
+
 func (c *skillDatabase) CreateSkillDependency(skillDependency schemas.SkillDependencySchema) (schemas.SkillDependencySchema, error) {
 	var skill_dependency_model models.SkillDependency = models.SkillDependency{}
 	var parent_skill, child_skill models.Skill
@@ -124,11 +141,24 @@ func (c *skillDatabase) CreateSkillConflict(skillConflict schemas.SkillConflictS
 	return skillConflict, err
 }
 
+func (c *skillDatabase) FindSkillConflicts(skill_id uint) ([]schemas.SkillConflictSchema, error) {
+	var skill_conflicts []schemas.SkillConflictSchema
+	var skill_models []models.SkillConflict
+	query := c.DB.Model(&models.SkillConflict{}).Where("skill1_id = ? or skill2_id = ?", skill_id, skill_id).Order("priority")
+	err := query.Find(&skill_models).Error
+	for _, skill_conflict := range skill_models {
+		skill_conflict_schema := schemas.SkillConflictSchema{}
+		skill_conflict_schema.FromModel(&skill_conflict)
+		skill_conflicts = append(skill_conflicts, skill_conflict_schema)
+	}
+	return skill_conflicts, err
+}
+
 func (c *skillDatabase) DeleteSkillConflict(skillConflict schemas.SkillConflictSchema) error {
 	var skill_conflict_model models.SkillConflict = models.SkillConflict{}
 	skillConflict.ToModel(&skill_conflict_model)
 
-	res := c.DB.Where("skill_1_id = ? AND skill_2_id = ?", skill_conflict_model.Skill1ID, skill_conflict_model.Skill2ID).Delete(&skill_conflict_model)
+	res := c.DB.Where("skill1_id = ? AND skill2_id = ?", skill_conflict_model.Skill1ID, skill_conflict_model.Skill2ID).Delete(&skill_conflict_model)
 	if res.Error != nil {
 		return res.Error
 	} else if res.RowsAffected < 1 {
@@ -172,6 +202,19 @@ func (c *skillDatabase) CreateSkillDomain(skillDomain schemas.SkillDomainSchema)
 	err = c.DB.Create(skill_domain_model).Error
 	skillDomain.FromModel(&skill_domain_model)
 	return skillDomain, err
+}
+
+func (c *skillDatabase) FindSkillDomains(skill_id uint) ([]schemas.SkillDomainSchema, error) {
+	var skill_domains []schemas.SkillDomainSchema
+	var skill_models []models.SkillDomain
+	query := c.DB.Model(&models.SkillDomain{}).Where("skill_id = ?", skill_id)
+	err := query.Find(&skill_models).Error
+	for _, skill_domain := range skill_models {
+		skill_domain_schema := schemas.SkillDomainSchema{}
+		skill_domain_schema.FromModel(&skill_domain)
+		skill_domains = append(skill_domains, skill_domain_schema)
+	}
+	return skill_domains, err
 }
 
 func (c *skillDatabase) DeleteSkillDomain(skillDomain schemas.SkillDomainSchema) error {
