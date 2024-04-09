@@ -46,7 +46,7 @@ function CreateSkillForm({ refresh, setRefresh }) {
 
         try {
             let res = await skillSchema.validate(data, { abortEarly: false });
-            console.log(res)
+            
             let response = await fetch(
                 'http://0.0.0.0:3001/v1/skill/',
                 {
@@ -59,7 +59,6 @@ function CreateSkillForm({ refresh, setRefresh }) {
             )
             setRefresh(!refresh)
         } catch (errors) {
-            console.log(errors)
             return {
                 success: false
             }
@@ -137,16 +136,15 @@ export function SkillDomain(props) {
 
     async function setUp(){
         setSkillDomain(await fetchSkillDomain())
-        console.log(skillDomain)
     }
     useEffect(() => {
         setUp()
     }, [])
     async function createSkillDomain(data) {
         try {
-            console.log(data)
+            
             let res = await skillDomainSchema.validate(data, { abortEarly: false });
-            console.log(res)
+           
             let response = await fetch(
                 'http://0.0.0.0:3001/v1/skill/domain',
                 {
@@ -159,7 +157,6 @@ export function SkillDomain(props) {
             )
             props.setRefresh(!props.refresh)
         } catch (errors) {
-            console.log(errors)
             return {
                 success: false
             }
@@ -265,7 +262,7 @@ export function SkillDependency(props) {
     }
     async function setUp() {
         setSkillDependency(await fetchSkilldeps())
-        console.log(skillDependency)
+        
     }
     useEffect(() => {
         setUp()
@@ -274,7 +271,7 @@ export function SkillDependency(props) {
         try {
             // console.log(data)
             let res = await skillDependencySchema.validate(data, { abortEarly: false });
-            console.log(res)
+           
             let response = await fetch(
                 'http://0.0.0.0:3001/v1/skill/dependency',
                 {
@@ -296,13 +293,24 @@ export function SkillDependency(props) {
             success: true
         }
     }
+    async function deleteSkillDependency(skill) {
+        console.log(skillDependency)
+        await fetch("http://0.0.0.0:3001/v1/skill/dependency", {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(skill)
+        })
+    }
     return <div>
         <h3>Dependencies</h3>
         <div className='cv_instances'>
             {skillDependency.map((skill, num) => {
                 return <div key={"skill_dependency_" + num} className='cv_instance'><ul>
-                    <li> Parent: {skill.parent_skill}</li>
+                    <li>Parent: {skill.parent_skill}</li>
                     <li>Child: {skill.child_skill}</li>
+                    <li><button onClick={() => deleteSkillDependency(skill)}>Delete</button></li>
                 </ul></div>
             })}
         </div>
@@ -382,7 +390,6 @@ export function SkillConflict() {
 
     async function setUp(){
         setSkillConflict(await fetchSkillConflict())
-        console.log(skillConflict)
     }
     useEffect(() => {
         setUp()
@@ -390,7 +397,7 @@ export function SkillConflict() {
     async function createSkillConflict(data) {
         try {
             let res = await skillConflictSchema.validate(data, { abortEarly: false });
-            console.log(res)
+           
             let response = await fetch(
                 'http://0.0.0.0:3001/v1/skill/conflict',
                 {
@@ -402,7 +409,6 @@ export function SkillConflict() {
                 }
             )
         } catch (errors) {
-            console.log(errors)
             return {
                 success: false
             }
@@ -498,6 +504,10 @@ export function SkillConflict() {
 }
 
 function SkillComponent(props) {
+    const [skillDependency, setSkillDependency] = useState([])
+    const [skillConflict, setSkillConflict] = useState([])
+    const [skillDomain, setSkillDomain] = useState([])
+
     async function deleteSkill() {
         await fetch(
             'http://0.0.0.0:3001/v1/skill/' + props.skill.id,
@@ -511,14 +521,41 @@ function SkillComponent(props) {
         )
         props.setRefresh(!props.refresh)
     }
-    return <div className='cv_instance'>
-        <ul>
-            <li>ID: {props.skill.id}</li>
-            <li>Name: {props.skill.name}</li>
-            <li>Description: {props.skill.description}</li>
-        </ul>
-        <button onClick={deleteSkill}>Delete</button>
-    </div>
+
+    async function getSkillDependencies() {
+        const response = await fetch(
+            'http://0.0.0.0:3001/v1/skill/' + props.skill.id + '/dependencies',
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }
+        )
+        const data = await response.json()
+        if (data != null){
+            console.log("skill_id:" + props.skill.id)
+            console.log(data)
+        }
+        setSkillDependency(data)
+        return data
+    }
+
+    useEffect(() => {
+        getSkillDependencies()
+    }, [])
+
+    return  <tr>
+        <td>{props.skill.id}</td>
+        <td>{props.skill.name}</td>
+        <td>{props.skill.description}</td>
+        <td></td>
+        <td>{skillDependency === null ? "No dependencies" : skillDependency.length}</td>
+        <td></td>
+        <td>
+            <button onClick={deleteSkill}>Delete</button>
+        </td>
+    </tr>
 }
 
 export default function Skill() {
@@ -530,7 +567,6 @@ export default function Skill() {
     useEffect(() => {
         setUp()
     }, [refresh])
-    console.log(skills)
     if (skills.length == 0) {
         return <div className="cv_model">
             <h1>Skills</h1>
@@ -539,13 +575,29 @@ export default function Skill() {
         </div>
     }
     return <div className="cv_model">
-        <h1>Skills</h1>
         <div className='cv_instances'>
-            {skills.map((skill) => {
-                return <SkillComponent skill={skill} key={"skill_" + skill.id} refresh={refresh} setRefresh={setRefresh} />
-            })}
+            <table>
+                <caption>
+                    Skills
+                </caption>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Domains</th>
+                        <th>Dependencies</th>
+                        <th>Conflicts</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {skills.map((skill, index) => <SkillComponent key={"skill_"+index} skill={skill} refresh={refresh} setRefresh={setRefresh} />)}
+                </tbody>
+            </table>
+            <CreateSkillForm refresh={refresh} setRefresh={setRefresh}></CreateSkillForm>
         </div>
-        <CreateSkillForm refresh={refresh} setRefresh={setRefresh}></CreateSkillForm>
+        
 
         <SkillDomain refresh={refresh} setRefresh={setRefresh}></SkillDomain>
         <SkillConflict refresh={refresh} setRefresh={setRefresh}></SkillConflict>

@@ -5,7 +5,10 @@
 .cvbuilder_sidebar{
     position: relative;
     padding-left: 10px;
-    width: 20%;
+    width: calc(20% - 50px);
+    margin-right: 50px;
+    background-color: #2c2c2c;
+    box-shadow: 5px 0 5px -1px #333;
 }
 
 .cvbuilder_sidebar ul{
@@ -36,10 +39,34 @@
 }
 
 .cv_instances{
-    display: flex;
-    flex-wrap: wrap;
+    display: block;
+    flex-wrap: wrap; 
     /* gap: 50px; */
 }
+
+.cv_instances table{
+    width: 60%;
+    float: left;
+}
+.cv_instances form{
+    width: 40%;
+    padding: 0;
+    float: left;
+}
+
+.cv_instances table thead tr{
+    height: 30px;
+}
+.cv_instances table tbody tr{
+    height: 30px;
+}
+.cv_instances table tbody tr td button{
+    background-color: #444;
+    border-radius: 10px;
+    padding: 5px;
+    border: none;
+}
+
 .cv_instance{
     position: relative;
     flex: 1 0 21%;
