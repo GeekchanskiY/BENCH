@@ -144,7 +144,7 @@ func (c *skillDatabase) CreateSkillConflict(skillConflict schemas.SkillConflictS
 func (c *skillDatabase) FindSkillConflicts(skill_id uint) ([]schemas.SkillConflictSchema, error) {
 	var skill_conflicts []schemas.SkillConflictSchema
 	var skill_models []models.SkillConflict
-	query := c.DB.Model(&models.SkillConflict{}).Where("skill_1_id = ? or skill_2_id = ?", skill_id, skill_id)
+	query := c.DB.Model(&models.SkillConflict{}).Where("skill_1_id = ? or skill_2_id = ?", skill_id, skill_id).Order("priority")
 	err := query.Find(&skill_models).Error
 	for _, skill_conflict := range skill_models {
 		skill_conflict_schema := schemas.SkillConflictSchema{}

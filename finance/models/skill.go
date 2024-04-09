@@ -24,9 +24,9 @@ func (s *SkillDependency) TableName() string {
 }
 
 type SkillConflict struct {
-	Skill1ID uint
+	Skill1ID uint  `gorm:"column:skill_1_id"`
 	Skill1   Skill `gorm:"foreignKey:Skill1ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Skill2ID uint
+	Skill2ID uint  `gorm:"column:skill_2_id"`
 	Skill2   Skill `gorm:"foreignKey:Skill2ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	Comment  string
 	Priority int
