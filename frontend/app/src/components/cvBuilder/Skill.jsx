@@ -124,8 +124,8 @@ export function SkillDomain(props) {
             }
         )
         let skilldomain = await response.json()
-        if (skilldomain.length == 0) {
-            setSkillDomain([])
+        if (skilldomain === null) {
+            return []
         }
         let validatedObjects = await Promise.all(skilldomain.map(async (object) => {
             await skillDomainSchema.validate(object, { abortEarly: false });
@@ -145,7 +145,7 @@ export function SkillDomain(props) {
             
             let res = await skillDomainSchema.validate(data, { abortEarly: false });
            
-            let response = await fetch(
+            await fetch(
                 'http://0.0.0.0:3001/v1/skill/domain',
                 {
                     method: 'POST',
@@ -393,7 +393,7 @@ export function SkillConflict(props) {
             }
         )
         let skillconflict = await response.json()
-        if (skillconflict.length == 0) {
+        if (skillconflict == null) {
             return []
         }
         let validatedObjects = await Promise.all(skillconflict.map(async (object) => {
@@ -432,6 +432,27 @@ export function SkillConflict(props) {
             success: true
         }
     }
+
+    async function deleteSkillConflict(skillConflict) {
+        try {
+            await fetch(
+                'http://0.0.0.0:3001/v1/skill/conflict',
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(skillConflict)
+                }
+            )
+        } catch (errors) {
+            console.error(errors)
+            return
+        }
+        setSkillConflict(await fetchSkillConflict())
+
+    }
+
     return <div>
         <h3>Conflicts</h3>
         <div className='cv_instances popup_instance'>
@@ -442,6 +463,7 @@ export function SkillConflict(props) {
                         <th>Skill 2</th>
                         <th>Priority</th>
                         <th>Comment</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -451,6 +473,7 @@ export function SkillConflict(props) {
                             <td>{skillConflict.skill_2}</td>
                             <td>{skillConflict.priority}</td>
                             <td>{skillConflict.comment}</td>
+                            <td><button onClick={() => deleteSkillConflict(skillConflict)}>Delete</button></td>
                         </tr>
                     ))}
                 </tbody>
