@@ -130,9 +130,8 @@ function CompanyComponent(props) {
     props.setRefresh(!props.refresh)
   }
 
-  console.log(props)
   return <tr>
-    <td><input type="checkbox" name={'skill_' + props.company.id} /></td>
+    <td><input type="checkbox" name={'company_' + props.company.id} /></td>
     <td>{props.company.id}</td>
     <td>{props.company.name}</td>
     <td>{props.company.rating}</td>
