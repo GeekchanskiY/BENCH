@@ -168,7 +168,7 @@ export default function Company() {
     <div className='cv_instances'>
       <table>
         <caption>
-          Skills
+          Companies
         </caption>
         <thead>
           <tr>
