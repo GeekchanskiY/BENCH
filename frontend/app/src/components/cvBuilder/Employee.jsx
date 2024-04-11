@@ -103,7 +103,7 @@ function CreateEmployeeForm({ refresh, setRefresh }) {
 
 function EmployeeComponent(props) {
   async function deleteEmployee() {
-    let response = await fetch(
+    await fetch(
       'http://0.0.0.0:3001/v1/employee/' + props.employee.id,
       {
         method: 'DELETE',
@@ -115,14 +115,15 @@ function EmployeeComponent(props) {
     )
     props.setRefresh(!props.refresh)
   }
-  return <div className='cv_instance'>
-    <ul>
-      <li>ID: {props.employee.id}</li>
-      <li>Name: {props.employee.name}</li>
-      <li>Age: {props.employee.age}</li>
-    </ul>
+  return  <tr>
+  <td><input type="checkbox" name={'employee_' + props.employee.id} /></td>
+  <td>{props.employee.id}</td>
+  <td>{props.employee.name}</td>
+  <td>{props.employee.age}</td>
+  <td>
     <button onClick={deleteEmployee}>Delete</button>
-  </div>
+  </td>
+</tr>
 }
 
 export default function Employee() {
@@ -145,11 +146,28 @@ export default function Employee() {
   return <div className="cv_model">
     <h1>Employees</h1>
     <div className='cv_instances'>
-      {employees.map((employee) => {
-        return <EmployeeComponent employee={employee} key={employee.id} refresh={refresh} setRefresh={setRefresh} />
-      })}
+    <table>
+        <caption>
+          Companies
+        </caption>
+        <thead>
+          <tr>
+            <th></th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {employees.map((employee) => {
+            return <EmployeeComponent employee={employee} key={"employee_" + employee.id} refresh={refresh} setRefresh={setRefresh} />
+          })}
+        </tbody>
+      </table>
+      <CreateEmployeeForm refresh={refresh} setRefresh={setRefresh}></CreateEmployeeForm>
     </div>
-    <CreateEmployeeForm refresh={refresh} setRefresh={setRefresh}></CreateEmployeeForm>
+    
   </div>
 
 }
