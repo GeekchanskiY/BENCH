@@ -106,13 +106,13 @@ function DomainComponent(props) {
     props.setRefresh(!props.refresh)
   }
   return <tr>
-  <td><input type="checkbox" name={'domain_' + props.domain.id} /></td>
-  <td>{props.domain.id}</td>
-  <td>{props.domain.name}</td>
-  <td>
-    <button onClick={deleteDomain}>Delete</button>
-  </td>
-</tr>
+    <td><input type="checkbox" name={'domain_' + props.domain.id} /></td>
+    <td>{props.domain.id}</td>
+    <td>{props.domain.name}</td>
+    <td>
+      <button onClick={deleteDomain}>Delete</button>
+    </td>
+  </tr>
 }
 
 export default function Domain() {
@@ -154,7 +154,5 @@ export default function Domain() {
       </table>
       <CreateDomainForm refresh={refresh} setRefresh={setRefresh}></CreateDomainForm>
     </div>
-
   </div>
-
 }
