@@ -165,19 +165,45 @@ export function SkillDomain(props) {
             success: true
         }
     }
+
+    async function deleteSkillDomain(data) {
+        await fetch(
+            'http://0.0.0.0:3001/v1/skill/domain',
+            {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }
+        )
+        setUp()
+    }
     return <div>
         <h3>Domains</h3>
-        <div className='cv_instances'>
-            {skillDomain.map((skill, index) => {
-                return <div key={index} className='cv_instance'>
-                    <ul>
-                        <li>Skill_id: {skill.skill_id}</li>
-                        <li>Domain_id: {skill.domain_id}</li>
-                        <li>Priority: {skill.priority}</li>
-                    </ul>
-                    
-                </div>
-            })}
+        <div className='cv_instances popup_instance'>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Skill ID</th>
+                        <th>Domain ID</th>
+                        <th>Priority</th>
+                        
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {skillDomain.map((sd, index) => (
+                        <tr key={"skill_conflict_table_item_"+index}>
+                            <td>{sd.skill_id}</td>
+                            <td>{sd.domain_id}</td>
+                            <td>{sd.priority}</td>
+                            <td><button onClick={() => deleteSkillDomain(sd)}>Delete</button></td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            
         </div>
         <Formik
             initialValues={{
@@ -305,6 +331,7 @@ export function SkillDependency(props) {
                 'child_skill':  props.selectedSkill
             })
         })
+        setUp()
     }
     return <div>
         <h3>Dependencies</h3>
