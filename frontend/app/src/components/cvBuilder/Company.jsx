@@ -137,7 +137,7 @@ function CompanyComponent(props) {
     <td>{props.company.rating}</td>
     <td>{props.company.description}</td>
     <td>{props.company.city}</td>
-    <td>{props.company.link}</td>
+    <td><a href={props.company.link}>{props.company.link}</a></td>
     <td>
       <button onClick={deleteCompany}>Delete</button>
     </td>
