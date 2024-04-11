@@ -117,7 +117,7 @@ function CreateCompanyForm({ refresh, setRefresh }) {
 
 function CompanyComponent(props) {
   async function deleteCompany() {
-    let response = await fetch(
+    await fetch(
       'http://0.0.0.0:3001/v1/company/' + props.company.id,
       {
         method: 'DELETE',
@@ -129,17 +129,20 @@ function CompanyComponent(props) {
     )
     props.setRefresh(!props.refresh)
   }
-  return <div className='cv_instance'>
-    <ul>
-      <li>ID: {props.company.id}</li>
-      <li>Name: {props.company.name}</li>
-      <li>Rating: {props.company.rating}</li>
-      <li>Description: {props.company.description}</li>
-      <li>City: {props.company.city}</li>
-      <li>Link: {props.company.link}</li>
-    </ul>
-    <button onClick={deleteCompany}>Delete</button>
-  </div>
+
+  console.log(props)
+  return <tr>
+    <td><input type="checkbox" name={'skill_' + props.company.id} /></td>
+    <td>{props.company.id}</td>
+    <td>{props.company.name}</td>
+    <td>{props.company.rating}</td>
+    <td>{props.company.description}</td>
+    <td>{props.company.city}</td>
+    <td>{props.company.link}</td>
+    <td>
+      <button onClick={deleteCompany}>Delete</button>
+    </td>
+  </tr>
 }
 
 
@@ -163,10 +166,30 @@ export default function Company() {
   return <div className="cv_model">
     <h1>Companies</h1>
     <div className='cv_instances'>
-      {companies.map((domain) => {
-        return <CompanyComponent company={domain} key={"company_" + domain.id} refresh={refresh} setRefresh={setRefresh} />
-      })}
+      <table>
+        <caption>
+          Skills
+        </caption>
+        <thead>
+          <tr>
+            <th></th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Rating</th>
+            <th>Description</th>
+            <th>City</th>
+            <th>Link</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {companies.map((company) => {
+            return <CompanyComponent company={company} key={"company_" + company.id} refresh={refresh} setRefresh={setRefresh} />
+          })}
+        </tbody>
+      </table>
+      <CreateCompanyForm refresh={refresh} setRefresh={setRefresh}></CreateCompanyForm>
     </div>
-    <CreateCompanyForm refresh={refresh} setRefresh={setRefresh}></CreateCompanyForm>
+   
   </div>
 }
