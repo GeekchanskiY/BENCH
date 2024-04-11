@@ -156,6 +156,7 @@ export function SkillDomain(props) {
                 }
             )
             props.setRefresh(!props.refresh)
+            setUp()
         } catch (errors) {
             return {
                 success: false
@@ -317,6 +318,7 @@ export function SkillDependency(props) {
         }
         return {
             success: true
+            
         }
     }
     async function deleteSkillDependency(skill) {
@@ -440,7 +442,7 @@ export function SkillConflict(props) {
         try {
             let res = await skillConflictSchema.validate(data, { abortEarly: false });
            
-            let response = await fetch(
+            await fetch(
                 'http://0.0.0.0:3001/v1/skill/conflict',
                 {
                     method: 'POST',
@@ -450,6 +452,7 @@ export function SkillConflict(props) {
                     body: JSON.stringify(res)
                 }
             )
+            setUp()
         } catch (errors) {
             return {
                 success: false
