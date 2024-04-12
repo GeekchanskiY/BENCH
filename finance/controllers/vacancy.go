@@ -82,6 +82,23 @@ func (c *vacancyController) Delete(ctx *gin.Context) {
 // Vacancy Domain
 //
 
+func (c *vacancyController) FindVacancyDomain(ctx *gin.Context) {
+	var params_id string = ctx.Params.ByName("id")
+	i, err := strconv.ParseUint(params_id, 10, 32)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+
+	}
+	var uid uint = uint(i)
+	vacancyDomains, err := c.vacancyRepository.FindVacancyDomain(uid)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, vacancyDomains)
+}
+
 func (c *vacancyController) FindAllVacancyDomain(ctx *gin.Context) {
 	skills, err := c.vacancyRepository.FindAllVacancyDomain()
 	if err != nil {
@@ -127,6 +144,23 @@ func (c *vacancyController) CreateVacancyDomain(ctx *gin.Context) {
 //
 // Vacancy Skill
 //
+
+func (c *vacancyController) FindVacancySkill(ctx *gin.Context) {
+	var params_id string = ctx.Params.ByName("id")
+	i, err := strconv.ParseUint(params_id, 10, 32)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+
+	}
+	var uid uint = uint(i)
+	vacancySkills, err := c.vacancyRepository.FindVacancySkill(uid)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, vacancySkills)
+}
 
 func (c *vacancyController) FindAllVacancySkill(ctx *gin.Context) {
 	skills, err := c.vacancyRepository.FindAllVacancySkill()

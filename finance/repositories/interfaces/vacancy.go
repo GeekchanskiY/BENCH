@@ -10,6 +10,9 @@ type VacancyRepository interface {
 	Create(vacancy schemas.VacancySchema) (schemas.VacancySchema, error)
 	Delete(id uint) error
 
+	FindVacancyDomain(id uint) ([]schemas.VacancyDomainSchema, error)
+	FindVacancySkill(id uint) ([]schemas.VacancySkillSchema, error)
+
 	FindAllVacancyDomain() ([]schemas.VacancyDomainSchema, error)
 	FindAllVacancySkill() ([]schemas.VacancySkillSchema, error)
 	CreateVacancyDomain(vacancyDomain schemas.VacancyDomainSchema) (schemas.VacancyDomainSchema, error)
