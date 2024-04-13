@@ -150,7 +150,7 @@ export function VacancySkill(props){
             let res = await vacancySkillSchema.validate(data, { abortEarly: false });
             
             await fetch(
-                'http://0.0.0.0:3001/v1/vacancy/skill',
+                'http://0.0.0.0:3001/v1/vacancy/skills',
                 {
                     method: 'POST',
                     headers: {
@@ -172,7 +172,7 @@ export function VacancySkill(props){
 
     async function deleteVacancySkill(data) {
         await fetch(
-            'http://0.0.0.0:3001/v1/vacancy/skill',
+            'http://0.0.0.0:3001/v1/vacancy/skills',
             {
                 method: 'DELETE',
                 headers: {
@@ -186,8 +186,88 @@ export function VacancySkill(props){
 
     return <div>
         <h1>Skills</h1>
+        <div className='cv_instances popup_instance'>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Vacancy</th>
+                        <th>Skill</th>
+                        <th>Priority</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {vacancySkills.map((vs, index) => (
+                        <tr key={"vacancy_doamin_table_item_"+index}>
+                            <td>{vs.vacancy_id}</td>
+                            <td>{vs.skill_id}</td>
+                            <td>{vs.priority}</td>
+                            <td><button onClick={() => deleteVacancySkill(vs)}>Delete</button></td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+        <Formik initialValues={{
+            skill_id: 1,
+            vacancy_id: 2,
+            priority: 1,
+        }} validationSchema={vacancySkillSchema} onSubmit={async (values, { setSubmitting, setErrors }) => {
+
+            let data = await createVacancySkill(values)
+            if (data.success == true) {
+                setSubmitting(false);
+            } else {
+                setErrors({ 'priority': 'error!' })
+            }
+
+        }}>
+            {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+            }) => (
+                <form onSubmit={handleSubmit} className='frm '>
+                    <h3>Add Vacancy Skill</h3>
+                    <input
+                        type="text"
+                        name="skill_id"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.skill_id}
+                    /> <br />
+                    <span className='errors'>{errors.skill_id && touched.skill_id && errors.skill_id}</span> <br />
+                    <input
+                        type="text"
+                        name="vacancy_id"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.vacancy_id}
+                    /> <br />
+                    <span className='errors'>{errors.vacancy_id && touched.vacancy_id && errors.vacancy_id}</span> <br />
+                    <input
+                        type="number"
+                        name="priority"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.priority}
+                    /> <br />
+                    <span className='errors'>{errors.priority && touched.priority && errors.priority}</span> <br />
+                    <button type="submit" disabled={isSubmitting}>
+                        Create
+                    </button>
+                </form>
+            )}
+        </Formik>
     </div>
 }
+
+
+
 export function VacancyDomain(props){
     const [vacancyDomain, setVacancyDomain] = useState([])
     async function fetchVacancyDomain(){
@@ -211,6 +291,52 @@ export function VacancyDomain(props){
         return validatedObjects;
     }
 
+    async function createVacancyDomain(data) {
+        try {
+            let res = await vacancyDomainSchema.validate(data, { abortEarly: false });
+            
+            await fetch(
+                'http://0.0.0.0:3001/v1/vacancy/domains',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(res)
+                }
+            )
+            setUp()
+        } catch (errors) {
+            console.error(errors)
+            return {
+                success: false
+            }
+        }
+        return {
+            success: true
+        }
+    }
+
+    async function deleteVacancyDomain(data) {
+        await fetch(
+            'http://0.0.0.0:3001/v1/vacancy/domains',
+            {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }
+        )
+        setUp()
+    }
+
+    async function setUp(){
+        setVacancyDomain(await fetchVacancyDomain())
+    }
+    useEffect(() => {
+        setUp()
+    }, [])
     return <div>
         <h1>Domains</h1>
         <div className='cv_instances popup_instance'>
@@ -218,17 +344,18 @@ export function VacancyDomain(props){
                 <thead>
                     <tr>
                         <th>Vacancy</th>
-                        <th>Skill</th>
+                        <th>Domain</th>
                         <th>Priority</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {vacancySkills.map((vacancySkill, index) => (
-                        <tr key={"vacancy_skill_table_item_"+index}>
-                            <td>{vacancySkill.vacancy_id}</td>
-                            <td>{vacancySkill.skill_id}</td>
-                            <td>{vacancySkill.priority}</td>
-                            <td><button onClick={() => deleteVacancySkill(vacancySkill)}>Delete</button></td>
+                    {vacancyDomain.map((vd, index) => (
+                        <tr key={"vacancy_doamin_table_item_"+index}>
+                            <td>{vd.vacancy_id}</td>
+                            <td>{vd.domain_id}</td>
+                            <td>{vd.priority}</td>
+                            <td><button onClick={() => deleteVacancyDomain(vd)}>Delete</button></td>
                         </tr>
                     ))}
                 </tbody>
@@ -236,18 +363,18 @@ export function VacancyDomain(props){
         </div>
         <Formik
             initialValues={{
-                skill_id: 1,
+                domain_id: 1,
                 vacancy_id: 2,
                 priority: 1,
             }}
-            validationSchema={vacancySkillSchema}
+            validationSchema={vacancyDomainSchema}
             onSubmit={async (values, { setSubmitting, setErrors }) => {
-
-                let data = await createVacancySkill(values)
+                
+                let data = await createVacancyDomain(values)
                 if (data.success == true) {
                     setSubmitting(false);
                 } else {
-                    setErrors({ 'comment': 'error!' })
+                    setErrors({ 'priority': 'error!' })
                 }
 
             }}>
@@ -261,15 +388,15 @@ export function VacancyDomain(props){
                 isSubmitting,
             }) => (
                 <form onSubmit={handleSubmit} className='frm '>
-                    <h3>Create Vacancy Skill</h3>
+                    <h3>Add Vacancy Domain</h3>
                     <input
                         type="text"
-                        name="skill_id"
+                        name="domain_id"
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        value={values.skill_id}
+                        value={values.domain_id}
                     /> <br />
-                    <span className='errors'>{errors.skill_id && touched.skill_id && errors.skill_id}</span> <br />
+                    <span className='errors'>{errors.domain_id && touched.domain_id && errors.domain_id}</span> <br />
                     <input
                         type="text"
                         name="vacancy_id"
