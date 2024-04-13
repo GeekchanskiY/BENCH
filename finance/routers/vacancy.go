@@ -28,8 +28,8 @@ func SetupVacancy(base_group *gin.RouterGroup, db *gorm.DB) {
 
 		vacancy.GET("/", VacancyController.FindAll)
 		vacancy.GET("/:id", VacancyController.FindByID)
-		vacancy.GET("/:id/domain", VacancyController.FindVacancyDomain)
-		vacancy.GET("/:id/skill", VacancyController.FindVacancySkill)
+		vacancy.GET("/:id/domains", VacancyController.FindVacancyDomain)
+		vacancy.GET("/:id/skills", VacancyController.FindVacancySkill)
 		vacancy.DELETE("/:id", VacancyController.Delete)
 		vacancy.POST("/", VacancyController.Create)
 	}
