@@ -43,7 +43,7 @@ function CreateVacancyForm({ refresh, setRefresh }) {
         console.log(data)
         try {
             let res = await vacancySchema.validate(data, { abortEarly: false });
-            
+
             await fetch(
                 'http://0.0.0.0:3001/v1/vacancy/',
                 {
@@ -123,10 +123,10 @@ function CreateVacancyForm({ refresh, setRefresh }) {
 }
 
 
-export function VacancySkill(props){
+export function VacancySkill(props) {
     const [vacancySkills, setVacancySkills] = useState([])
     async function fetchSkills() {
-        let response = await fetch('http://0.0.0.0:3001/v1/vacancy/'+ props.vacancy_id +'/skills')
+        let response = await fetch('http://0.0.0.0:3001/v1/vacancy/' + props.vacancy_id + '/skills')
         let skills = await response.json()
         if (skills == null) {
             return []
@@ -138,7 +138,7 @@ export function VacancySkill(props){
         return validatedObjects;
     }
 
-    async function setUp(){
+    async function setUp() {
         setVacancySkills(await fetchSkills())
     }
     useEffect(() => {
@@ -148,7 +148,7 @@ export function VacancySkill(props){
     async function createVacancySkill(data) {
         try {
             let res = await vacancySkillSchema.validate(data, { abortEarly: false });
-            
+
             await fetch(
                 'http://0.0.0.0:3001/v1/vacancy/skills',
                 {
@@ -198,7 +198,7 @@ export function VacancySkill(props){
                 </thead>
                 <tbody>
                     {vacancySkills.map((vs, index) => (
-                        <tr key={"vacancy_doamin_table_item_"+index}>
+                        <tr key={"vacancy_doamin_table_item_" + index}>
                             <td>{vs.vacancy_id}</td>
                             <td>{vs.skill_id}</td>
                             <td>{vs.priority}</td>
@@ -268,9 +268,9 @@ export function VacancySkill(props){
 
 
 
-export function VacancyDomain(props){
+export function VacancyDomain(props) {
     const [vacancyDomain, setVacancyDomain] = useState([])
-    async function fetchVacancyDomain(){
+    async function fetchVacancyDomain() {
         let response = await fetch(
             'http://0.0.0.0:3001/v1/vacancy/' + props.vacancy_id + '/domains',
             {
@@ -294,7 +294,7 @@ export function VacancyDomain(props){
     async function createVacancyDomain(data) {
         try {
             let res = await vacancyDomainSchema.validate(data, { abortEarly: false });
-            
+
             await fetch(
                 'http://0.0.0.0:3001/v1/vacancy/domains',
                 {
@@ -331,7 +331,7 @@ export function VacancyDomain(props){
         setUp()
     }
 
-    async function setUp(){
+    async function setUp() {
         setVacancyDomain(await fetchVacancyDomain())
     }
     useEffect(() => {
@@ -351,7 +351,7 @@ export function VacancyDomain(props){
                 </thead>
                 <tbody>
                     {vacancyDomain.map((vd, index) => (
-                        <tr key={"vacancy_doamin_table_item_"+index}>
+                        <tr key={"vacancy_doamin_table_item_" + index}>
                             <td>{vd.vacancy_id}</td>
                             <td>{vd.domain_id}</td>
                             <td>{vd.priority}</td>
@@ -369,7 +369,7 @@ export function VacancyDomain(props){
             }}
             validationSchema={vacancyDomainSchema}
             onSubmit={async (values, { setSubmitting, setErrors }) => {
-                
+
                 let data = await createVacancyDomain(values)
                 if (data.success == true) {
                     setSubmitting(false);
@@ -422,7 +422,7 @@ export function VacancyDomain(props){
     </div>
 }
 
-export function VacancyComponent(props){
+export function VacancyComponent(props) {
 
     const [domains, setDomains] = useState(null)
     const [skills, setSkills] = useState(null)
@@ -462,7 +462,7 @@ export function VacancyComponent(props){
         getVacancySkills()
     }, [])
 
-    async function deleteVacancy(){
+    async function deleteVacancy() {
         await fetch(
             'http://0.0.0.0:3001/v1/vacancy/' + props.vacancy.id,
             {
@@ -480,21 +480,21 @@ export function VacancyComponent(props){
     }
 
     return <tr>
-    <td><input type="checkbox" name={'vacancy_' + props.vacancy.id} /></td>
-    <td>{props.vacancy.id}</td>
-    <td>{props.vacancy.name}</td>
-    <td>{props.vacancy.description}</td>
-    <td className={domains !== null ? "clickable_row" : ""} onClick={() => callPopup("vacancy_domain")}>{domains === null ? "-" : domains.length}</td>
-    <td className={skills !== null ? "clickable_row" : ""} onClick={() => callPopup("vacancy_skill")}>{skills === null ? "-" : skills.length}</td>
-    
-    <td>
-      <button onClick={deleteVacancy}>Delete</button>
-    </td>
-  </tr>
+        <td><input type="checkbox" name={'vacancy_' + props.vacancy.id} /></td>
+        <td>{props.vacancy.id}</td>
+        <td>{props.vacancy.name}</td>
+        <td>{props.vacancy.description}</td>
+        <td className={domains !== null ? "clickable_row" : ""} onClick={() => callPopup("vacancy_domain")}>{domains === null ? "-" : domains.length}</td>
+        <td className={skills !== null ? "clickable_row" : ""} onClick={() => callPopup("vacancy_skill")}>{skills === null ? "-" : skills.length}</td>
+
+        <td>
+            <button onClick={deleteVacancy}>Delete</button>
+        </td>
+    </tr>
 
 }
 
-export default function Vacancy(){
+export default function Vacancy() {
     const [vacancies, setVacancies] = useState([])
     const [refresh, setRefresh] = useState(false)
     const [popup, setPopup] = useState(null)
@@ -507,7 +507,7 @@ export default function Vacancy(){
 
     useEffect(() => {
         setUp()
-        
+
     }, [refresh, popup, selectedVacancy])
 
     if (vacancies.length == 0) {
@@ -518,24 +518,24 @@ export default function Vacancy(){
         </div>
     }
 
-    function selectPopup(new_popup, vacancy){
+    function selectPopup(new_popup, vacancy) {
         setSelectedVacancy(vacancy)
         console.log(vacancy)
         console.log(new_popup)
         switch (new_popup) {
             case "vacancy_domain":
-                
+
                 setPopupBlock(<VacancyDomain vacancy_id={vacancy} refresh={refresh} setRefresh={setRefresh} />)
                 break;
             case "vacancy_skill":
-                
+
                 setPopupBlock(<VacancySkill vacancy_id={vacancy} refresh={refresh} setRefresh={setRefresh} />)
                 break;
             default:
                 setPopupBlock(<span>Empty</span>)
         }
         setPopup(new_popup)
-        
+
     }
 
     return <div className="cv_model">
@@ -557,11 +557,11 @@ export default function Vacancy(){
                     </tr>
                 </thead>
                 <tbody>
-                    {vacancies.map((vacancy, index) => <VacancyComponent setPopup={selectPopup} key={"vacancy_"+index} vacancy={vacancy} refresh={refresh} setRefresh={setRefresh} />)}
+                    {vacancies.map((vacancy, index) => <VacancyComponent setPopup={selectPopup} key={"vacancy_" + index} vacancy={vacancy} refresh={refresh} setRefresh={setRefresh} />)}
                 </tbody>
             </table>
             <CreateVacancyForm refresh={refresh} setRefresh={setRefresh}></CreateVacancyForm>
         </div>
-        <div className={popup !== null? 'popup' : 'hidden'}><button onClick={() => setPopup(null)}>Close</button>{popup_block}</div>
+        <div className={popup !== null ? 'popup' : 'hidden'}><button onClick={() => setPopup(null)}>Close</button>{popup_block}</div>
     </div>
 }
