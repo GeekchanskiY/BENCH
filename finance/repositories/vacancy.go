@@ -65,6 +65,18 @@ func (c *vacancyDatabase) Delete(id uint) error {
 //	VacancyDomain
 //
 
+func (c *vacancyDatabase) FindVacancyDomain(id uint) ([]schemas.VacancyDomainSchema, error) {
+	var vacancy_domains []models.VacancyDomain
+	err := c.DB.Where("vacancy_id = ?", id).Find(&vacancy_domains).Error
+	var skill_schemas []schemas.VacancyDomainSchema
+	var schema schemas.VacancyDomainSchema
+	for _, s := range vacancy_domains {
+		schema.FromModel(&s)
+		skill_schemas = append(skill_schemas, schema)
+	}
+	return skill_schemas, err
+}
+
 func (c *vacancyDatabase) CreateVacancyDomain(vacancyDomain schemas.VacancyDomainSchema) (schemas.VacancyDomainSchema, error) {
 	var vacancy_domain_model models.VacancyDomain = models.VacancyDomain{}
 	var vacancy models.Vacancy
@@ -112,8 +124,20 @@ func (c *vacancyDatabase) FindAllVacancyDomain() ([]schemas.VacancyDomainSchema,
 }
 
 //
-//	VacancyDomain
+//	VacancySkill
 //
+
+func (c *vacancyDatabase) FindVacancySkill(id uint) ([]schemas.VacancySkillSchema, error) {
+	var vacancy_skills []models.VacancySkill
+	err := c.DB.Where("vacancy_id = ?", id).Find(&vacancy_skills).Error
+	var skill_schemas []schemas.VacancySkillSchema
+	var schema schemas.VacancySkillSchema
+	for _, s := range vacancy_skills {
+		schema.FromModel(&s)
+		skill_schemas = append(skill_schemas, schema)
+	}
+	return skill_schemas, err
+}
 
 func (c *vacancyDatabase) CreateVacancySkill(vacancySkill schemas.VacancySkillSchema) (schemas.VacancySkillSchema, error) {
 	var vacancy_skill_model models.VacancySkill = models.VacancySkill{}

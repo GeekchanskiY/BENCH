@@ -74,7 +74,7 @@ func (c *skillDatabase) FindSkillDependencies(skill_id uint) ([]schemas.SkillSch
 	var schema schemas.SkillSchema
 	var skill models.Skill
 	for _, s := range skilldeps {
-		err := c.DB.First(&skill, s.ChildSkillID).Error
+		err := c.DB.First(&skill, s.ParentSkillID).Error
 		if err != nil {
 			return skill_schemas, err
 		}

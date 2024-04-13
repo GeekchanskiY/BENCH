@@ -124,8 +124,8 @@ export function SkillDomain(props) {
             }
         )
         let skilldomain = await response.json()
-        if (skilldomain.length == 0) {
-            setSkillDomain([])
+        if (skilldomain === null) {
+            return []
         }
         let validatedObjects = await Promise.all(skilldomain.map(async (object) => {
             await skillDomainSchema.validate(object, { abortEarly: false });
@@ -145,7 +145,7 @@ export function SkillDomain(props) {
             
             let res = await skillDomainSchema.validate(data, { abortEarly: false });
            
-            let response = await fetch(
+            await fetch(
                 'http://0.0.0.0:3001/v1/skill/domain',
                 {
                     method: 'POST',
@@ -156,6 +156,7 @@ export function SkillDomain(props) {
                 }
             )
             props.setRefresh(!props.refresh)
+            setUp()
         } catch (errors) {
             return {
                 success: false
@@ -165,19 +166,45 @@ export function SkillDomain(props) {
             success: true
         }
     }
+
+    async function deleteSkillDomain(data) {
+        await fetch(
+            'http://0.0.0.0:3001/v1/skill/domain',
+            {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }
+        )
+        setUp()
+    }
     return <div>
         <h3>Domains</h3>
-        <div className='cv_instances'>
-            {skillDomain.map((skill, index) => {
-                return <div key={index} className='cv_instance'>
-                    <ul>
-                        <li>Skill_id: {skill.skill_id}</li>
-                        <li>Domain_id: {skill.domain_id}</li>
-                        <li>Priority: {skill.priority}</li>
-                    </ul>
-                    
-                </div>
-            })}
+        <div className='cv_instances popup_instance'>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Skill ID</th>
+                        <th>Domain ID</th>
+                        <th>Priority</th>
+                        
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {skillDomain.map((sd, index) => (
+                        <tr key={"skill_conflict_table_item_"+index}>
+                            <td>{sd.skill_id}</td>
+                            <td>{sd.domain_id}</td>
+                            <td>{sd.priority}</td>
+                            <td><button onClick={() => deleteSkillDomain(sd)}>Delete</button></td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            
         </div>
         <Formik
             initialValues={{
@@ -244,17 +271,17 @@ export function SkillDependency(props) {
     const [skillDependency, setSkillDependency] = useState([])
     async function fetchSkilldeps() {
         let response = await fetch(
-            'http://0.0.0.0:3001/v1/skill/'+ props.selectedSkill.id +'/dependency',
+            'http://0.0.0.0:3001/v1/skill/'+ props.selectedSkill +'/dependencies',
             {
                 method: 'GET',
             }
         )
         let skilldeps = await response.json()
-        if (skilldeps.length == 0) {
-            setSkillDependency([])
+        if (skilldeps === null) {
+            return []
         }
         let validatedObjects = await Promise.all(skilldeps.map(async (object) => {
-            await skillDependencySchema.validate(object, { abortEarly: false });
+            await skillSchema.validate(object, { abortEarly: false });
             return object;
         }));
         return validatedObjects;
@@ -272,7 +299,7 @@ export function SkillDependency(props) {
             // console.log(data)
             let res = await skillDependencySchema.validate(data, { abortEarly: false });
            
-            let response = await fetch(
+            await fetch(
                 'http://0.0.0.0:3001/v1/skill/dependency',
                 {
                     method: 'POST',
@@ -291,6 +318,7 @@ export function SkillDependency(props) {
         }
         return {
             success: true
+            
         }
     }
     async function deleteSkillDependency(skill) {
@@ -300,19 +328,34 @@ export function SkillDependency(props) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(skill)
+            body: JSON.stringify({
+                'parent_skill': skill.id,
+                'child_skill':  props.selectedSkill
+            })
         })
+        setUp()
     }
     return <div>
         <h3>Dependencies</h3>
-        <div className='cv_instances'>
-            {skillDependency.map((skill, num) => {
-                return <div key={"skill_dependency_" + num} className='cv_instance'><ul>
-                    <li>Parent: {skill.parent_skill}</li>
-                    <li>Child: {skill.child_skill}</li>
-                    <li><button onClick={() => deleteSkillDependency(skill)}>Delete</button></li>
-                </ul></div>
-            })}
+        <div className='cv_instances popup_instance'>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Child skill</th>
+                        <th>Parent skill</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {skillDependency === null ?'asd': skillDependency.map((skill, index) => {
+                        return <tr key={index}>
+                            <td>{props.selectedSkill}</td>
+                            <td>{skill.id} - {skill.name}</td>
+                            <td><button onClick={() => deleteSkillDependency(skill)}>Delete</button></td>
+                        </tr>
+                    })}
+                </tbody>
+            </table>
         </div>
         <Formik
             initialValues={{
@@ -379,7 +422,7 @@ export function SkillConflict(props) {
             }
         )
         let skillconflict = await response.json()
-        if (skillconflict.length == 0) {
+        if (skillconflict == null) {
             return []
         }
         let validatedObjects = await Promise.all(skillconflict.map(async (object) => {
@@ -399,7 +442,7 @@ export function SkillConflict(props) {
         try {
             let res = await skillConflictSchema.validate(data, { abortEarly: false });
            
-            let response = await fetch(
+            await fetch(
                 'http://0.0.0.0:3001/v1/skill/conflict',
                 {
                     method: 'POST',
@@ -409,6 +452,7 @@ export function SkillConflict(props) {
                     body: JSON.stringify(res)
                 }
             )
+            setUp()
         } catch (errors) {
             return {
                 success: false
@@ -418,6 +462,27 @@ export function SkillConflict(props) {
             success: true
         }
     }
+
+    async function deleteSkillConflict(skillConflict) {
+        try {
+            await fetch(
+                'http://0.0.0.0:3001/v1/skill/conflict',
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(skillConflict)
+                }
+            )
+        } catch (errors) {
+            console.error(errors)
+            return
+        }
+        setSkillConflict(await fetchSkillConflict())
+
+    }
+
     return <div>
         <h3>Conflicts</h3>
         <div className='cv_instances popup_instance'>
@@ -428,6 +493,7 @@ export function SkillConflict(props) {
                         <th>Skill 2</th>
                         <th>Priority</th>
                         <th>Comment</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -437,6 +503,7 @@ export function SkillConflict(props) {
                             <td>{skillConflict.skill_2}</td>
                             <td>{skillConflict.priority}</td>
                             <td>{skillConflict.comment}</td>
+                            <td><button onClick={() => deleteSkillConflict(skillConflict)}>Delete</button></td>
                         </tr>
                     ))}
                 </tbody>
