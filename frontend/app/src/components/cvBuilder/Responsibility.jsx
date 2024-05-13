@@ -101,10 +101,13 @@ function CreateResponsibilityForm({ refresh, setRefresh }) {
                 <span className='errors'>{errors.name && touched.name && errors.name}</span> <br />
                 <input type="text" name="comments" onChange={handleChange} onBlur={handleBlur} value={values.comments} /> <br />
                 <span className='errors'>{errors.comments && touched.comments && errors.comments}</span> <br />
+                <span>experience_level</span> <br />
                 <input type="number" name="experience_level" onChange={handleChange} onBlur={handleBlur} value={values.experience_level} /> <br />
                 <span className='errors'>{errors.experience_level && touched.experience_level && errors.experience_level}</span> <br />
+                <span>skill_id</span> <br />
                 <input type="text" name="skill_id" onChange={handleChange} onBlur={handleBlur} value={values.skill_id} /> <br />
                 <span className='errors'>{errors.skill_id && touched.skill_id && errors.skill_id}</span> <br />
+                <span>priority</span> <br />
                 <input type="number" name="priority" onChange={handleChange} onBlur={handleBlur} value={values.priority} /> <br />
                 <span className='errors'>{errors.priority && touched.priority && errors.priority}</span> <br />
                 <button type="submit" disabled={isSubmitting}>
@@ -185,6 +188,8 @@ export function ResponsibilityComponent(props) {
         <td>{props.responsibility.experience_level}</td>
         <td>{props.responsibility.skill_id}</td>
         <td>{props.responsibility.priority}</td>
+        <th>0</th>
+        <th>0</th>
         <td><button onClick={() => deleteResponsibility()}>Delete</button></td>
     </tr>
 }
@@ -253,6 +258,8 @@ export default function Responsibility(){
                         <th>Experience Level</th>
                         <th>Skill</th>
                         <th>Priority</th>
+                        <th>Synonims</th>
+                        <th>Conflicts</th>
                         <th>Actions</th>
                     </tr>
                 </thead>

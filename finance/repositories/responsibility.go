@@ -47,7 +47,7 @@ func (c *respDatabase) FindByID(id uint) (schemas.ResponsibilitySchema, error) {
 func (c *respDatabase) Create(resp schemas.ResponsibilitySchema) (schemas.ResponsibilitySchema, error) {
 	var resp_model models.Responsibility = models.Responsibility{}
 	resp.ToModel(&resp_model)
-	err := c.DB.Save(&resp).Error
+	err := c.DB.Save(&resp_model).Error
 	if err != nil {
 		return resp, err
 	}
