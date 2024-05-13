@@ -188,6 +188,8 @@ export function ResponsibilityComponent(props) {
         <td>{props.responsibility.experience_level}</td>
         <td>{props.responsibility.skill_id}</td>
         <td>{props.responsibility.priority}</td>
+        <th>0</th>
+        <th>0</th>
         <td><button onClick={() => deleteResponsibility()}>Delete</button></td>
     </tr>
 }
@@ -256,6 +258,8 @@ export default function Responsibility(){
                         <th>Experience Level</th>
                         <th>Skill</th>
                         <th>Priority</th>
+                        <th>Synonims</th>
+                        <th>Conflicts</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
