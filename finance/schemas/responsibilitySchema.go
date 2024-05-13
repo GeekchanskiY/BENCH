@@ -3,6 +3,7 @@ package schemas
 import "Finance/models"
 
 type ResponsibilitySchema struct {
+	ID              uint   `json:"id"`
 	SkillID         uint   `json:"skill_id" binding:"required"`
 	Priority        int    `json:"priority" binding:"required"`
 	Name            string `json:"name" binding:"required"`
@@ -11,6 +12,7 @@ type ResponsibilitySchema struct {
 }
 
 func (c *ResponsibilitySchema) ToModel(model *models.Responsibility) {
+	model.ID = c.ID
 	model.SkillID = c.SkillID
 	model.Name = c.Name
 	model.Priority = c.Priority
@@ -20,6 +22,7 @@ func (c *ResponsibilitySchema) ToModel(model *models.Responsibility) {
 }
 
 func (c *ResponsibilitySchema) FromModel(model *models.Responsibility) {
+	c.ID = model.ID
 	c.SkillID = model.SkillID
 	c.Name = model.Name
 	c.Priority = model.Priority

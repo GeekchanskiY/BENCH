@@ -81,6 +81,22 @@ func (c *respDatabase) FindAllResponsibilitySynonim() ([]schemas.ResponsibilityS
 	return synonim_schemas, err
 }
 
+func (c *respDatabase) FindResponsibilitySynonim(id uint) ([]schemas.ResponsibilitySynonimSchema, error) {
+	var resp_synonims []models.ResponsibilitySynonim
+	var synonim_schemas []schemas.ResponsibilitySynonimSchema
+	err := c.DB.Find(&resp_synonims, id).Error
+	if err != nil {
+		return synonim_schemas, err
+	}
+
+	var schema schemas.ResponsibilitySynonimSchema
+	for _, s := range resp_synonims {
+		schema.FromModel(&s)
+		synonim_schemas = append(synonim_schemas, schema)
+	}
+	return synonim_schemas, err
+}
+
 func (c *respDatabase) CreateResponsibilitySynonim(synonim schemas.ResponsibilitySynonimSchema) (schemas.ResponsibilitySynonimSchema, error) {
 	var synonim_model models.ResponsibilitySynonim = models.ResponsibilitySynonim{}
 	var resp models.Responsibility
@@ -138,6 +154,22 @@ func (c *respDatabase) CreateResponsibilityConflict(respConflict schemas.Respons
 	}
 	respConflict.FromModel(&resp_conflict_model)
 	return respConflict, err
+}
+
+func (c *respDatabase) FindResponsibilityConflict(id uint) ([]schemas.ResponsibilityConflictSchema, error) {
+	var resp_conflicts []models.ResponsibilityConflict
+	var resp_schemas []schemas.ResponsibilityConflictSchema
+	err := c.DB.Find(&resp_conflicts, id).Error
+	if err != nil {
+		return resp_schemas, err
+	}
+
+	var schema schemas.ResponsibilityConflictSchema
+	for _, s := range resp_conflicts {
+		schema.FromModel(&s)
+		resp_schemas = append(resp_schemas, schema)
+	}
+	return resp_schemas, err
 }
 
 func (c *respDatabase) DeleteResponsibilityConflict(respConflict schemas.ResponsibilityConflictSchema) error {

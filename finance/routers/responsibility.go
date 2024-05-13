@@ -29,6 +29,8 @@ func SetupResponsibility(base_group *gin.RouterGroup, db *gorm.DB) {
 		responsibility_group.GET("/", ResponsibilityController.FindAll)
 		responsibility_group.GET("/:id", ResponsibilityController.FindByID)
 		responsibility_group.DELETE("/:id", ResponsibilityController.Delete)
+		responsibility_group.GET("/:id/synonims", ResponsibilityController.FindSynonims)
+		responsibility_group.GET("/:id/conflicts", ResponsibilityController.FindConflicts)
 		responsibility_group.POST("/", ResponsibilityController.Create)
 
 	}
