@@ -106,9 +106,8 @@ func (c *respDatabase) CreateResponsibilitySynonim(synonim schemas.Responsibilit
 		return synonim, errors.New("responsibility not found")
 	}
 
-	synonim_model.ResponsibilityID = resp.ID
-	synonim_model.Name = synonim.Name
-	err = c.DB.Create(synonim_model).Error
+	synonim.ToModel(&synonim_model)
+	err = c.DB.Create(&synonim_model).Error
 	if err != nil {
 		return synonim, err
 	}

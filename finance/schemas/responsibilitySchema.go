@@ -33,7 +33,7 @@ func (c *ResponsibilitySchema) FromModel(model *models.Responsibility) {
 
 type ResponsibilitySynonimSchema struct {
 	ResponsibilityID uint   `json:"responsibility_id" binding:"required"`
-	Name             string `json:"name_id" binding:"required"`
+	Name             string `json:"name" binding:"required"`
 }
 
 func (c *ResponsibilitySynonimSchema) ToModel(model *models.ResponsibilitySynonim) {
