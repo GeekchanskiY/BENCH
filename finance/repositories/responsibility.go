@@ -84,7 +84,7 @@ func (c *respDatabase) FindAllResponsibilitySynonim() ([]schemas.ResponsibilityS
 func (c *respDatabase) FindResponsibilitySynonim(id uint) ([]schemas.ResponsibilitySynonimSchema, error) {
 	var resp_synonims []models.ResponsibilitySynonim
 	var synonim_schemas []schemas.ResponsibilitySynonimSchema
-	err := c.DB.Find(&resp_synonims, id).Error
+	err := c.DB.Find(&resp_synonims).Where("responsibility_id = ?", id).Error
 	if err != nil {
 		return synonim_schemas, err
 	}
@@ -117,9 +117,8 @@ func (c *respDatabase) CreateResponsibilitySynonim(synonim schemas.Responsibilit
 
 func (c *respDatabase) DeleteResponsibilitySynonim(synonim schemas.ResponsibilitySynonimSchema) error {
 	var synonim_model models.ResponsibilitySynonim = models.ResponsibilitySynonim{}
-	synonim.ToModel(&synonim_model)
 
-	res := c.DB.Where("responsibility_id = ?", synonim.ResponsibilityID).Delete(&synonim_model)
+	res := c.DB.Where("id = ?", synonim.ID).Delete(&synonim_model)
 	if res.Error != nil {
 		return res.Error
 	} else if res.RowsAffected < 1 {
