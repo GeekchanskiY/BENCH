@@ -81,6 +81,22 @@ func (c *respDatabase) FindAllResponsibilitySynonim() ([]schemas.ResponsibilityS
 	return synonim_schemas, err
 }
 
+func (c *respDatabase) FindResponsibilitySynonim(id uint) ([]schemas.ResponsibilitySynonimSchema, error) {
+	var resp_synonims []models.ResponsibilitySynonim
+	var synonim_schemas []schemas.ResponsibilitySynonimSchema
+	err := c.DB.Find(&resp_synonims).Where("responsibility_id = ?", id).Error
+	if err != nil {
+		return synonim_schemas, err
+	}
+
+	var schema schemas.ResponsibilitySynonimSchema
+	for _, s := range resp_synonims {
+		schema.FromModel(&s)
+		synonim_schemas = append(synonim_schemas, schema)
+	}
+	return synonim_schemas, err
+}
+
 func (c *respDatabase) CreateResponsibilitySynonim(synonim schemas.ResponsibilitySynonimSchema) (schemas.ResponsibilitySynonimSchema, error) {
 	var synonim_model models.ResponsibilitySynonim = models.ResponsibilitySynonim{}
 	var resp models.Responsibility
@@ -90,9 +106,8 @@ func (c *respDatabase) CreateResponsibilitySynonim(synonim schemas.Responsibilit
 		return synonim, errors.New("responsibility not found")
 	}
 
-	synonim_model.ResponsibilityID = resp.ID
-	synonim_model.Name = synonim.Name
-	err = c.DB.Create(synonim_model).Error
+	synonim.ToModel(&synonim_model)
+	err = c.DB.Create(&synonim_model).Error
 	if err != nil {
 		return synonim, err
 	}
@@ -102,9 +117,8 @@ func (c *respDatabase) CreateResponsibilitySynonim(synonim schemas.Responsibilit
 
 func (c *respDatabase) DeleteResponsibilitySynonim(synonim schemas.ResponsibilitySynonimSchema) error {
 	var synonim_model models.ResponsibilitySynonim = models.ResponsibilitySynonim{}
-	synonim.ToModel(&synonim_model)
 
-	res := c.DB.Where("responsibility_id = ?", synonim.ResponsibilityID).Delete(&synonim_model)
+	res := c.DB.Where("id = ?", synonim.ID).Delete(&synonim_model)
 	if res.Error != nil {
 		return res.Error
 	} else if res.RowsAffected < 1 {
@@ -132,7 +146,7 @@ func (c *respDatabase) CreateResponsibilityConflict(respConflict schemas.Respons
 	resp_conflict_model.Responsibility1ID = resp_1.ID
 	resp_conflict_model.Responsibility2ID = resp_2.ID
 	resp_conflict_model.Priority = respConflict.Priority
-	err = c.DB.Create(resp_conflict_model).Error
+	err = c.DB.Create(&resp_conflict_model).Error
 	if err != nil {
 		return respConflict, err
 	}
@@ -140,11 +154,26 @@ func (c *respDatabase) CreateResponsibilityConflict(respConflict schemas.Respons
 	return respConflict, err
 }
 
+func (c *respDatabase) FindResponsibilityConflict(id uint) ([]schemas.ResponsibilityConflictSchema, error) {
+	var resp_conflicts []models.ResponsibilityConflict
+	var resp_schemas []schemas.ResponsibilityConflictSchema
+	err := c.DB.Find(&resp_conflicts).Where("responsibility_1_id = ? OR responsibility_2_id = ?", id, id).Error
+	if err != nil {
+		return resp_schemas, err
+	}
+
+	var schema schemas.ResponsibilityConflictSchema
+	for _, s := range resp_conflicts {
+		schema.FromModel(&s)
+		resp_schemas = append(resp_schemas, schema)
+	}
+	return resp_schemas, err
+}
+
 func (c *respDatabase) DeleteResponsibilityConflict(respConflict schemas.ResponsibilityConflictSchema) error {
 	var resp_conflict_model models.ResponsibilityConflict = models.ResponsibilityConflict{}
-	respConflict.ToModel(&resp_conflict_model)
 
-	res := c.DB.Where("responsibility_1_id = ? AND responsibility_2_id = ?", resp_conflict_model.Responsibility1ID, resp_conflict_model.Responsibility2ID).Delete(&resp_conflict_model)
+	res := c.DB.Where("id = ?", respConflict.ID).Delete(&resp_conflict_model)
 	if res.Error != nil {
 		return res.Error
 	} else if res.RowsAffected < 1 {

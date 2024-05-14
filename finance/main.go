@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+
 	var db *gorm.DB
 
 	// config.SetupDBConnection(db)

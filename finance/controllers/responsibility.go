@@ -90,6 +90,22 @@ func (c *respController) FindAllSynonims(ctx *gin.Context) {
 	ctx.JSON(200, skills)
 }
 
+func (c *respController) FindSynonims(ctx *gin.Context) {
+	var params_id string = ctx.Params.ByName("id")
+	i, err := strconv.ParseUint(params_id, 10, 32)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	var uid uint = uint(i)
+	skills, err := c.respRepository.FindResponsibilitySynonim(uid)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, skills)
+}
+
 func (c *respController) DeleteSynonim(ctx *gin.Context) {
 	var synonim schemas.ResponsibilitySynonimSchema
 	err := ctx.BindJSON(&synonim)
@@ -143,6 +159,22 @@ func (c *respController) CreateRespConflict(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(200, conflict)
+}
+
+func (c *respController) FindConflicts(ctx *gin.Context) {
+	var params_id string = ctx.Params.ByName("id")
+	i, err := strconv.ParseUint(params_id, 10, 32)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	var uid uint = uint(i)
+	conflicts, err := c.respRepository.FindResponsibilityConflict(uid)
+	if err != nil {
+		ctx.JSON(400, ctx.Error(err))
+		return
+	}
+	ctx.JSON(200, conflicts)
 }
 
 func (c *respController) FindAllRespConflicts(ctx *gin.Context) {

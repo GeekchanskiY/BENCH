@@ -12,11 +12,13 @@ let responsibilitySchema = object().shape({
 
 
 let responsibilitySynonimSchema = object().shape({
+    id: number().positive().integer(),
     responsibility_id: number().positive().integer().required(),
-    name_id: string().required()
+    name: string().required()
 });
 
 let responsibilityConflictSchema = object().shape({
+    id: number().positive().integer(),
     responsibility_1_id: number().positive().integer().required(),
     responsibility_2_id: number().positive().integer().required(),
     priority: number().positive().integer().required()
@@ -182,27 +184,312 @@ export function ResponsibilityComponent(props) {
     }
     return <tr>
         <td><input type="checkbox" name={'responsibility_' + props.responsibility.name} /></td>
-      
+        <td>{props.responsibility.id}</td>
         <td>{props.responsibility.name}</td>
         <td>{props.responsibility.comments}</td>
         <td>{props.responsibility.experience_level}</td>
         <td>{props.responsibility.skill_id}</td>
         <td>{props.responsibility.priority}</td>
-        <th>0</th>
-        <th>0</th>
+        <th className={responsibilitySynonims !== null ? "clickable_row" : ""} onClick={() => callPopup("responsibility_synonim")}>{responsibilitySynonims === null ? "-" : responsibilitySynonims.length}</th>
+        <th className={responsibilityConflicts !== null ? "clickable_row" : ""} onClick={() => callPopup("responsibility_conflict")}>{responsibilityConflicts === null ? "-" : responsibilityConflicts.length}</th>
+        
         <td><button onClick={() => deleteResponsibility()}>Delete</button></td>
     </tr>
 }
 
-export function ResponsibilitySynonim(){
+export function ResponsibilitySynonim(props){
+    const [responsibilitySynonims, setResponsibilitySynonims] = useState([])
+    async function fetchResponsibilitySynonims() {
+        let response = await fetch(
+            'http://0.0.0.0:3001/v1/responsibility/'+ props.selectedResponsibility +'/synonims',
+            {
+                method: 'GET',
+            }
+        )
+        let responsibilitysynonims = await response.json()
+        if (responsibilitysynonims === null) {
+            return []
+        }
+        let validatedObjects = await Promise.all(responsibilitysynonims.map(async (object) => {
+            await responsibilitySynonimSchema.validate(object, { abortEarly: false });
+            return object;
+        }));
+        return validatedObjects;
+    }
+
+    async function setUp(){
+        setResponsibilitySynonims(await fetchResponsibilitySynonims())
+    }
+    useEffect(() => {
+        setUp()
+    }, [])
+
+    async function deleteResponsibilitySynonim(synonim) {
+        await fetch(
+            'http://0.0.0.0:3001/v1/responsibility/synonim',
+            {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(synonim)
+            }
+        )
+        setUp()
+    }
+
+    async function createResponsibilitySynonim(synonim) {
+        try {
+            let res = await responsibilitySynonimSchema.validate(synonim, { abortEarly: false });
+            
+            await fetch(
+                'http://0.0.0.0:3001/v1/responsibility/synonim',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(res)
+                }
+            )
+            setUp()
+        } catch (errors) {
+            return {
+                success: false
+            }
+        }
+        return {
+            success: true
+        }
+    }
     return <div>
         <h3>Synonims</h3>
+        <div className='cv_instances popup_instance'>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Responsibility ID</th>
+                        <th>Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {responsibilitySynonims.map((synonim, index) => (
+                        <tr key={"responsibility_synonim_table_item_"+index}>
+                            <td>{synonim.id}</td>
+                            <td>{synonim.responsibility_id}</td>
+                            <td>{synonim.name}</td>
+                            <td><button onClick={() => deleteResponsibilitySynonim(synonim)}>Delete</button></td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            
+        </div>
+        <Formik
+            initialValues={{
+                responsibility_id: 1,
+                name: 'Python',
+            }}
+            validationSchema={responsibilitySynonimSchema}
+            onSubmit={async (values, { setSubmitting, setErrors }) => {
+                console.log(values)
+                let data = await createResponsibilitySynonim(values)
+                if (data.success == true) {
+                    setSubmitting(false);
+                } else {
+                    setErrors({ 'name': 'error!' })
+                }
+
+            }}>
+            {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+            }) => (
+                <form onSubmit={handleSubmit} className='frm '>
+                    <h3>Create Responsibility Synonim</h3>
+                    <input
+                        type="text"
+                        name="responsibility_id"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.responsibility_id}
+                    /> <br />
+                    <span className='errors'>{errors.responsibility_id && touched.responsibility_id && errors.responsibility_id}</span> <br />
+                    <input
+                        type="text"
+                        name="name"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.name}
+                    /> <br />
+                    <span className='errors'>{errors.name && touched.name && errors.name}</span> <br />
+                    <button type="submit" disabled={isSubmitting}>
+                        Create
+                    </button>
+                </form>
+            )}
+        </Formik>
     </div>
 }
 
-export function ResponsibilityConflict(){
+export function ResponsibilityConflict(props){
+    const [conflict, setConflict] = useState([])
+    async function fetchConflicts() {
+        let response = await fetch(
+            'http://0.0.0.0:3001/v1/responsibility/'+ props.selectedResponsibility +'/conflicts',
+            {
+                method: 'GET',
+            }
+        )
+        let conflict = await response.json()
+        if (conflict === null) {
+            return []
+        }
+        let validatedObjects = await Promise.all(conflict.map(async (object) => {
+            await responsibilityConflictSchema.validate(object, { abortEarly: false });
+            return object;
+        }));
+        return validatedObjects;
+    }
+
+    async function setUp(){
+        setConflict(await fetchConflicts())
+    }
+    useEffect(() => {
+        setUp()
+    }, [])
+
+    async function createConflict(conflict) {
+        try {
+            let res = await responsibilityConflictSchema.validate(conflict, { abortEarly: false });
+            
+            await fetch(
+                'http://0.0.0.0:3001/v1/responsibility/conflict',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(res)
+                }
+            )
+            setUp()
+        } catch (errors) {
+            return {
+                success: false
+            }
+        }
+        return {
+            success: true
+        }
+    }
+
+    async function deleteConflict(conflict) {
+        await fetch(
+            'http://0.0.0.0:3001/v1/responsibility/conflict',
+            {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(conflict)
+            }
+        )
+        setUp()
+    }
+    
     return <div>
         <h3>Conflicts</h3>
+        <div className='cv_instances popup_instance'>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Responsibility 1 id</th>
+                        <th>Responsibility 2 id</th>
+                        <th>Priority</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {conflict.map((conflict, index) => (
+                        <tr key={"responsibility_conflict_table_item_"+index}>
+                            <td>{conflict.id}</td>
+                            <td>{conflict.responsibility_1_id}</td>
+                            <td>{conflict.responsibility_2_id}</td>
+                            <td>{conflict.priority}</td>
+                            <td><button onClick={() => deleteConflict(conflict)}>Delete</button></td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            
+        </div>
+        <Formik
+            initialValues={{
+                responsibility_1_id: 1,
+                responsibility_2_id: 1,
+                priority: 1,
+            }}
+            validationSchema={responsibilityConflictSchema}
+            onSubmit={async (values, { setSubmitting, setErrors }) => {
+                console.log(values)
+                let data = await createConflict(values)
+                if (data.success == true) {
+                    setSubmitting(false);
+                } else {
+                    setErrors({ 'name': 'error!' })
+                }
+
+            }}>
+            {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+            }) => (
+                <form onSubmit={handleSubmit} className='frm '>
+                    <h3>Create Responsibility Conflict</h3>
+                    <input
+                        type="number"
+                        name="responsibility_1_id"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.responsibility_1_id}
+                    /> <br />
+                    <span className='errors'>{errors.responsibility_1_id && touched.responsibility_1_id && errors.responsibility_1_id}</span> <br />
+                    <input
+                        type="number"
+                        name="responsibility_2_id"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.responsibility_2_id}
+                    /> <br />
+                    <span className='errors'>{errors.responsibility_2_id && touched.responsibility_2_id && errors.responsibility_2_id}</span> <br />
+                    <input
+                        type="number"
+                        name="priority"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.priority}
+                    /> <br />
+                    <span className='errors'>{errors.priority && touched.priority && errors.priority}</span> <br />
+                    <button type="submit" disabled={isSubmitting}>
+                        Create
+                    </button>
+                </form>
+            )}
+        </Formik>
     </div>
 }
 
@@ -222,8 +509,7 @@ export default function Responsibility(){
     }, [refresh, popup, selectedResponsibility])
     function selectPopup(new_popup, responsibility){
         setSelectedResponsibility(responsibility)
-        console.log(responsibility)
-        console.log(new_popup)
+        
         switch (new_popup) {
             case "responsibility_synonim":
                 setPopupBlock(<ResponsibilitySynonim refresh={refresh} setRefresh={setRefresh} selectedResponsibility={responsibility}></ResponsibilitySynonim>)
@@ -253,6 +539,7 @@ export default function Responsibility(){
                 <thead>
                     <tr>
                         <th></th>
+                        <th>ID</th>
                         <th>Name</th>
                         <th>Comments</th>
                         <th>Experience Level</th>
