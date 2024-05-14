@@ -5,6 +5,7 @@ import Employee from "./Employee"
 import Responsibility from "./Responsibility"
 import Skill from "./Skill"
 import Vacancy from "./Vacancy"
+import Commands from "./Commands"
 import { useState } from "react"
 
 import '../../styles/cv_builder.css'
@@ -28,6 +29,8 @@ export default function CVBuilder() {
                 return <Company></Company>
             case 'vacancy':
                 return <Vacancy></Vacancy>
+            case 'commands':
+                return <Commands></Commands>
             default:
                 return <Skill></Skill>
         }
@@ -45,6 +48,9 @@ export default function CVBuilder() {
                 <li onClick={() => setCurrpage('cv')}>CV</li>
                 <li onClick={() => setCurrpage('company')}>Company</li>
                 <li onClick={() => setCurrpage('vacancy')}>Vacancy</li>
+                <li>.</li>
+                <li>.</li>
+                <li onClick={() => setCurrpage('commands')}>Commands</li>
         
             </ul>
         </aside>
