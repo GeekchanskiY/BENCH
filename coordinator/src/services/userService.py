@@ -24,7 +24,7 @@ class UserService:
         
         token: str
         expires_at: str
-        token, expires_at = jwt_utils.encodeJWT(userdata.email)
+        token, expires_at = jwt_utils.encodeJWT(db_user.name)
 
         return JWTDetailedSchema(
             token=token,
