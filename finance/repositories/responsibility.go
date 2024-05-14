@@ -146,7 +146,7 @@ func (c *respDatabase) CreateResponsibilityConflict(respConflict schemas.Respons
 	resp_conflict_model.Responsibility1ID = resp_1.ID
 	resp_conflict_model.Responsibility2ID = resp_2.ID
 	resp_conflict_model.Priority = respConflict.Priority
-	err = c.DB.Create(resp_conflict_model).Error
+	err = c.DB.Create(&resp_conflict_model).Error
 	if err != nil {
 		return respConflict, err
 	}
@@ -157,7 +157,7 @@ func (c *respDatabase) CreateResponsibilityConflict(respConflict schemas.Respons
 func (c *respDatabase) FindResponsibilityConflict(id uint) ([]schemas.ResponsibilityConflictSchema, error) {
 	var resp_conflicts []models.ResponsibilityConflict
 	var resp_schemas []schemas.ResponsibilityConflictSchema
-	err := c.DB.Find(&resp_conflicts, id).Error
+	err := c.DB.Find(&resp_conflicts).Where("responsibility_1_id = ? OR responsibility_2_id = ?", id, id).Error
 	if err != nil {
 		return resp_schemas, err
 	}
@@ -172,9 +172,8 @@ func (c *respDatabase) FindResponsibilityConflict(id uint) ([]schemas.Responsibi
 
 func (c *respDatabase) DeleteResponsibilityConflict(respConflict schemas.ResponsibilityConflictSchema) error {
 	var resp_conflict_model models.ResponsibilityConflict = models.ResponsibilityConflict{}
-	respConflict.ToModel(&resp_conflict_model)
 
-	res := c.DB.Where("responsibility_1_id = ? AND responsibility_2_id = ?", resp_conflict_model.Responsibility1ID, resp_conflict_model.Responsibility2ID).Delete(&resp_conflict_model)
+	res := c.DB.Where("id = ?", respConflict.ID).Delete(&resp_conflict_model)
 	if res.Error != nil {
 		return res.Error
 	} else if res.RowsAffected < 1 {
