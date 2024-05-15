@@ -36,7 +36,7 @@ func SetupUtils(base_group *gin.RouterGroup, db *gorm.DB) {
 				"message": "Hello World",
 			})
 		})
-		utils.POST("/export", utilsController.Export)
-		utils.GET("/import", utilsController.Import)
+		utils.GET("/backup", utilsController.Export)
+		utils.POST("/backup", utilsController.Import)
 	}
 }

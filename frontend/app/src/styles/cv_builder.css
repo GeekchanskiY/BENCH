@@ -125,3 +125,7 @@
     margin: 5px;
     color: #000;
 }
+
+#export_res_status{
+    transition: .5s;
+}
