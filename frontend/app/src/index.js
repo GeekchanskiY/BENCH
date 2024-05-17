@@ -18,6 +18,7 @@ import Register from './components/Register';
 import Projects from './components/projects/Projects';
 import CVBuilder from './components/cvBuilder/CVBuilder';
 import Ressearch from './components/ressearch/Ressearch';
+import Tests from './components/Tests';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -37,6 +38,7 @@ root.render(
           <Route path='/projects' element={<Projects/>} />
           <Route path='/cv' element={<CVBuilder/>} />
           <Route path='/ressearch' element={<Ressearch/>} />
+          <Route path='/tests' element={<Tests/>} />
         </Routes>
     </div>
     <Footer></Footer>

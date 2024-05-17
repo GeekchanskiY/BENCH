@@ -1,0 +1,39 @@
+.supreme-container {
+    width: 100px;
+    height: 100px;
+    border: 1px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.supreme-lock {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.supreme-inactive {
+    background-color: black;
+}
+
+.supreme-prior{
+    position: absolute;
+    width: 100px;
+    height: 100px;
+}
+
+.supreme-prior button{
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    color: #fff;
+}
+.supreme-filler{
+    width: 25%;
+    height: 25%;
+    background-color: violet;
+    transition: .5s;
+}
