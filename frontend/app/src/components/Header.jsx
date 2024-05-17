@@ -18,6 +18,7 @@ export default function Header() {
             <Link to={'/projects'}>Projects</Link>
             <Link to={'/ressearch'} >Ressearch</Link>
             <Link to={'/services'} >Services</Link>
+            <Link to={'/tests'} >Tests</Link>
         </div>
         <div className='side-header whoami part-header'>
             <WhoAmI />
