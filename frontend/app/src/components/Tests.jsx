@@ -22,7 +22,7 @@ export function SupremeButton() {
             setTimeout(() => {
                 element.style.backgroundColor = 'red';
                 console.log("supreme")
-            }, 100 * Math.floor(Math.random() * 3))
+            }, 100 * Math.floor(Math.random() * 10))
         });
     }
 

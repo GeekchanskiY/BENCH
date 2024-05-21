@@ -9,4 +9,5 @@ type CompanyRepository interface {
 	FindByID(id uint) (schemas.CompanySchema, error)
 	Create(employee schemas.CompanySchema) (schemas.CompanySchema, error)
 	Delete(id uint) error
+	FindByName(name string) (schemas.CompanySchema, error)
 }

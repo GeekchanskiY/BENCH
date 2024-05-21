@@ -4,6 +4,8 @@ import (
 	controllers "Finance/controllers/interfaces"
 	interfaces "Finance/repositories/interfaces"
 	"Finance/schemas"
+	"fmt"
+	"io"
 
 	//"Finance/schemas"
 	"github.com/gin-gonic/gin"
@@ -58,22 +60,31 @@ type Backup struct {
 }
 
 func (c *utilsController) Import(ctx *gin.Context) {
-	var backup Backup
-	var errors []error = []error{}
-	err := ctx.BindJSON(backup)
+	var backup Backup = Backup{}
+	var errors []string = []string{}
+	body, _ := io.ReadAll(ctx.Request.Body)
+	println(string(body))
+	err := ctx.BindJSON(&backup)
 	if err != nil {
-		errors = append(errors, err)
+		fmt.Println(err)
+		errors = append(errors, err.Error())
 	}
 
 	for _, company := range backup.Companies {
+		_, err = c.companyRepository.FindByName(company.Name)
+		if err == nil {
+			continue
+		} else {
+			fmt.Println(err)
+		}
 		_, err := c.companyRepository.Create(company)
 		if err != nil {
-			errors = append(errors, err)
+			errors = append(errors, err.Error())
 		}
 	}
 
 	if len(errors) > 0 {
-		ctx.JSON(500, gin.H{
+		ctx.JSON(400, gin.H{
 			"message": errors,
 		})
 		return

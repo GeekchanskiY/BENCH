@@ -30,7 +30,23 @@ export default function Commands() {
     }
 
     async function import_command() {
-        await copyToClipboard(imported)
+        let res = await fetch("http://0.0.0.0:3001/v1/utils/backup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(imported)
+        })
+        let data = await res.json()
+        console.log(data["message"])
+        if (data.success) {
+            document.getElementById("import_res_status").innerHTML = "Imported!"
+            document.getElementById("import_res_status").style.color = "green"
+            setTimeout(() => {
+                document.getElementById("import_res_status").innerHTML = "Result will be copied to clipboard"
+                document.getElementById("import_res_status").style.color = "#fff"
+            }, 2000)
+        }
     }
 
     async function export_command() {
@@ -52,6 +68,7 @@ export default function Commands() {
         
         <input type="text" value={imported} onChange={(e) => setImported(e.target.value)} />
         <button onClick={import_command}>Import</button>
+        <span id="import_res_status">Result will be shown here</span>
         <br />
         <button onClick={export_command}>Export</button>
         <span id="export_res_status">Result will be copied to clipboard</span>

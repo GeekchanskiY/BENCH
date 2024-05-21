@@ -10,7 +10,6 @@ import (
 func main() {
 
 	var db *gorm.DB
-
 	// config.SetupDBConnection(db)
 
 	db = config.Setup(db)

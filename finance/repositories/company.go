@@ -28,6 +28,14 @@ func (c *companyDatabase) FindAll() ([]schemas.CompanySchema, error) {
 	return company_schemas, err
 }
 
+func (c *companyDatabase) FindByName(name string) (schemas.CompanySchema, error) {
+	var company models.Company
+	err := c.DB.Where("name = ?", name).First(&company).Error
+	var company_schema schemas.CompanySchema = schemas.CompanySchema{}
+	company_schema.FromModel(&company)
+	return company_schema, err
+}
+
 func (c *companyDatabase) FindByID(id uint) (schemas.CompanySchema, error) {
 	var company models.Company
 	err := c.DB.First(&company, id).Error

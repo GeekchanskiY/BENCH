@@ -129,3 +129,7 @@
 #export_res_status{
     transition: .5s;
 }
+
+#import_res_status{
+    transition: .5s;
+}
