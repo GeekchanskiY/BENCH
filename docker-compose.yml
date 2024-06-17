@@ -85,25 +85,25 @@ services:
       - ./support/:/app/
   
   # Rails application
-  ressearch_backend:
-    build:
-      context: ./ressearch/
-    container_name: bench-backend-rails
-    hostname: ressearch
-    env_file:
-      - ./.env
-    volumes:
-      - ./ressearch:/rails
-    image:
-      ressearch_backend:latest
-    restart: always
-    ports:
-      - "3000:3000"
-    depends_on:
-      - db-local2
-    networks:
-      - backend_rails
-      - backend_communicator
+  # ressearch_backend:
+  #   build:
+  #     context: ./ressearch/
+  #   container_name: bench-backend-rails
+  #   hostname: ressearch
+  #   env_file:
+  #     - ./.env
+  #   volumes:
+  #     - ./ressearch:/rails
+  #   image:
+  #     ressearch_backend:latest
+  #   restart: always
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - db-local2
+  #   networks:
+  #     - backend_rails
+  #     - backend_communicator
   
   # Go application
   finance_backend:
