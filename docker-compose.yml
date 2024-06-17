@@ -60,7 +60,7 @@ services:
       - kafka-net
     depends_on:
       - db-local
-      - ressearch_backend
+      # - ressearch_backend
       - finance_backend
       - rabbitmq
       - kafka
